@@ -1298,9 +1298,9 @@ var PROJECTS=[
 ];
 
 var SERVICES=[
-  {num:'01',title:'Design & Detail Engineering',desc:'Complete design and engineering services across Architectural, Structural, and MEP disciplines. From concept through construction documentation, we deliver accurate, coordinated, and detail-driven packages.',features:['Architectural design and documentation','Structural analysis and design','MEP system engineering','Shop drawing preparation','Construction supervision support'],icon:'✎'},
-  {num:'02',title:'BIM Services',desc:'Full-cycle BIM implementation from modeling to coordination. We deliver LOD 100 through LOD 500 models tailored to project phases, enabling clash-free construction and efficient project delivery.',features:['3D BIM modeling (all disciplines)','BIM execution planning','LOD 100–500 deliverables','Model management and coordination','As-built model documentation'],icon:'⬡'},
-  {num:'03',title:'Design Review & Audit',desc:'Comprehensive design audits that identify discrepancies, code compliance issues, and optimization opportunities across all engineering disciplines before construction begins.',features:['Multi-discipline design review','Code compliance verification','Constructability analysis','Design optimization recommendations','Peer review documentation'],icon:'✓'},
+  {num:'01',title:'Design & Detail Engineering',desc:'Complete design and engineering services across Architectural, Structural, and MEP disciplines. From concept through construction documentation, we deliver accurate, coordinated, and detail-driven packages.',features:['Architectural design and documentation','Structural analysis and design','MEP system engineering','Shop drawing preparation','Construction supervision support'],icon:'✎',page:'DesignEngineering1'},
+  {num:'02',title:'BIM Services',desc:'Full-cycle BIM implementation from modeling to coordination. We deliver LOD 100 through LOD 500 models tailored to project phases, enabling clash-free construction and efficient project delivery.',features:['3D BIM modeling (all disciplines)','BIM execution planning','LOD 100–500 deliverables','Model management and coordination','As-built model documentation'],icon:'⬡',page:'BIMServices'},
+  {num:'03',title:'BIM & Engineering Service',desc:'Expert BIM consultancy, digital construction management, 3D modelling and visualization, and clash detection services to navigate the complexities of modern construction.',features:['BIM Consultancy','Digital Construction Management','3D Modelling & Visualization','Clash Detection & Resolution'],icon:'✓',page:'DesignEngineering'},
   {num:'04',title:'Estimation & Take-off',desc:'Precise quantity surveying and cost estimation services for tendering, procurement, and construction phases. BOQ and BOM preparation aligned with international standards.',features:['Bill of Quantities (BOQ) preparation','Bill of Materials (BOM)','Cost estimation and budgeting','Tender documentation support','Quantity verification and reconciliation'],icon:'≡'},
   {num:'05',title:'Multi-Discipline Coordination',desc:'Advanced clash detection and design optimization across Architectural, Structural, and MEP disciplines. We resolve conflicts before they reach the field, reducing rework and delays.',features:['3D clash detection and resolution','Cross-discipline coordination','Design optimization reports','Construction sequencing coordination','Field issue resolution support'],icon:'⇄'},
   {num:'06',title:'Technical Consultancy',desc:'Value engineering, risk mitigation, and ongoing technical support throughout project lifecycle phases. Our consultants bring 15+ years of mega-project experience to your team.',features:['Value engineering analysis','Risk assessment and mitigation','Technical advisory services','Specification development (CSI format)','Sustainable and LEED design support'],icon:'☆'},
@@ -1429,6 +1429,7 @@ function initScrollAnimations(){
 function renderHomeServices(){
   var grid=document.getElementById('homeServicesGrid');grid.innerHTML='';
   SERVICES.slice(0,3).forEach(function(s,i){
+    var target=s.page||'BIMServices';
     var card=document.createElement('div');card.className='service-card animate-on-scroll';
     card.style.transitionDelay=(i*0.1)+'s';
     card.innerHTML='<span class="service-num">'+s.num+'</span>'+
@@ -1436,7 +1437,7 @@ function renderHomeServices(){
       '<h3 class="service-title">'+esc(s.title)+'</h3>'+
       '<p class="service-desc">'+esc(s.desc)+'</p>'+
       '<ul class="service-features">'+s.features.slice(0,3).map(function(f){return'<li>'+esc(f)+'</li>'}).join('')+'</ul>'+
-      '<button class="service-link" onclick="navigateTo(\'Services\')">Learn More <span class="arrow">→</span></button>';
+      '<button class="service-link" onclick="navigateTo(\''+target+'\')">Learn More <span class="arrow">→</span></button>';
     grid.appendChild(card);
   });
 }
