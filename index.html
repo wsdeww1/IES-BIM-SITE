@@ -551,6 +551,29 @@ a{text-decoration:none;color:inherit}
 .svc-page-desc{font-size:14px;line-height:1.7;color:var(--gray-600)}
 @media(max-width:768px){.svc-page-grid{grid-template-columns:1fr}}
 
+/* ── Design & Detail discipline cards ── */
+.de-disciplines{display:flex;flex-direction:column;gap:32px;max-width:900px;margin:0 auto 48px}
+.de-discipline-card{
+  background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius-lg);
+  padding:0;overflow:hidden;transition:all var(--transition);
+}
+.de-discipline-card:hover{border-color:var(--teal);box-shadow:var(--shadow-hover)}
+.de-discipline-title{
+  background:var(--gold);color:var(--teal-deeper);
+  font-size:17px;font-weight:700;padding:14px 28px;margin:0;
+}
+.de-discipline-list{
+  list-style:none;padding:20px 28px 24px;margin:0;display:flex;flex-direction:column;gap:10px;
+}
+.de-discipline-list li{
+  font-size:14px;color:var(--gray-700);line-height:1.6;
+  padding-left:20px;position:relative;
+}
+.de-discipline-list li::before{
+  content:'';position:absolute;left:0;top:8px;
+  width:8px;height:8px;border-radius:50%;background:var(--teal);
+}
+
 .cta-banner-inline h3{font-family:'Playfair Display',serif;font-size:28px;font-weight:800;color:#fff;margin-bottom:10px}
 .cta-banner-inline p{font-size:15px;color:rgba(255,255,255,0.6);line-height:1.6}
 
@@ -961,29 +984,54 @@ a{text-decoration:none;color:inherit}
     <div class="section-header" style="max-width:720px">
       <div class="section-tag">Our Expertise</div>
       <h2 class="section-h2">Design &amp; Detail Engineering</h2>
-      <p class="section-sub">Expert engineering consultancy and digital management services to help clients navigate the complexities of modern construction.</p>
+      <p class="section-sub">Complete design and engineering services across Architectural, Structural, Mechanical, and Electrical disciplines.</p>
     </div>
-    <div class="svc-page-grid">
-      <div class="svc-page-card">
-        <div class="svc-page-icon">01</div>
-        <h3 class="svc-page-title">BIM Consultancy</h3>
-        <p class="svc-page-desc">We offer expert BIM consultancy services to help clients navigate the complexities of BIM adoption and implementation.</p>
+    <div class="de-disciplines">
+
+      <!-- Architectural -->
+      <div class="de-discipline-card">
+        <h3 class="de-discipline-title">Architectural</h3>
+        <ul class="de-discipline-list">
+          <li>Fit-out and interior design development</li>
+          <li>Detailed architectural layouts and finishes</li>
+          <li>Coordination of architectural elements with MEP systems</li>
+          <li>Preparation of detailed drawings and BIM-based shop drawings</li>
+        </ul>
       </div>
-      <div class="svc-page-card">
-        <div class="svc-page-icon">02</div>
-        <h3 class="svc-page-title">Digital Construction Management</h3>
-        <p class="svc-page-desc">Our digital construction management services help clients streamline their construction processes, improve collaboration, and reduce errors.</p>
+
+      <!-- Structural -->
+      <div class="de-discipline-card">
+        <h3 class="de-discipline-title">Structural</h3>
+        <ul class="de-discipline-list">
+          <li>Structural analysis and design support</li>
+          <li>Reinforcement detailing and concrete shop drawings</li>
+          <li>Steel structure modeling and connection detailing</li>
+          <li>Structural coordination with architectural and MEP systems</li>
+        </ul>
       </div>
-      <div class="svc-page-card">
-        <div class="svc-page-icon">03</div>
-        <h3 class="svc-page-title">3D Modelling &amp; Visualization</h3>
-        <p class="svc-page-desc">We create detailed 3D models and visualizations to help clients better understand and communicate their projects.</p>
+
+      <!-- Mechanical -->
+      <div class="de-discipline-card">
+        <h3 class="de-discipline-title">Mechanical (HVAC, Plumbing, Fire Fighting, etc.)</h3>
+        <ul class="de-discipline-list">
+          <li>Mechanical system design and analysis (HVAC, plumbing, fire protection)</li>
+          <li>Ductwork, piping, and equipment modeling in BIM</li>
+          <li>Preparation of detailed mechanical shop drawings and layouts</li>
+          <li>Coordination with architectural, structural, and electrical systems</li>
+        </ul>
       </div>
-      <div class="svc-page-card">
-        <div class="svc-page-icon">04</div>
-        <h3 class="svc-page-title">Clash Detection &amp; Resolution</h3>
-        <p class="svc-page-desc">Our clash detection and resolution services help clients identify and resolve potential conflicts before they become major issues.</p>
+
+      <!-- Electrical -->
+      <div class="de-discipline-card">
+        <h3 class="de-discipline-title">Electrical (Power, Lighting, ELV, etc.)</h3>
+        <ul class="de-discipline-list">
+          <li>Electrical system design and load analysis (power, lighting, ELV systems)</li>
+          <li>Cable routing, panel schedules, and equipment layout in BIM</li>
+          <li>Preparation of detailed electrical shop drawings and schematics</li>
+          <li>Coordination with architectural, structural, and mechanical systems</li>
+        </ul>
       </div>
+
     </div>
     <div class="cta-banner-inline">
       <div><h3>Need a Custom Solution?</h3><p>Our team can tailor engineering services to your specific project requirements.</p></div>
