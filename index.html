@@ -1361,7 +1361,7 @@ function updateNav(){
       var btn=document.createElement('button');
       btn.className='nav-link'+(isServicePage()?' active':'');
       btn.innerHTML='Services <span class="nav-dropdown-arrow"></span>';
-      btn.onclick=function(){navigateTo('BIMServices')};
+      btn.style.cursor='default';
       wrap.appendChild(btn);
       wrap.insertAdjacentHTML('beforeend',buildSimpleDropdown());
       dn.appendChild(wrap);
