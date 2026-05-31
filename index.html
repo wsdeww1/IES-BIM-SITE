@@ -164,12 +164,13 @@ a{text-decoration:none;color:inherit}
   position:relative;min-height:100vh;display:flex;align-items:center;
   background:var(--dark);overflow:hidden;
 }
+.hero-video{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;z-index:0;
+}
 .hero-bg{
-  position:absolute;inset:0;
-  background:
-    linear-gradient(135deg,rgba(12,31,34,0.97) 0%,rgba(59,108,112,0.85) 50%,rgba(45,83,86,0.9) 100%),
-    repeating-linear-gradient(90deg,transparent,transparent 100px,rgba(255,255,255,0.01) 100px,rgba(255,255,255,0.01) 101px),
-    repeating-linear-gradient(0deg,transparent,transparent 100px,rgba(255,255,255,0.01) 100px,rgba(255,255,255,0.01) 101px);
+  position:absolute;inset:0;z-index:1;
+  background:linear-gradient(135deg,rgba(12,31,34,0.82) 0%,rgba(59,108,112,0.7) 50%,rgba(45,83,86,0.75) 100%);
 }
 .hero-pattern{
   position:absolute;inset:-50%;width:200%;height:200%;
@@ -822,6 +823,9 @@ a{text-decoration:none;color:inherit}
 
   <!-- Hero -->
   <section class="hero">
+    <video class="hero-video" autoplay muted loop playsinline>
+      <source src="./videos/hero-bg.mp4" type="video/mp4">
+    </video>
     <div class="hero-bg"></div>
     <div class="hero-pattern"></div>
     <div class="hero-glow"></div>
