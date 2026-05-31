@@ -4,14 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>IES — Integrated Engineering Systems | BIM &amp; Engineering Services</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
 <style>
+/* ── Fonts ──────────────────────────────────────────────── */
+@font-face{font-family:'Noto Sans';src:url('fonts/Noto Sans Regular.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Noto Sans Symbols';src:url('fonts/NotoSansSymbols-VariableFont_wght.ttf') format('truetype');font-weight:100 900;font-style:normal;font-display:swap}
 /* ── Reset ──────────────────────────────────────────────── */
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{font-family:'Inter',sans-serif;background:#fff;color:#1a1a1a;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body{font-family:'Noto Sans','Helvetica Neue',Arial,sans-serif;background:#fff;color:#1a1a1a;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 img{max-width:100%;display:block}
 button{font-family:inherit;cursor:pointer}
 a{text-decoration:none;color:inherit}
@@ -203,7 +203,7 @@ a{text-decoration:none;color:inherit}
 }
 .hero-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--gold);animation:countPulse 2s infinite}
 .hero-h1{
-  font-family:'Playfair Display',serif;font-size:clamp(40px,5.5vw,72px);
+  font-family:'Noto Sans','Helvetica Neue',Arial,sans-serif;font-size:clamp(40px,5.5vw,72px);
   font-weight:800;line-height:1.05;letter-spacing:-0.02em;margin-bottom:24px;
 }
 .hero-h1 span{color:var(--gold)}
@@ -290,7 +290,7 @@ a{text-decoration:none;color:inherit}
 .section-tag.light{color:var(--gold)}
 .section-tag.light::before{background:var(--gold)}
 .section-h2{
-  font-family:'Playfair Display',serif;font-size:clamp(32px,3.5vw,48px);
+  font-family:'Noto Sans','Helvetica Neue',Arial,sans-serif;font-size:clamp(32px,3.5vw,48px);
   font-weight:800;line-height:1.15;letter-spacing:-0.02em;
   color:var(--teal-deeper);margin-bottom:16px;
 }
@@ -574,7 +574,7 @@ a{text-decoration:none;color:inherit}
   width:8px;height:8px;border-radius:50%;background:var(--teal);
 }
 
-.cta-banner-inline h3{font-family:'Playfair Display',serif;font-size:28px;font-weight:800;color:#fff;margin-bottom:10px}
+.cta-banner-inline h3{font-family:'Noto Sans','Helvetica Neue',Arial,sans-serif;font-size:28px;font-weight:800;color:#fff;margin-bottom:10px}
 .cta-banner-inline p{font-size:15px;color:rgba(255,255,255,0.6);line-height:1.6}
 
 @media(max-width:900px){
@@ -664,7 +664,7 @@ a{text-decoration:none;color:inherit}
 .cta-inner{
   max-width:700px;margin:0 auto;text-align:center;position:relative;z-index:1;
 }
-.cta-inner h2{font-family:'Playfair Display',serif;font-size:clamp(28px,3.5vw,44px);font-weight:800;color:#fff;margin-bottom:16px}
+.cta-inner h2{font-family:'Noto Sans','Helvetica Neue',Arial,sans-serif;font-size:clamp(28px,3.5vw,44px);font-weight:800;color:#fff;margin-bottom:16px}
 .cta-inner p{font-size:18px;color:rgba(255,255,255,0.55);line-height:1.6;margin-bottom:36px}
 
 /* ══════════════════════════════════════════════════════════
@@ -699,7 +699,7 @@ a{text-decoration:none;color:inherit}
   text-transform:uppercase;letter-spacing:0.06em;border-radius:100px;
   background:rgba(59,108,112,0.08);color:var(--teal);margin-bottom:12px;
 }
-.modal-title{font-family:'Playfair Display',serif;font-size:30px;font-weight:800;color:var(--teal-deeper);margin-bottom:16px;line-height:1.2}
+.modal-title{font-family:'Noto Sans','Helvetica Neue',Arial,sans-serif;font-size:30px;font-weight:800;color:var(--teal-deeper);margin-bottom:16px;line-height:1.2}
 .modal-desc{font-size:16px;line-height:1.7;color:var(--gray-600);margin-bottom:28px}
 .modal-divider{height:1px;background:var(--gray-200);margin-bottom:28px}
 .modal-meta{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:28px}
@@ -727,7 +727,7 @@ a{text-decoration:none;color:inherit}
 .office-card-top{position:relative;padding:36px 36px 28px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px}
 .office-details{display:flex;flex-direction:column;gap:10px;align-items:center}
 .office-label{
-  font-family:'Playfair Display',serif;font-size:22px;font-weight:800;
+  font-family:'Noto Sans','Helvetica Neue',Arial,sans-serif;font-size:22px;font-weight:800;
   color:var(--teal-deeper);line-height:1.2;
 }
 .office-addr{font-size:13.5px;color:var(--gray-600);line-height:1.6}
@@ -1079,7 +1079,7 @@ a{text-decoration:none;color:inherit}
     </div>
     <div class="about-story">
       <div class="about-story-text">
-        <h3 style="font-family:'Playfair Display',serif;font-size:30px;font-weight:800;color:var(--teal-deeper);line-height:1.2">Built on Engineering Precision</h3>
+        <h3 style="font-family:'Noto Sans','Helvetica Neue',Arial,sans-serif;font-size:30px;font-weight:800;color:var(--teal-deeper);line-height:1.2">Built on Engineering Precision</h3>
         <p>Integrated Engineering Systems (IES) was founded with a clear mission: to deliver high-quality, BIM-based digital modeling solutions that meet the demanding standards of modern construction. Headquartered in Riyadh with a branch office in Cairo, we serve clients across the Middle East and international markets.</p>
         <p>Our team of 25+ engineering professionals brings together deep expertise across Architectural, Structural, and MEP disciplines. With members holding 15+ years of industry experience, we have built a track record of 90% on-time submission and successful delivery on mega-projects including high-rise buildings, hospitals, commercial developments, and stadiums.</p>
         <p>We believe in reducing project risks, enhancing coordination, and achieving successful outcomes through accurate, coordinated, and detail-driven engineering services.</p>
