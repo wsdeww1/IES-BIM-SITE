@@ -1494,21 +1494,7 @@ function closeModal(){document.getElementById('modal').classList.remove('open');
 document.addEventListener('keydown',function(e){if(e.key==='Escape')closeModal()});
 
 /* ═══ SERVICES PAGE ═══ */
-function renderServices(){
-  var list=document.getElementById('servicesList');list.innerHTML='';
-  SERVICES.forEach(function(s,i){
-    var row=document.createElement('div');row.className='service-row'+(i%2===1?' reversed':'');
-    row.innerHTML=
-      '<div class="service-row-content">'+
-      '<div class="svc-gold-bar"></div><div class="svc-num-label">'+s.num+'</div>'+
-      '<h2 class="svc-title">'+esc(s.title)+'</h2><p class="svc-desc">'+esc(s.desc)+'</p>'+
-      '<ul class="svc-features">'+s.features.map(function(f){return'<li>'+esc(f)+'</li>'}).join('')+'</ul></div>'+
-      '<div class="service-row-visual'+(i%2===0?'':' alt')+'">'+
-      '<span class="service-row-num">'+s.num+'</span>'+
-      '<div class="service-row-icon">'+s.num+'</div></div>';
-    list.appendChild(row);
-  });
-}
+function renderServices(){/* removed — individual service pages now */}
 
 /* ═══ CONTACT ═══ */
 function handleSubmit(e){
