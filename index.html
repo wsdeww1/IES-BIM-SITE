@@ -528,6 +528,29 @@ a{text-decoration:none;color:inherit}
   background:linear-gradient(135deg,var(--teal-deeper),var(--teal));
   display:flex;align-items:center;justify-content:space-between;gap:32px;
 }
+/* ── Service page cards ── */
+.svc-page-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;max-width:1000px;margin:0 auto 48px}
+.svc-page-card{
+  background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius-lg);
+  padding:36px;transition:all var(--transition);position:relative;overflow:hidden;
+}
+.svc-page-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--teal),var(--gold));
+  transform:scaleX(0);transform-origin:left;transition:transform var(--transition);
+}
+.svc-page-card:hover{border-color:var(--teal);box-shadow:var(--shadow-hover);transform:translateY(-4px)}
+.svc-page-card:hover::before{transform:scaleX(1)}
+.svc-page-icon{
+  width:48px;height:48px;border-radius:10px;margin-bottom:20px;
+  background:linear-gradient(135deg,rgba(59,108,112,0.08),rgba(59,108,112,0.04));
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;font-weight:800;color:var(--teal);
+}
+.svc-page-title{font-size:19px;font-weight:700;color:var(--teal-deeper);margin-bottom:12px}
+.svc-page-desc{font-size:14px;line-height:1.7;color:var(--gray-600)}
+@media(max-width:768px){.svc-page-grid{grid-template-columns:1fr}}
+
 .cta-banner-inline h3{font-family:'Playfair Display',serif;font-size:28px;font-weight:800;color:#fff;margin-bottom:10px}
 .cta-banner-inline p{font-size:15px;color:rgba(255,255,255,0.6);line-height:1.6}
 
@@ -839,7 +862,7 @@ a{text-decoration:none;color:inherit}
     </div>
     <div class="services-grid" id="homeServicesGrid"></div>
     <div style="text-align:center;margin-top:48px">
-      <button class="btn-gold" onclick="navigateTo('Services')">View All Services <span class="arrow">&rarr;</span></button>
+      <button class="btn-gold" onclick="navigateTo('BIMServices')">View All Services <span class="arrow">&rarr;</span></button>
     </div>
   </section>
 
@@ -890,19 +913,107 @@ a{text-decoration:none;color:inherit}
 <!-- ═══════════════════════════════════════════════════════════
      SERVICES
      ═══════════════════════════════════════════════════════════ -->
-<div class="page-section" id="page-Services">
+<!-- ═══ BIM SERVICES PAGE ═══ -->
+<div class="page-section" id="page-BIMServices">
   <section class="section" style="padding-top:140px">
-    <div class="section-header" style="max-width:640px">
+    <div class="section-header" style="max-width:720px">
       <div class="section-tag">Our Expertise</div>
-      <h2 class="section-h2">Services</h2>
-      <p class="section-sub">Comprehensive engineering services across all disciplines — from concept design through construction documentation and beyond.</p>
+      <h2 class="section-h2">BIM Services</h2>
+      <p class="section-sub">A comprehensive range of BIM (Building Information Modelling) services tailored to enhance the efficiency and accuracy of your projects.</p>
     </div>
-    <div class="services-detail-list" id="servicesList"></div>
-    <div class="cta-banner-inline">
-      <div>
-        <h3>Need a Custom Solution?</h3>
-        <p>Our team can tailor services to your specific project requirements.</p>
+    <div class="svc-page-grid">
+      <div class="svc-page-card">
+        <div class="svc-page-icon">01</div>
+        <h3 class="svc-page-title">BIM Implementation</h3>
+        <p class="svc-page-desc">Seamless integration of BIM into your project workflow, ensuring enhanced collaboration and efficiency.</p>
       </div>
+      <div class="svc-page-card">
+        <div class="svc-page-icon">02</div>
+        <h3 class="svc-page-title">ASMEP Systems</h3>
+        <p class="svc-page-desc">Expertise in Architectural, Structural, Mechanical, Electrical, and Plumbing systems to cater to diverse project needs.</p>
+      </div>
+      <div class="svc-page-card">
+        <div class="svc-page-icon">03</div>
+        <h3 class="svc-page-title">LOD Services</h3>
+        <p class="svc-page-desc">Varying levels of development (LOD 100 to LOD 500), customized to meet specific project requirements.</p>
+      </div>
+      <div class="svc-page-card">
+        <div class="svc-page-icon">04</div>
+        <h3 class="svc-page-title">BIM Coordination</h3>
+        <p class="svc-page-desc">BIM Coordination Reviews to minimize conflicts and optimize construction processes.</p>
+      </div>
+      <div class="svc-page-card">
+        <div class="svc-page-icon">05</div>
+        <h3 class="svc-page-title">PDF/CAD to BIM Modelling</h3>
+        <p class="svc-page-desc">Transformation of PDF and CAD files into accurate BIM models for improved project visualization and coordination.</p>
+      </div>
+    </div>
+    <div class="cta-banner-inline">
+      <div><h3>Need a Custom Solution?</h3><p>Our team can tailor BIM services to your specific project requirements.</p></div>
+      <button class="btn-gold" onclick="navigateTo('Contact')" style="white-space:nowrap">Contact Our Team <span class="arrow">&rarr;</span></button>
+    </div>
+  </section>
+</div>
+
+<!-- ═══ DESIGN & DETAIL ENGINEERING PAGE ═══ -->
+<div class="page-section" id="page-DesignEngineering">
+  <section class="section" style="padding-top:140px">
+    <div class="section-header" style="max-width:720px">
+      <div class="section-tag">Our Expertise</div>
+      <h2 class="section-h2">Design &amp; Detail Engineering</h2>
+      <p class="section-sub">Expert engineering consultancy and digital management services to help clients navigate the complexities of modern construction.</p>
+    </div>
+    <div class="svc-page-grid">
+      <div class="svc-page-card">
+        <div class="svc-page-icon">01</div>
+        <h3 class="svc-page-title">BIM Consultancy</h3>
+        <p class="svc-page-desc">We offer expert BIM consultancy services to help clients navigate the complexities of BIM adoption and implementation.</p>
+      </div>
+      <div class="svc-page-card">
+        <div class="svc-page-icon">02</div>
+        <h3 class="svc-page-title">Digital Construction Management</h3>
+        <p class="svc-page-desc">Our digital construction management services help clients streamline their construction processes, improve collaboration, and reduce errors.</p>
+      </div>
+      <div class="svc-page-card">
+        <div class="svc-page-icon">03</div>
+        <h3 class="svc-page-title">3D Modelling &amp; Visualization</h3>
+        <p class="svc-page-desc">We create detailed 3D models and visualizations to help clients better understand and communicate their projects.</p>
+      </div>
+      <div class="svc-page-card">
+        <div class="svc-page-icon">04</div>
+        <h3 class="svc-page-title">Clash Detection &amp; Resolution</h3>
+        <p class="svc-page-desc">Our clash detection and resolution services help clients identify and resolve potential conflicts before they become major issues.</p>
+      </div>
+    </div>
+    <div class="cta-banner-inline">
+      <div><h3>Need a Custom Solution?</h3><p>Our team can tailor engineering services to your specific project requirements.</p></div>
+      <button class="btn-gold" onclick="navigateTo('Contact')" style="white-space:nowrap">Contact Our Team <span class="arrow">&rarr;</span></button>
+    </div>
+  </section>
+</div>
+
+<!-- ═══ DESIGN & DETAIL ENGINEERING-1 PAGE ═══ -->
+<div class="page-section" id="page-DesignEngineering1">
+  <section class="section" style="padding-top:140px">
+    <div class="section-header" style="max-width:720px">
+      <div class="section-tag">Our Expertise</div>
+      <h2 class="section-h2">Design &amp; Detail Engineering</h2>
+      <p class="section-sub">Accurate construction documentation and comprehensive project management to deliver projects on time and within budget.</p>
+    </div>
+    <div class="svc-page-grid">
+      <div class="svc-page-card">
+        <div class="svc-page-icon">01</div>
+        <h3 class="svc-page-title">Construction Documentation</h3>
+        <p class="svc-page-desc">We provide accurate and comprehensive construction documentation services to help clients ensure that their projects are completed on time and within budget.</p>
+      </div>
+      <div class="svc-page-card">
+        <div class="svc-page-icon">02</div>
+        <h3 class="svc-page-title">Project Management</h3>
+        <p class="svc-page-desc">Our project management services help clients oversee their projects from conception to completion, ensuring that they are completed on time, within budget, and to the required quality standards.</p>
+      </div>
+    </div>
+    <div class="cta-banner-inline">
+      <div><h3>Need a Custom Solution?</h3><p>Our team can tailor services to your specific project requirements.</p></div>
       <button class="btn-gold" onclick="navigateTo('Contact')" style="white-space:nowrap">Contact Our Team <span class="arrow">&rarr;</span></button>
     </div>
   </section>
@@ -1063,10 +1174,9 @@ a{text-decoration:none;color:inherit}
     </div>
     <div>
       <div class="footer-col-title">Services</div>
-      <button class="footer-link" onclick="navigateTo('Services')">Design &amp; Detail</button>
-      <button class="footer-link" onclick="navigateTo('Services')">BIM Coordination</button>
-      <button class="footer-link" onclick="navigateTo('Services')">Design Audit</button>
-      <button class="footer-link" onclick="navigateTo('Services')">Estimation</button>
+      <button class="footer-link" onclick="navigateTo('BIMServices')">BIM Services</button>
+      <button class="footer-link" onclick="navigateTo('DesignEngineering')">Design &amp; Detail</button>
+      <button class="footer-link" onclick="navigateTo('DesignEngineering1')">Design &amp; Detail-1</button>
     </div>
     <div>
       <div class="footer-col-title">Company</div>
@@ -1115,7 +1225,7 @@ var OFFICES={cairo:{lat:30.0444,lng:31.2357},riyadh:{lat:24.7136,lng:46.6753}};
 var TAG_CLASS={Architecture:'tag-arch',Structural:'tag-struct',MEP:'tag-mep',BIM:'tag-bim'};
 
 /* ═══ NAV ═══ */
-var currentPage='Home',pages=['Home','Projects','Services','About','Contact'],mobileOpen=false;
+var currentPage='Home',pages=['Home','Projects','BIMServices','DesignEngineering','DesignEngineering1','About','Contact'],mobileOpen=false;
 
 function navigateTo(p){
   if(!pages.includes(p))return;
@@ -1127,18 +1237,16 @@ function navigateTo(p){
   if(p==='Contact')initMap();
   initScrollAnimations();
 }
-var SVC_ITEMS = [
-  'BIM Services',
-  'Design & Detail Engineering',
-  'Design Review & Audit',
-  'Estimation & Take-off',
-  'Multi-Discipline Coordination',
-  'Technical Consultancy'
+var SVC_DROPDOWN_ITEMS = [
+  {label:'BIM Services', page:'BIMServices'},
+  {label:'Design & Detail Engineering', page:'DesignEngineering'},
+  {label:'Design & Detail Engineering-1', page:'DesignEngineering1'}
 ];
+var NAV_PAGES = ['Home','Projects','About','Contact']; /* visible nav links (Services is dropdown) */
 function buildSimpleDropdown(){
   var html='<div class="nav-simple-dropdown"><div class="nav-simple-dropdown-inner">';
-  SVC_ITEMS.forEach(function(s){
-    html+='<button class="dropdown-item" onclick="navigateTo(\'Services\')">'+s+'</button>';
+  SVC_DROPDOWN_ITEMS.forEach(function(s){
+    html+='<button class="dropdown-item" onclick="navigateTo(\''+s.page+'\')">'+s.label+'</button>';
   });
   html+='</div></div>';
   return html;
@@ -1146,8 +1254,8 @@ function buildSimpleDropdown(){
 function buildMobileSvcPanel(){
   var html='<button class="mobile-svc-toggle" onclick="toggleMobileSvc(this)">Services <span class="mobile-svc-arrow">&#9660;</span></button>';
   html+='<div class="mobile-svc-panel" id="mobileSvcPanel">';
-  SVC_ITEMS.forEach(function(s){
-    html+='<button class="mobile-svc-item" onclick="navigateTo(\'Services\');closeMobile()">'+s+'</button>';
+  SVC_DROPDOWN_ITEMS.forEach(function(s){
+    html+='<button class="mobile-svc-item" onclick="navigateTo(\''+s.page+'\');closeMobile()">'+s.label+'</button>';
   });
   html+='</div>';
   return html;
@@ -1157,16 +1265,18 @@ function toggleMobileSvc(btn){
   var panel=document.getElementById('mobileSvcPanel');
   if(panel)panel.classList.toggle('open');
 }
+function isServicePage(){return ['BIMServices','DesignEngineering','DesignEngineering1'].indexOf(currentPage)!==-1}
 function updateNav(){
   /* Desktop nav */
   var dn=document.getElementById('desktopNav');dn.innerHTML='';
-  pages.forEach(function(p){
-    if(p==='Services'){
+  var navItems=['Home','Projects','_services_','About','Contact'];
+  navItems.forEach(function(p){
+    if(p==='_services_'){
       var wrap=document.createElement('div');wrap.className='nav-dropdown-wrap';
       var btn=document.createElement('button');
-      btn.className='nav-link'+(currentPage===p?' active':'');
-      btn.innerHTML=p+' <span class="nav-dropdown-arrow"></span>';
-      btn.onclick=function(){navigateTo(p)};
+      btn.className='nav-link'+(isServicePage()?' active':'');
+      btn.innerHTML='Services <span class="nav-dropdown-arrow"></span>';
+      btn.onclick=function(){navigateTo('BIMServices')};
       wrap.appendChild(btn);
       wrap.insertAdjacentHTML('beforeend',buildSimpleDropdown());
       dn.appendChild(wrap);
@@ -1179,8 +1289,8 @@ function updateNav(){
   });
   /* Mobile nav */
   var mn=document.getElementById('mobileNav');mn.innerHTML='';
-  pages.forEach(function(p){
-    if(p==='Services'){
+  navItems.forEach(function(p){
+    if(p==='_services_'){
       mn.insertAdjacentHTML('beforeend',buildMobileSvcPanel());
     } else {
       var b=document.createElement('button');
