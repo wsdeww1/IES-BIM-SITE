@@ -1724,25 +1724,14 @@ function initGlobe(canvasId){
         '  float l=dot(normalize(vN),normalize(sunDir));',
         '  float m=smoothstep(-0.25,0.30,l);',           /* terminator blend */
         '  vec3 col=mix(night*1.6,day*1.15,m);',          /* mix both textures */
-        '  float rim=pow(1.0-max(dot(normalize(vN),vec3(0.0,0.0,1.0)),0.0),2.5);',
-        '  col+=vec3(0.20,0.32,0.45)*rim*0.6;',           /* atmosphere rim */
         '  gl_FragColor=vec4(col,1.0);',
         '}'
       ].join('\n')
     });
 
     earth=new THREE.Mesh(new THREE.SphereGeometry(1,72,72),mat);
+    earth.scale.setScalar(0.8);                          /* slightly smaller */
     group.add(earth);
-
-    /* soft atmosphere halo (back-side additive sphere) */
-    var atmoMat=new THREE.ShaderMaterial({
-      transparent:true,blending:THREE.AdditiveBlending,side:THREE.BackSide,depthWrite:false,
-      uniforms:{},
-      vertexShader:['varying vec3 vN;void main(){vN=normalize(normalMatrix*normal);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}'].join('\n'),
-      fragmentShader:['varying vec3 vN;void main(){float i=pow(0.62-dot(vN,vec3(0,0,1.0)),3.0);i=clamp(i,0.0,1.0);gl_FragColor=vec4(vec3(0.30,0.55,0.75)*i,i);}'].join('\n')
-    });
-    var atmo=new THREE.Mesh(new THREE.SphereGeometry(1.18,48,48),atmoMat);
-    group.add(atmo);
   }
 
   function resize(){
