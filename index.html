@@ -192,7 +192,7 @@ a{text-decoration:none;color:inherit}
 }
 .hero-content{
   position:relative;z-index:2;padding:0 60px;max-width:1400px;width:100%;margin:0 auto;
-  display:grid;grid-template-columns:1fr 400px;gap:80px;align-items:center;
+  display:flex;align-items:center;
 }
 .hero-text{color:#fff}
 .hero-badge{
@@ -438,6 +438,16 @@ a{text-decoration:none;color:inherit}
 .about-visual-logo{height:48px;opacity:0.15}
 
 .values-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;max-width:1000px;margin:0 auto}
+/* Team stats */
+.team-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;max-width:1000px;margin:0 auto}
+.team-stat{
+  text-align:center;padding:40px 24px;border-radius:var(--radius-lg);
+  background:#fff;border:1px solid var(--gray-200);transition:all var(--transition);
+}
+.team-stat:hover{border-color:var(--teal);box-shadow:var(--shadow-hover);transform:translateY(-4px)}
+.team-stat .stat-number{font-size:44px;font-weight:800;color:var(--teal-deeper);line-height:1;margin-bottom:8px}
+.team-stat .stat-label{font-size:14px;color:var(--gray-600)}
+@media(max-width:768px){.team-stats{grid-template-columns:repeat(2,1fr)}}
 .value-card{
   text-align:center;padding:48px 32px;border-radius:var(--radius-lg);
   background:#fff;border:1px solid var(--gray-200);
@@ -830,32 +840,7 @@ a{text-decoration:none;color:inherit}
           <button class="btn-outline" onclick="navigateTo('Contact')">Contact Us</button>
         </div>
       </div>
-      <div class="hero-stats" id="heroStats">
-        <div class="hero-stat-card">
-          <div class="stat-icon">
-            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
-          </div>
-          <div><div class="stat-number" data-target="25" data-suffix="+">0</div><div class="stat-label">Engineering Professionals</div></div>
-        </div>
-        <div class="hero-stat-card">
-          <div class="stat-icon">
-            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          </div>
-          <div><div class="stat-number" data-target="15" data-suffix="+">0</div><div class="stat-label">Years of Experience</div></div>
-        </div>
-        <div class="hero-stat-card">
-          <div class="stat-icon">
-            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-          </div>
-          <div><div class="stat-number" data-target="90" data-suffix="%">0</div><div class="stat-label">On-time Delivery</div></div>
-        </div>
-        <div class="hero-stat-card">
-          <div class="stat-icon">
-            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a4 4 0 00-8 0v2"/></svg>
-          </div>
-          <div><div class="stat-number" data-target="50" data-suffix="+">0</div><div class="stat-label">Projects Completed</div></div>
-        </div>
-      </div>
+      <!-- stats removed -->
     </div>
   </section>
 
@@ -1102,7 +1087,8 @@ a{text-decoration:none;color:inherit}
 <!-- ═══════════════════════════════════════════════════════════
      ABOUT
      ═══════════════════════════════════════════════════════════ -->
-<div class="page-section" id="page-About">
+<!-- ═══ IES STORY PAGE ═══ -->
+<div class="page-section" id="page-AboutStory">
   <section class="section" style="padding-top:140px">
     <div class="section-header" style="max-width:680px">
       <div class="section-tag">About IES</div>
@@ -1140,6 +1126,35 @@ a{text-decoration:none;color:inherit}
 
   <section class="section">
     <div class="section-header centered">
+      <div class="section-tag">Global Presence</div>
+      <h2 class="section-h2">Our Offices</h2>
+      <p class="section-sub">Strategically located to serve the Middle East region.</p>
+    </div>
+    <div class="offices-grid">
+      <div class="office-card"><h3 class="office-city">Riyadh</h3><div class="office-country">Saudi Arabia — Head Office</div><p class="office-detail">Our headquarters and primary engineering center, providing local coordination, client liaison, and on-site technical support for KSA projects.</p></div>
+      <div class="office-card"><h3 class="office-city">Cairo</h3><div class="office-country">Egypt — Branch Office</div><p class="office-detail">Our branch office housing the majority of our design and BIM production teams, serving the Middle East region.</p></div>
+    </div>
+  </section>
+</div>
+
+<!-- ═══ IES TEAM PAGE ═══ -->
+<div class="page-section" id="page-AboutTeam">
+  <section class="section" style="padding-top:140px">
+    <div class="section-header" style="max-width:680px">
+      <div class="section-tag">About IES</div>
+      <h2 class="section-h2">Our Team</h2>
+      <p class="section-sub">A multi-discipline team of engineering professionals organized for efficiency and quality across every project phase.</p>
+    </div>
+    <div class="team-stats" id="teamStats">
+      <div class="team-stat"><div class="stat-number" data-target="25" data-suffix="+">0</div><div class="stat-label">Engineering Professionals</div></div>
+      <div class="team-stat"><div class="stat-number" data-target="15" data-suffix="+">0</div><div class="stat-label">Years of Experience</div></div>
+      <div class="team-stat"><div class="stat-number" data-target="90" data-suffix="%">0</div><div class="stat-label">On-time Delivery</div></div>
+      <div class="team-stat"><div class="stat-number" data-target="50" data-suffix="+">0</div><div class="stat-label">Projects Completed</div></div>
+    </div>
+  </section>
+
+  <section class="section section-gray">
+    <div class="section-header centered">
       <div class="section-tag">Team</div>
       <h2 class="section-h2">Organization Structure</h2>
       <p class="section-sub">A multi-discipline team organized for efficiency and quality across every project phase.</p>
@@ -1154,18 +1169,6 @@ a{text-decoration:none;color:inherit}
       <div class="org-depts-sub">
         <div class="org-dept">BIM</div><div class="org-dept">QA/QC</div><div class="org-dept">QS</div>
       </div>
-    </div>
-  </section>
-
-  <section class="section section-gray">
-    <div class="section-header centered">
-      <div class="section-tag">Global Presence</div>
-      <h2 class="section-h2">Our Offices</h2>
-      <p class="section-sub">Strategically located to serve the Middle East region.</p>
-    </div>
-    <div class="offices-grid">
-      <div class="office-card"><h3 class="office-city">Riyadh</h3><div class="office-country">Saudi Arabia — Head Office</div><p class="office-detail">Our headquarters and primary engineering center, providing local coordination, client liaison, and on-site technical support for KSA projects.</p></div>
-      <div class="office-card"><h3 class="office-city">Cairo</h3><div class="office-country">Egypt — Branch Office</div><p class="office-detail">Our branch office housing the majority of our design and BIM production teams, serving the Middle East region.</p></div>
     </div>
   </section>
 </div>
@@ -1260,7 +1263,7 @@ a{text-decoration:none;color:inherit}
     </div>
     <div>
       <div class="footer-col-title">Company</div>
-      <button class="footer-link" onclick="navigateTo('About')">About IES</button>
+      <button class="footer-link" onclick="navigateTo('AboutStory')">About IES</button>
       <button class="footer-link" onclick="navigateTo('Projects')">Projects</button>
       <button class="footer-link" onclick="navigateTo('Contact')">Contact Us</button>
     </div>
@@ -1305,7 +1308,7 @@ var OFFICES={cairo:{lat:30.0444,lng:31.2357},riyadh:{lat:24.7136,lng:46.6753}};
 var TAG_CLASS={Architecture:'tag-arch',Structural:'tag-struct',MEP:'tag-mep',BIM:'tag-bim'};
 
 /* ═══ NAV ═══ */
-var currentPage='Home',pages=['Home','Projects','BIMServices','DesignEngineering','DesignEngineering1','About','Contact'],mobileOpen=false;
+var currentPage='Home',pages=['Home','Projects','BIMServices','DesignEngineering','DesignEngineering1','AboutStory','AboutTeam','Contact'],mobileOpen=false;
 
 function navigateTo(p){
   if(!pages.includes(p))return;
@@ -1315,50 +1318,64 @@ function navigateTo(p){
   updateNav();closeMobile();window.scrollTo({top:0,behavior:'smooth'});
   if(p==='Projects')renderProjects();
   if(p==='Contact')initMap();
+  if(p==='AboutTeam'){countersStarted=false;var ts=document.getElementById('teamStats');if(ts)statsObs.observe(ts)}
   initScrollAnimations();
 }
-var SVC_DROPDOWN_ITEMS = [
-  {label:'BIM Services', page:'BIMServices'},
-  {label:'BIM & Engineering Service', page:'DesignEngineering'},
-  {label:'Design & Detail Engineering', page:'DesignEngineering1'}
-];
-var NAV_PAGES = ['Home','Projects','About','Contact']; /* visible nav links (Services is dropdown) */
-function buildSimpleDropdown(){
+
+/* Dropdown menu definitions */
+var DROPDOWNS={
+  Services:{label:'Services',pages:['BIMServices','DesignEngineering','DesignEngineering1'],items:[
+    {label:'BIM Services',page:'BIMServices'},
+    {label:'BIM & Engineering Service',page:'DesignEngineering'},
+    {label:'Design & Detail Engineering',page:'DesignEngineering1'}
+  ]},
+  About:{label:'About',pages:['AboutStory','AboutTeam'],items:[
+    {label:'IES Story',page:'AboutStory'},
+    {label:'IES Team',page:'AboutTeam'}
+  ]}
+};
+
+function buildSimpleDropdown(key){
+  var d=DROPDOWNS[key];
   var html='<div class="nav-simple-dropdown"><div class="nav-simple-dropdown-inner">';
-  SVC_DROPDOWN_ITEMS.forEach(function(s){
+  d.items.forEach(function(s){
     html+='<button class="dropdown-item" onclick="navigateTo(\''+s.page+'\')">'+s.label+'</button>';
   });
   html+='</div></div>';
   return html;
 }
-function buildMobileSvcPanel(){
-  var html='<button class="mobile-svc-toggle" onclick="toggleMobileSvc(this)">Services <span class="mobile-svc-arrow">&#9660;</span></button>';
-  html+='<div class="mobile-svc-panel" id="mobileSvcPanel">';
-  SVC_DROPDOWN_ITEMS.forEach(function(s){
+function buildMobilePanel(key){
+  var d=DROPDOWNS[key];
+  var pid='mobilePanel_'+key;
+  var html='<button class="mobile-svc-toggle" onclick="toggleMobilePanel(\''+pid+'\',this)">'+d.label+' <span class="mobile-svc-arrow">&#9660;</span></button>';
+  html+='<div class="mobile-svc-panel" id="'+pid+'">';
+  d.items.forEach(function(s){
     html+='<button class="mobile-svc-item" onclick="navigateTo(\''+s.page+'\');closeMobile()">'+s.label+'</button>';
   });
   html+='</div>';
   return html;
 }
-function toggleMobileSvc(btn){
+function toggleMobilePanel(pid,btn){
   btn.classList.toggle('open');
-  var panel=document.getElementById('mobileSvcPanel');
+  var panel=document.getElementById(pid);
   if(panel)panel.classList.toggle('open');
 }
-function isServicePage(){return ['BIMServices','DesignEngineering','DesignEngineering1'].indexOf(currentPage)!==-1}
+function isInDropdown(key){return DROPDOWNS[key].pages.indexOf(currentPage)!==-1}
+
 function updateNav(){
+  var navItems=['Home','Projects','_Services_','_About_','Contact'];
   /* Desktop nav */
   var dn=document.getElementById('desktopNav');dn.innerHTML='';
-  var navItems=['Home','Projects','_services_','About','Contact'];
   navItems.forEach(function(p){
-    if(p==='_services_'){
+    if(p==='_Services_'||p==='_About_'){
+      var key=p.replace(/_/g,'');
       var wrap=document.createElement('div');wrap.className='nav-dropdown-wrap';
       var btn=document.createElement('button');
-      btn.className='nav-link'+(isServicePage()?' active':'');
-      btn.innerHTML='Services <span class="nav-dropdown-arrow"></span>';
+      btn.className='nav-link'+(isInDropdown(key)?' active':'');
+      btn.innerHTML=DROPDOWNS[key].label+' <span class="nav-dropdown-arrow"></span>';
       btn.style.cursor='default';
       wrap.appendChild(btn);
-      wrap.insertAdjacentHTML('beforeend',buildSimpleDropdown());
+      wrap.insertAdjacentHTML('beforeend',buildSimpleDropdown(key));
       dn.appendChild(wrap);
     } else {
       var b=document.createElement('button');
@@ -1370,8 +1387,9 @@ function updateNav(){
   /* Mobile nav */
   var mn=document.getElementById('mobileNav');mn.innerHTML='';
   navItems.forEach(function(p){
-    if(p==='_services_'){
-      mn.insertAdjacentHTML('beforeend',buildMobileSvcPanel());
+    if(p==='_Services_'||p==='_About_'){
+      var key=p.replace(/_/g,'');
+      mn.insertAdjacentHTML('beforeend',buildMobilePanel(key));
     } else {
       var b=document.createElement('button');
       b.className='nav-link'+(currentPage===p?' active':'');
@@ -1641,7 +1659,7 @@ function initParticleWave(canvasId){
   document.querySelectorAll('.page-section').forEach(function(el){el.classList.remove('active')});
   var t=document.getElementById('page-'+currentPage);if(t)t.classList.add('active');
   if(currentPage==='Contact')initMap();
-  var sb=document.getElementById('heroStats');if(sb)statsObs.observe(sb);
+  if(currentPage==='AboutTeam'){var ts=document.getElementById('teamStats');if(ts)statsObs.observe(ts)}
   initScrollAnimations();
   initParticleWave('particleHome');
   initParticleWave('particleProjects');
