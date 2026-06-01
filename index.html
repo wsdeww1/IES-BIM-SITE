@@ -1732,6 +1732,8 @@ function initGlobe(canvasId){
 
     earth=new THREE.Mesh(new THREE.SphereGeometry(1,72,72),mat);
     earth.scale.setScalar(0.8);                          /* slightly smaller */
+    /* start facing the Middle East (Egypt ~31°E / Saudi Arabia ~45°E, center ~38°E) */
+    earth.rotation.y=-(38+90)*Math.PI/180;
     group.add(earth);
   }
 
