@@ -74,8 +74,10 @@ a{text-decoration:none;color:inherit}
 }
 .site-header.scrolled{height:64px;background:rgba(12,31,34,0.97);box-shadow:0 4px 30px rgba(0,0,0,0.3)}
 .header-left{display:flex;align-items:center;gap:56px}
-.header-logo{height:30px;cursor:pointer;transition:opacity var(--transition)}
-.header-logo:hover{opacity:0.85}
+.header-logo-group{display:flex;align-items:center;gap:12px;cursor:pointer;transition:opacity var(--transition)}
+.header-logo-group:hover{opacity:0.85}
+.header-logo-icon{height:42px;width:auto;display:block}
+.header-logo{height:30px;display:block}
 .desktop-nav{display:flex;gap:8px}
 .nav-link{
   color:rgba(255,255,255,0.6);font-size:13.5px;font-weight:500;
@@ -806,7 +808,10 @@ a{text-decoration:none;color:inherit}
 <!-- ═══ HEADER ═══ -->
 <header class="site-header" id="siteHeader">
   <div class="header-left">
-    <img src="./assets/logo-horizontal-white.svg" class="header-logo" alt="IES" onclick="navigateTo('Home')">
+    <div class="header-logo-group" onclick="navigateTo('Home')">
+      <img src="./assets/logo-icon.svg" class="header-logo-icon" alt="">
+      <img src="./assets/logo-horizontal-white.svg" class="header-logo" alt="IES">
+    </div>
     <nav class="desktop-nav" id="desktopNav"></nav>
   </div>
   <button class="header-cta" onclick="navigateTo('Contact')">Get in Touch &rarr;</button>
