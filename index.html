@@ -1723,7 +1723,8 @@ function initGlobe(canvasId){
         '  vec3 night=texture2D(nightTex,vUv).rgb;',
         '  float l=dot(normalize(vN),normalize(sunDir));',
         '  float m=smoothstep(-0.25,0.30,l);',           /* terminator blend */
-        '  vec3 col=mix(night*1.6,day*1.15,m);',          /* mix both textures */
+        '  vec3 nightGlow=night*vec3(1.15,1.05,0.7)*2.6;', /* warm, brighter city lights */
+        '  vec3 col=mix(nightGlow,day*1.15,m);',           /* mix both textures */
         '  gl_FragColor=vec4(col,1.0);',
         '}'
       ].join('\n')
