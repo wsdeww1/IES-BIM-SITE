@@ -213,6 +213,7 @@ a{text-decoration:none;color:inherit}
 .hero-lockup{display:flex;align-items:center;gap:24px;margin-bottom:28px}
 .hero-logo{height:clamp(120px,16vw,200px);width:auto;display:block;flex-shrink:0}
 .hero-lockup .hero-h1{margin-bottom:0}
+.hero-word-shift{display:inline-block;margin-left:-10px}
 @media(max-width:600px){.hero-lockup{gap:14px}}
 .hero-sub{
   font-size:18px;font-weight:300;line-height:1.7;
@@ -762,6 +763,7 @@ a{text-decoration:none;color:inherit}
 
 /* ══ PARTICLE WAVE CANVAS ══ */
 .particle-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+.globe-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;opacity:0.85}
 
 .site-footer{background:var(--dark);padding:80px 60px 32px;color:#fff}
 .footer-top{
@@ -844,7 +846,7 @@ a{text-decoration:none;color:inherit}
         <div class="hero-badge">BIM &amp; Engineering Services</div>
         <div class="hero-lockup">
           <img src="./assets/logo-icon-color.svg" class="hero-logo" alt="IES">
-          <h1 class="hero-h1">Integrated<br>Engineering<br><span>Systems</span></h1>
+          <h1 class="hero-h1"><span class="hero-word-shift">Integrated</span><br>Engineering<br><span>Systems</span></h1>
         </div>
         <p class="hero-sub">Delivering high-quality BIM-based digital modeling solutions for Architectural, Structural, and MEP disciplines across the Middle East.</p>
         <div class="hero-btns">
@@ -1186,9 +1188,12 @@ a{text-decoration:none;color:inherit}
      CONTACT
      ═══════════════════════════════════════════════════════════ -->
 <div class="page-section" id="page-Contact">
-  <section class="section" style="padding-top:140px">
+  <section class="section section-dark" style="padding-top:140px;position:relative;overflow:hidden">
+    <canvas class="particle-canvas" id="particleContact"></canvas>
+    <canvas class="globe-canvas" id="globeContact"></canvas>
+    <div style="position:relative;z-index:2">
     <div class="section-header" style="max-width:640px">
-      <div class="section-tag">Get in Touch</div>
+      <div class="section-tag light">Get in Touch</div>
       <h2 class="section-h2">Contact Us</h2>
       <p class="section-sub">Ready to <span class="gold-highlight" data-highlight>discuss</span> your next project? Reach out to <span class="gold-highlight delay-1" data-highlight>schedule a meeting</span> with our <span class="gold-highlight delay-2" data-highlight>engineering team</span>.</p>
     </div>
@@ -1226,6 +1231,7 @@ a{text-decoration:none;color:inherit}
         <iframe class="office-map" src="https://www.openstreetmap.org/export/embed.html?bbox=31.1557%2C29.9944%2C31.3157%2C30.0944&layer=mapnik&marker=30.0444%2C31.2357" title="Cairo Office" loading="lazy"></iframe>
       </div>
 
+    </div>
     </div>
   </section>
 </div>
@@ -1659,6 +1665,97 @@ function initParticleWave(canvasId){
   return{resize:resize};
 }
 
+/* ═══ 3D ROTATING GLOBE (dot-sphere Earth) ═══ */
+function initGlobe(canvasId){
+  var canvas=document.getElementById(canvasId);
+  if(!canvas)return null;
+  var ctx=canvas.getContext('2d');
+  var W,H,dpr,active=false,cx,cy,R;
+  var N=1600;                       /* points on sphere */
+  var pts=[];
+  var tilt=0.41;                    /* axial tilt (radians) */
+  var cosT=Math.cos(tilt),sinT=Math.sin(tilt);
+
+  /* Fibonacci sphere distribution */
+  (function build(){
+    var ga=Math.PI*(3-Math.sqrt(5));
+    for(var i=0;i<N;i++){
+      var y=1-(i/(N-1))*2;
+      var r=Math.sqrt(1-y*y);
+      var th=ga*i;
+      pts.push({x:Math.cos(th)*r,y:y,z:Math.sin(th)*r});
+    }
+  })();
+
+  function resize(){
+    var rect=canvas.parentElement.getBoundingClientRect();
+    W=rect.width;H=rect.height;
+    dpr=Math.min(window.devicePixelRatio||1,2);
+    canvas.width=Math.round(W*dpr);canvas.height=Math.round(H*dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    /* place globe in open upper-right area, behind content */
+    R=Math.min(W*0.30,250);
+    cx=W>900?W*0.76:W*0.5;
+    cy=W>900?Math.min(H*0.30,300):200;
+  }
+
+  function draw(){
+    if(!active)return;
+    ctx.clearRect(0,0,W,H);
+    ctx.globalCompositeOperation='lighter';
+    var ang=performance.now()*0.00018;   /* slow spin */
+    var cosA=Math.cos(ang),sinA=Math.sin(ang);
+    var sprite=_pwSprite;
+
+    for(var i=0;i<N;i++){
+      var p=pts[i];
+      /* rotate around Y (spin) */
+      var x1=p.x*cosA - p.z*sinA;
+      var z1=p.x*sinA + p.z*cosA;
+      /* axial tilt around X */
+      var y2=p.y*cosT - z1*sinT;
+      var z2=p.y*sinT + z1*cosT;
+
+      var depth=(z2+1)/2;             /* 0 back .. 1 front */
+      var scale=R*(0.62+0.38*depth);
+      var sx=cx + x1*scale;
+      var sy=cy - y2*scale;
+
+      /* brightness: front bright, back faint (see-through globe) */
+      var a=0.08+depth*depth*0.6;
+      /* gold equatorial band accent */
+      var rad=(0.6+depth*1.8);
+      ctx.globalAlpha=a;
+      ctx.drawImage(sprite, sx-rad, sy-rad, rad*2, rad*2);
+    }
+
+    /* soft rim halo */
+    ctx.globalAlpha=0.06;
+    var grd=ctx.createRadialGradient(cx,cy,R*0.6,cx,cy,R*1.25);
+    grd.addColorStop(0,'rgba(242,218,145,0.18)');
+    grd.addColorStop(1,'rgba(242,218,145,0)');
+    ctx.fillStyle=grd;
+    ctx.beginPath();ctx.arc(cx,cy,R*1.25,0,6.283);ctx.fill();
+
+    ctx.globalAlpha=1;
+    ctx.globalCompositeOperation='source-over';
+    requestAnimationFrame(draw);
+  }
+
+  resize();
+  var observer=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting&&!active){
+        if(!W||!H||canvas.width===0)resize();
+        active=true;requestAnimationFrame(draw);
+      } else if(!e.isIntersecting){active=false}
+    });
+  },{threshold:0.02});
+  observer.observe(canvas);
+  var rt;window.addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(resize,150)});
+  return{resize:resize};
+}
+
 /* ═══ OFFICE CARDS (static, no slider) ═══ */
 
 /* ═══ INIT ═══ */
@@ -1672,6 +1769,8 @@ function initParticleWave(canvasId){
   initScrollAnimations();
   initParticleWave('particleHome');
   initParticleWave('particleProjects');
+  initParticleWave('particleContact');
+  initGlobe('globeContact');
 })();
 </script>
 </body>
