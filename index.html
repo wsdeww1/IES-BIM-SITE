@@ -212,8 +212,8 @@ a{text-decoration:none;color:inherit}
 .hero-h1 span{color:var(--gold)}
 .hero-lockup{display:flex;align-items:center;gap:24px;margin-bottom:28px}
 .hero-logo{height:clamp(120px,16vw,200px);width:auto;display:block;flex-shrink:0}
-.hero-lockup .hero-h1{margin-bottom:0;white-space:nowrap}
-@media(max-width:1024px){.hero-lockup{flex-direction:column;align-items:flex-start;gap:16px}.hero-lockup .hero-h1{white-space:normal}}
+.hero-lockup .hero-h1{margin-bottom:0}
+.hero-word-shift{display:inline-block;margin-left:-10px}
 @media(max-width:600px){.hero-lockup{gap:14px}}
 .hero-sub{
   font-size:18px;font-weight:300;line-height:1.7;
@@ -846,7 +846,7 @@ a{text-decoration:none;color:inherit}
         <div class="hero-badge">BIM &amp; Engineering Services</div>
         <div class="hero-lockup">
           <img src="./assets/logo-icon-color.svg" class="hero-logo" alt="IES">
-          <h1 class="hero-h1">Integrated Engineering <span>Systems</span></h1>
+          <h1 class="hero-h1"><span class="hero-word-shift">Integrated</span><br>Engineering<br><span>Systems</span></h1>
         </div>
         <p class="hero-sub">Delivering high-quality BIM-based digital modeling solutions for Architectural, Structural, and MEP disciplines across the Middle East.</p>
         <div class="hero-btns">
