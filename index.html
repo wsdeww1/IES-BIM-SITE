@@ -1296,6 +1296,7 @@ a{text-decoration:none;color:inherit}
   </div>
 </footer>
 
+<script src="https://unpkg.com/three@0.128.0/build/three.min.js"></script>
 <script>
 /* ═══ DATA ═══ */
 var PROJECTS=[
@@ -1665,90 +1666,116 @@ function initParticleWave(canvasId){
   return{resize:resize};
 }
 
-/* ═══ 3D ROTATING GLOBE (dot-sphere Earth) ═══ */
+/* ═══ REAL TEXTURED 3D EARTH (Three.js, day/night mix shader) ═══ */
 function initGlobe(canvasId){
   var canvas=document.getElementById(canvasId);
   if(!canvas)return null;
-  var ctx=canvas.getContext('2d');
-  var W,H,dpr,active=false,cx,cy,R;
-  var N=1600;                       /* points on sphere */
-  var pts=[];
-  var tilt=0.41;                    /* axial tilt (radians) */
-  var cosT=Math.cos(tilt),sinT=Math.sin(tilt);
+  /* THREE may load after init (CDN) — poll until ready */
+  if(typeof THREE==='undefined'){
+    var tries=0,t=setInterval(function(){
+      if(typeof THREE!=='undefined'){clearInterval(t);initGlobe(canvasId);}
+      else if(++tries>100)clearInterval(t);
+    },100);
+    return null;
+  }
+  var W,H,active=false,started=false;
+  var renderer,scene,camera,earth,group;
 
-  /* Fibonacci sphere distribution */
-  (function build(){
-    var ga=Math.PI*(3-Math.sqrt(5));
-    for(var i=0;i<N;i++){
-      var y=1-(i/(N-1))*2;
-      var r=Math.sqrt(1-y*y);
-      var th=ga*i;
-      pts.push({x:Math.cos(th)*r,y:y,z:Math.sin(th)*r});
-    }
-  })();
-
-  function resize(){
+  function setup(){
+    if(started)return;started=true;
     var rect=canvas.parentElement.getBoundingClientRect();
     W=rect.width;H=rect.height;
-    dpr=Math.min(window.devicePixelRatio||1,2);
-    canvas.width=Math.round(W*dpr);canvas.height=Math.round(H*dpr);
-    ctx.setTransform(dpr,0,0,dpr,0,0);
-    /* place globe in open upper-right area, behind content */
-    R=Math.min(W*0.30,250);
-    cx=W>900?W*0.76:W*0.5;
-    cy=W>900?Math.min(H*0.30,300):200;
+    renderer=new THREE.WebGLRenderer({canvas:canvas,alpha:true,antialias:true});
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+    renderer.setSize(W,H,false);
+    if(THREE.sRGBEncoding)renderer.outputEncoding=THREE.sRGBEncoding;
+    scene=new THREE.Scene();
+    camera=new THREE.PerspectiveCamera(38,W/H,0.1,100);
+    camera.position.set(0,0,3.4);
+
+    group=new THREE.Group();
+    /* offset into upper-right on desktop, centered on mobile */
+    if(W>900){group.position.set(1.05,0.55,0);} else {group.position.set(0,0.35,0);}
+    group.rotation.z=0.41;                 /* axial tilt */
+    scene.add(group);
+
+    var loader=new THREE.TextureLoader();
+    var dayTex=loader.load('./assets/earth/day.jpg');
+    var nightTex=loader.load('./assets/earth/night.jpg');
+    if(THREE.sRGBEncoding){dayTex.encoding=THREE.sRGBEncoding;nightTex.encoding=THREE.sRGBEncoding;}
+
+    var mat=new THREE.ShaderMaterial({
+      uniforms:{
+        dayTex:{value:dayTex},
+        nightTex:{value:nightTex},
+        sunDir:{value:new THREE.Vector3(1,0.25,0.7).normalize()}
+      },
+      vertexShader:[
+        'varying vec2 vUv;varying vec3 vN;',
+        'void main(){vUv=uv;vN=normalize(normalMatrix*normal);',
+        'gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}'
+      ].join('\n'),
+      fragmentShader:[
+        'uniform sampler2D dayTex;uniform sampler2D nightTex;uniform vec3 sunDir;',
+        'varying vec2 vUv;varying vec3 vN;',
+        'void main(){',
+        '  vec3 day=texture2D(dayTex,vUv).rgb;',
+        '  vec3 night=texture2D(nightTex,vUv).rgb;',
+        '  float l=dot(normalize(vN),normalize(sunDir));',
+        '  float m=smoothstep(-0.25,0.30,l);',           /* terminator blend */
+        '  vec3 col=mix(night*1.6,day*1.15,m);',          /* mix both textures */
+        '  float rim=pow(1.0-max(dot(normalize(vN),vec3(0.0,0.0,1.0)),0.0),2.5);',
+        '  col+=vec3(0.20,0.32,0.45)*rim*0.6;',           /* atmosphere rim */
+        '  gl_FragColor=vec4(col,1.0);',
+        '}'
+      ].join('\n')
+    });
+
+    earth=new THREE.Mesh(new THREE.SphereGeometry(1,72,72),mat);
+    group.add(earth);
+
+    /* soft atmosphere halo (back-side additive sphere) */
+    var atmoMat=new THREE.ShaderMaterial({
+      transparent:true,blending:THREE.AdditiveBlending,side:THREE.BackSide,depthWrite:false,
+      uniforms:{},
+      vertexShader:['varying vec3 vN;void main(){vN=normalize(normalMatrix*normal);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}'].join('\n'),
+      fragmentShader:['varying vec3 vN;void main(){float i=pow(0.62-dot(vN,vec3(0,0,1.0)),3.0);i=clamp(i,0.0,1.0);gl_FragColor=vec4(vec3(0.30,0.55,0.75)*i,i);}'].join('\n')
+    });
+    var atmo=new THREE.Mesh(new THREE.SphereGeometry(1.18,48,48),atmoMat);
+    group.add(atmo);
   }
 
-  function draw(){
+  function resize(){
+    if(!started)return;
+    var rect=canvas.parentElement.getBoundingClientRect();
+    W=rect.width;H=rect.height;
+    if(W>900){group.position.set(1.05,0.55,0);} else {group.position.set(0,0.35,0);}
+    camera.aspect=W/H;camera.updateProjectionMatrix();
+    renderer.setSize(W,H,false);
+  }
+
+  function loop(){
     if(!active)return;
-    ctx.clearRect(0,0,W,H);
-    ctx.globalCompositeOperation='lighter';
-    var ang=performance.now()*0.00018;   /* slow spin */
-    var cosA=Math.cos(ang),sinA=Math.sin(ang);
-    var sprite=_pwSprite;
-
-    for(var i=0;i<N;i++){
-      var p=pts[i];
-      /* rotate around Y (spin) */
-      var x1=p.x*cosA - p.z*sinA;
-      var z1=p.x*sinA + p.z*cosA;
-      /* axial tilt around X */
-      var y2=p.y*cosT - z1*sinT;
-      var z2=p.y*sinT + z1*cosT;
-
-      var depth=(z2+1)/2;             /* 0 back .. 1 front */
-      var scale=R*(0.62+0.38*depth);
-      var sx=cx + x1*scale;
-      var sy=cy - y2*scale;
-
-      /* brightness: front bright, back faint (see-through globe) */
-      var a=0.08+depth*depth*0.6;
-      /* gold equatorial band accent */
-      var rad=(0.6+depth*1.8);
-      ctx.globalAlpha=a;
-      ctx.drawImage(sprite, sx-rad, sy-rad, rad*2, rad*2);
-    }
-
-    /* soft rim halo */
-    ctx.globalAlpha=0.06;
-    var grd=ctx.createRadialGradient(cx,cy,R*0.6,cx,cy,R*1.25);
-    grd.addColorStop(0,'rgba(242,218,145,0.18)');
-    grd.addColorStop(1,'rgba(242,218,145,0)');
-    ctx.fillStyle=grd;
-    ctx.beginPath();ctx.arc(cx,cy,R*1.25,0,6.283);ctx.fill();
-
-    ctx.globalAlpha=1;
-    ctx.globalCompositeOperation='source-over';
-    requestAnimationFrame(draw);
+    earth.rotation.y+=0.0012;            /* slow spin */
+    renderer.render(scene,camera);
+    requestAnimationFrame(loop);
   }
 
-  resize();
+  /* Start as soon as the section is visible & sized (independent of observer) */
+  function tryStart(){
+    if(started)return true;
+    var rect=canvas.parentElement.getBoundingClientRect();
+    if(rect.width<2||rect.height<2)return false;
+    setup();resize();active=true;requestAnimationFrame(loop);
+    return true;
+  }
+  var st=setInterval(function(){if(tryStart())clearInterval(st);},200);
+
+  /* Observer pauses rendering when scrolled off-screen */
   var observer=new IntersectionObserver(function(entries){
     entries.forEach(function(e){
-      if(e.isIntersecting&&!active){
-        if(!W||!H||canvas.width===0)resize();
-        active=true;requestAnimationFrame(draw);
-      } else if(!e.isIntersecting){active=false}
+      if(e.isIntersecting){if(started&&!active){active=true;resize();requestAnimationFrame(loop);}}
+      else{active=false}
     });
   },{threshold:0.02});
   observer.observe(canvas);
