@@ -1521,76 +1521,96 @@ function initMap(){}
 
 function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML}
 
-/* ═══ PARTICLE WAVE MESH ═══ */
+/* ═══ 3D PARTICLE WAVE FIELD (perfect-loop, perspective terrain) ═══ */
+/* Shared soft-glow sprite (white core + bloom falloff) */
+var _pwSprite=(function(){
+  var s=document.createElement('canvas');s.width=s.height=32;
+  var g=s.getContext('2d');
+  var grd=g.createRadialGradient(16,16,0,16,16,16);
+  grd.addColorStop(0,'rgba(255,255,255,1)');
+  grd.addColorStop(0.30,'rgba(255,255,255,0.85)');
+  grd.addColorStop(0.55,'rgba(255,255,255,0.22)');
+  grd.addColorStop(1,'rgba(255,255,255,0)');
+  g.fillStyle=grd;g.fillRect(0,0,32,32);
+  return s;
+})();
+
 function initParticleWave(canvasId){
   var canvas=document.getElementById(canvasId);
   if(!canvas)return null;
   var ctx=canvas.getContext('2d');
-  var cols,rows,spacing=10,points=[];
-  var time=Math.random()*100;
-  var active=false;
-  var W,H;
+  var W,H,dpr,active=false;
+
+  /* Frame-filling flow-field grid (screen space) */
+  var SP=13;                     /* dot spacing (CSS px) */
+  var COLS,ROWS;
+  var AMPX=30, AMPY=16;          /* horizontal strand bend / vertical undulation */
+  var LOOP_MS=24000;             /* seamless loop period */
 
   function resize(){
     var rect=canvas.parentElement.getBoundingClientRect();
     W=rect.width;H=rect.height;
-    canvas.width=W;canvas.height=H;
-    cols=Math.ceil(W/spacing)+2;
-    rows=Math.ceil(H/spacing)+2;
-    points=[];
-    for(var r=0;r<rows;r++){
-      for(var c=0;c<cols;c++){
-        points.push({bx:c*spacing,by:r*spacing});
-      }
-    }
+    dpr=Math.min(window.devicePixelRatio||1,2);
+    canvas.width=Math.round(W*dpr);canvas.height=Math.round(H*dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    COLS=Math.ceil(W/SP)+4;
+    ROWS=Math.ceil(H/SP)+4;
   }
 
-  function draw(){
+  function draw(now){
     if(!active)return;
+    var phase=2*Math.PI*((now % LOOP_MS)/LOOP_MS);
+
     ctx.clearRect(0,0,W,H);
-    time+=0.006;
+    ctx.globalCompositeOperation='lighter';
+    var sprite=_pwSprite;
 
-    /* Compute displaced positions */
-    for(var i=0;i<points.length;i++){
-      var p=points[i];
-      var nx=p.bx/W,ny=p.by/H;
+    /* gentle global drift, perfectly periodic */
+    var driftX=Math.sin(phase)*10;
+    var driftY=Math.cos(phase)*6;
 
-      /* Multi-layered organic distortion */
-      var d1=Math.sin(ny*6.0+time*1.1)*Math.cos(nx*3.0+time*0.7)*25;
-      var d2=Math.sin(nx*8.0+ny*4.0+time*0.9)*15;
-      var d3=Math.cos(ny*10.0+time*1.5)*Math.sin(nx*5.0-time)*12;
-      var d4=Math.sin((nx+ny)*12.0+time*0.5)*8;
+    for(var r=0;r<ROWS;r++){
+      var by=r*SP - SP + driftY;
+      var ny=r*0.060;
+      for(var c=0;c<COLS;c++){
+        var bx=c*SP - SP + driftX;
+        var nx=c*0.060;
 
-      /* Strong vertical column warping */
-      var colWarp=Math.sin(nx*4.0+time*0.8)*Math.sin(ny*7.0+time*1.3)*20;
-      var vertPinch=Math.sin(ny*3.14+time*0.6)*Math.cos(nx*6.0+time)*18;
+        /* Layered cyclic flow — vertical strands bend horizontally.
+           Every time term uses integer*phase => seamless loop at phase=2π. */
+        var w1=Math.sin(ny*1.6 + nx*0.45 + phase);
+        var w2=Math.sin(ny*3.1 - nx*0.70 - phase*2.0);
+        var w3=Math.cos(ny*0.9 + nx*0.20 + phase);
+        var w4=Math.sin((nx+ny)*2.4 + phase*3.0);            /* fractal detail */
+        var warpX=(w1*0.62 + w2*0.30 + w3*0.45 + w4*0.16)*AMPX;
 
-      p.x=p.bx+d1+d3*0.7+colWarp;
-      p.y=p.by+d2+d4*0.6+vertPinch;
-    }
+        var v1=Math.sin(nx*1.4 + ny*0.5 + phase*2.0);
+        var v2=Math.cos(nx*2.6 - ny*0.8 - phase);
+        var warpY=(v1*0.7 + v2*0.3)*AMPY;
 
-    /* Draw dots only — dense grid like the reference */
-    for(var i=0;i<points.length;i++){
-      var p=points[i];
-      if(p.x<-5||p.x>W+5||p.y<-5||p.y>H+5)continue;
+        var px=bx+warpX;
+        var py=by+warpY;
+        if(px<-16||px>W+16||py<-16||py>H+16)continue;
 
-      /* Brightness: stronger in center, falloff at edges */
-      var cx=p.x/W-0.5,cy=p.y/H-0.5;
-      var dist=Math.sqrt(cx*cx+cy*cy)*2;
-      var b=Math.max(0,0.6-dist*0.5);
+        /* crest drives depth: bright ridges, dim valleys (3D shading) */
+        var crest=w1*0.6 + w2*0.4;                  /* -1 .. 1 */
+        var cN=crest*0.5+0.5;                        /* 0 .. 1 */
+        var a=0.10 + 0.50*cN*cN;                     /* near-bright ridges */
 
-      /* Displacement intensity adds extra glow */
-      var dx=p.x-p.bx,dy=p.y-p.by;
-      var displace=Math.sqrt(dx*dx+dy*dy);
-      b+=Math.min(displace*0.005,0.15);
+        /* soft edge vignette so it melts into the section */
+        var ex=px/W, ey=py/H;
+        var edge=Math.min(1, Math.min(ex,1-ex)*3.2) * Math.min(1, Math.min(ey,1-ey)*3.2);
+        a*=0.35+0.65*edge;
+        if(a<=0.015)continue;
 
-      var r=0.8+b*1.0;
-      ctx.globalAlpha=b;
-      ctx.fillStyle='#ffffff';
-      ctx.beginPath();ctx.arc(p.x,p.y,r,0,6.28);ctx.fill();
+        var rad=0.7 + cN*1.9;                        /* crests larger */
+        ctx.globalAlpha=a;
+        ctx.drawImage(sprite, px-rad, py-rad, rad*2, rad*2);
+      }
     }
 
     ctx.globalAlpha=1;
+    ctx.globalCompositeOperation='source-over';
     requestAnimationFrame(draw);
   }
 
@@ -1598,13 +1618,17 @@ function initParticleWave(canvasId){
 
   var observer=new IntersectionObserver(function(entries){
     entries.forEach(function(e){
-      if(e.isIntersecting&&!active){active=true;draw()}
+      if(e.isIntersecting&&!active){
+        if(!W||!H||canvas.width===0)resize();   /* page may have been hidden at init */
+        active=true;requestAnimationFrame(draw);
+      }
       else if(!e.isIntersecting){active=false}
     });
   },{threshold:0.02});
   observer.observe(canvas);
 
-  window.addEventListener('resize',resize);
+  var rt;
+  window.addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(resize,150)});
   return{resize:resize};
 }
 
