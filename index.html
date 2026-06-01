@@ -744,17 +744,8 @@ a{text-decoration:none;color:inherit}
   .office-country-shape{width:80px;height:80px}
 }
 
-/* ══ GEOMETRIC BACKGROUND ══ */
-.geo-container{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
-.geo-shape{position:absolute;border:1.5px solid rgba(255,255,255,0.12);border-radius:2px}
-@keyframes geoSpin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
-@keyframes geoDrift{0%{transform:translate(0,0) rotate(0deg)}25%{transform:translate(15px,-20px) rotate(90deg)}50%{transform:translate(-10px,15px) rotate(180deg)}75%{transform:translate(20px,10px) rotate(270deg)}100%{transform:translate(0,0) rotate(360deg)}}
-@keyframes geoPulse{0%,100%{opacity:0.08;transform:scale(1) rotate(0deg)}50%{opacity:0.22;transform:scale(1.15) rotate(180deg)}}
-@keyframes geoFloat{0%,100%{transform:translateY(0) rotate(0deg)}33%{transform:translateY(-25px) rotate(120deg)}66%{transform:translateY(10px) rotate(240deg)}}
-.geo-shape.spin{animation:geoSpin var(--dur) linear infinite}
-.geo-shape.drift{animation:geoDrift var(--dur) ease-in-out infinite}
-.geo-shape.pulse{animation:geoPulse var(--dur) ease-in-out infinite}
-.geo-shape.float{animation:geoFloat var(--dur) ease-in-out infinite}
+/* ══ PARTICLE WAVE CANVAS ══ */
+.particle-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
 
 .site-footer{background:var(--dark);padding:80px 60px 32px;color:#fff}
 .footer-top{
@@ -895,7 +886,7 @@ a{text-decoration:none;color:inherit}
 
   <!-- Featured Projects -->
   <section class="section section-dark" style="position:relative">
-    <div class="geo-container" id="geoHome"></div>
+    <canvas class="particle-canvas" id="particleHome"></canvas>
     <div style="position:relative;z-index:1">
       <div class="section-header">
         <div class="section-tag light">Portfolio</div>
@@ -924,7 +915,7 @@ a{text-decoration:none;color:inherit}
      ═══════════════════════════════════════════════════════════ -->
 <div class="page-section" id="page-Projects">
   <section class="section section-dark" style="padding-top:140px;min-height:100vh;position:relative">
-    <div class="geo-container" id="geoProjects"></div>
+    <canvas class="particle-canvas" id="particleProjects"></canvas>
     <div style="position:relative;z-index:1">
       <div class="section-header" style="max-width:700px">
         <div class="section-tag light">Portfolio</div>
@@ -1530,32 +1521,91 @@ function initMap(){}
 
 function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML}
 
-/* ═══ GEOMETRIC SHAPES ═══ */
-function spawnGeoShapes(containerId,count){
-  var c=document.getElementById(containerId);if(!c)return;
-  c.innerHTML='';
-  var anims=['spin','drift','pulse','float'];
-  for(var i=0;i<count;i++){
-    var el=document.createElement('div');
-    el.className='geo-shape '+anims[Math.floor(Math.random()*anims.length)];
-    var size=40+Math.random()*120;
-    var x=Math.random()*100;
-    var y=Math.random()*100;
-    var dur=12+Math.random()*28;
-    var delay=Math.random()*-20;
-    var opacity=0.08+Math.random()*0.14;
-    var shape=Math.random();
-    el.style.cssText='width:'+size+'px;height:'+size+'px;left:'+x+'%;top:'+y+'%;--dur:'+dur+'s;animation-delay:'+delay+'s;opacity:'+opacity+';';
-    if(shape<0.33){
-      el.style.borderRadius='50%';
-    }else if(shape<0.66){
-      el.style.transform='rotate('+Math.random()*360+'deg)';
-    }else{
-      el.style.borderRadius='2px';
-      el.style.transform='rotate(45deg)';
+/* ═══ PARTICLE WAVE MESH ═══ */
+function initParticleWave(canvasId){
+  var canvas=document.getElementById(canvasId);
+  if(!canvas)return null;
+  var ctx=canvas.getContext('2d');
+  var cols,rows,spacing=18,points=[];
+  var time=Math.random()*1000;
+  var active=false;
+
+  function resize(){
+    var rect=canvas.parentElement.getBoundingClientRect();
+    canvas.width=rect.width;canvas.height=rect.height;
+    cols=Math.ceil(canvas.width/spacing)+1;
+    rows=Math.ceil(canvas.height/spacing)+1;
+    points=[];
+    for(var r=0;r<rows;r++){
+      for(var c=0;c<cols;c++){
+        points.push({bx:c*spacing,by:r*spacing,x:0,y:0});
+      }
     }
-    c.appendChild(el);
   }
+
+  function draw(){
+    if(!active)return;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    time+=0.008;
+
+    for(var i=0;i<points.length;i++){
+      var p=points[i];
+      var wave1=Math.sin(p.bx*0.008+time)*12;
+      var wave2=Math.cos(p.by*0.006+time*0.7)*10;
+      var wave3=Math.sin((p.bx+p.by)*0.005+time*1.2)*8;
+      p.x=p.bx+wave1+wave3*0.5;
+      p.y=p.by+wave2+wave3*0.5;
+    }
+
+    /* Draw connecting lines */
+    ctx.strokeStyle='rgba(255,255,255,0.06)';
+    ctx.lineWidth=0.5;
+    for(var r=0;r<rows;r++){
+      for(var c=0;c<cols;c++){
+        var idx=r*cols+c;
+        var p=points[idx];
+        if(c<cols-1){
+          var right=points[idx+1];
+          ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(right.x,right.y);ctx.stroke();
+        }
+        if(r<rows-1){
+          var below=points[idx+cols];
+          ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(below.x,below.y);ctx.stroke();
+        }
+      }
+    }
+
+    /* Draw dots */
+    for(var i=0;i<points.length;i++){
+      var p=points[i];
+      var dist=Math.sqrt(Math.pow(p.x-canvas.width*0.5,2)+Math.pow(p.y-canvas.height*0.5,2));
+      var maxDist=Math.sqrt(Math.pow(canvas.width*0.5,2)+Math.pow(canvas.height*0.5,2));
+      var brightness=0.15+0.35*(1-dist/maxDist);
+      var size=1+1.2*(1-dist/maxDist);
+      ctx.fillStyle='rgba(255,255,255,'+brightness+')';
+      ctx.beginPath();ctx.arc(p.x,p.y,size,0,Math.PI*2);ctx.fill();
+    }
+
+    requestAnimationFrame(draw);
+  }
+
+  resize();
+
+  var observer=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting&&!active){active=true;draw()}
+      else if(!e.isIntersecting){active=false}
+    });
+  },{threshold:0.05});
+  observer.observe(canvas);
+
+  window.addEventListener('resize',function(){
+    var wasActive=active;
+    resize();
+    if(wasActive&&active){}
+  });
+
+  return{resize:resize};
 }
 
 /* ═══ OFFICE CARDS (static, no slider) ═══ */
@@ -1569,8 +1619,8 @@ function spawnGeoShapes(containerId,count){
   if(currentPage==='Contact')initMap();
   var sb=document.getElementById('heroStats');if(sb)statsObs.observe(sb);
   initScrollAnimations();
-  spawnGeoShapes('geoHome',18);
-  spawnGeoShapes('geoProjects',22);
+  initParticleWave('particleHome');
+  initParticleWave('particleProjects');
 })();
 </script>
 </body>
