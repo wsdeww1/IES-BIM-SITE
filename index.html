@@ -1746,7 +1746,7 @@ function initGlobe(canvasId){
 
   function loop(){
     if(!active)return;
-    earth.rotation.y+=0.0012;            /* slow spin */
+    earth.rotation.y+=0.0024;            /* spin */
     renderer.render(scene,camera);
     requestAnimationFrame(loop);
   }
