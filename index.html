@@ -1662,7 +1662,13 @@ function initParticleWave(canvasId){
   observer.observe(canvas);
 
   var rt;
-  window.addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(resize,150)});
+  function debResize(){clearTimeout(rt);rt=setTimeout(resize,120);}
+  window.addEventListener('resize',debResize);
+  /* Auto-correct when the section itself changes size (maps/iframes loading, nav) */
+  if(window.ResizeObserver){
+    var ro=new ResizeObserver(debResize);
+    ro.observe(canvas.parentElement);
+  }
   return{resize:resize};
 }
 
@@ -1771,7 +1777,10 @@ function initGlobe(canvasId){
     });
   },{threshold:0.02});
   observer.observe(canvas);
-  var rt;window.addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(resize,150)});
+  var rt;
+  function debResize(){clearTimeout(rt);rt=setTimeout(resize,120);}
+  window.addEventListener('resize',debResize);
+  if(window.ResizeObserver){var ro=new ResizeObserver(debResize);ro.observe(canvas.parentElement);}
   return{resize:resize};
 }
 
