@@ -835,7 +835,7 @@ a{text-decoration:none;color:inherit}
 
   <!-- Hero -->
   <section class="hero">
-    <video class="hero-video" autoplay muted loop playsinline>
+    <video class="hero-video" id="heroVideo" muted playsinline preload="auto">
       <source src="./videos/hero-bg.mp4" type="video/mp4">
     </video>
     <div class="hero-bg"></div>
@@ -1790,7 +1790,44 @@ function initGlobe(canvasId){
   initParticleWave('particleProjects');
   initParticleWave('particleContact');
   initGlobe('globeContact');
+  initVideoScrub('heroVideo');
 })();
+
+/* ═══ HERO VIDEO — mouse-scrub interaction ═══ */
+function initVideoScrub(id){
+  var video=document.getElementById(id);
+  if(!video)return;
+  var SENSITIVITY=0.8;
+  var targetTime=0, prevX=null, seeking=false, pending=false;
+
+  function ready(){
+    return video.duration && isFinite(video.duration);
+  }
+
+  video.addEventListener('seeked',function(){
+    seeking=false;
+    if(pending){pending=false;doSeek();}
+  });
+
+  function doSeek(){
+    if(!ready())return;
+    if(seeking){pending=true;return;}
+    seeking=true;
+    try{video.currentTime=targetTime;}catch(e){seeking=false;}
+  }
+
+  window.addEventListener('mousemove',function(e){
+    if(!ready()){prevX=e.clientX;return;}
+    if(prevX===null){prevX=e.clientX;return;}
+    var delta=e.clientX-prevX;
+    prevX=e.clientX;
+    var offset=(delta/window.innerWidth)*SENSITIVITY*video.duration;
+    targetTime+=offset;
+    if(targetTime<0)targetTime=0;
+    else if(targetTime>video.duration)targetTime=video.duration;
+    doSeek();
+  });
+}
 </script>
 </body>
 </html>
