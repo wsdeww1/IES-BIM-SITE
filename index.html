@@ -776,13 +776,6 @@ a{text-decoration:none;color:inherit}
 .bim-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;opacity:0.5}
 .bim-video-overlay{position:absolute;inset:0;z-index:1;
   background:linear-gradient(180deg,rgba(12,31,34,0.78) 0%,rgba(12,31,34,0.62) 45%,rgba(12,31,34,0.88) 100%);}
-.bim-grid{position:absolute;inset:0;z-index:2;pointer-events:none;opacity:0.5;
-  background-image:linear-gradient(rgba(242,218,145,0.10) 1px,transparent 1px),linear-gradient(90deg,rgba(242,218,145,0.10) 1px,transparent 1px);
-  background-size:48px 48px;
-  mask-image:radial-gradient(ellipse 80% 70% at 50% 40%,#000 30%,transparent 80%);
-  -webkit-mask-image:radial-gradient(ellipse 80% 70% at 50% 40%,#000 30%,transparent 80%);
-  animation:bimGridPan 14s linear infinite;}
-@keyframes bimGridPan{from{background-position:0 0,0 0}to{background-position:48px 48px,48px 48px}}
 
 .site-footer{background:var(--dark);padding:80px 60px 32px;color:#fff}
 .footer-top{
@@ -953,7 +946,6 @@ a{text-decoration:none;color:inherit}
       <source src="./videos/bim-bg.mp4" type="video/mp4">
     </video>
     <div class="bim-video-overlay"></div>
-    <div class="bim-grid"></div>
     <div style="position:relative;z-index:3">
     <div class="section-header" style="max-width:720px">
       <div class="section-tag light">Our Expertise</div>
