@@ -772,6 +772,17 @@ a{text-decoration:none;color:inherit}
 /* ══ PARTICLE WAVE CANVAS ══ */
 .particle-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
 .globe-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;opacity:0.85}
+/* BIM Services video background + animated grid */
+.bim-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;opacity:0.5}
+.bim-video-overlay{position:absolute;inset:0;z-index:1;
+  background:linear-gradient(180deg,rgba(12,31,34,0.78) 0%,rgba(12,31,34,0.62) 45%,rgba(12,31,34,0.88) 100%);}
+.bim-grid{position:absolute;inset:0;z-index:2;pointer-events:none;opacity:0.5;
+  background-image:linear-gradient(rgba(242,218,145,0.10) 1px,transparent 1px),linear-gradient(90deg,rgba(242,218,145,0.10) 1px,transparent 1px);
+  background-size:48px 48px;
+  mask-image:radial-gradient(ellipse 80% 70% at 50% 40%,#000 30%,transparent 80%);
+  -webkit-mask-image:radial-gradient(ellipse 80% 70% at 50% 40%,#000 30%,transparent 80%);
+  animation:bimGridPan 14s linear infinite;}
+@keyframes bimGridPan{from{background-position:0 0,0 0}to{background-position:48px 48px,48px 48px}}
 
 .site-footer{background:var(--dark);padding:80px 60px 32px;color:#fff}
 .footer-top{
@@ -937,9 +948,15 @@ a{text-decoration:none;color:inherit}
      ═══════════════════════════════════════════════════════════ -->
 <!-- ═══ BIM SERVICES PAGE ═══ -->
 <div class="page-section" id="page-BIMServices">
-  <section class="section" style="padding-top:140px">
+  <section class="section section-dark" style="padding-top:140px;position:relative;overflow:hidden">
+    <video class="bim-video" id="bimVideo" autoplay muted loop playsinline preload="auto">
+      <source src="./videos/bim-bg.mp4" type="video/mp4">
+    </video>
+    <div class="bim-video-overlay"></div>
+    <div class="bim-grid"></div>
+    <div style="position:relative;z-index:3">
     <div class="section-header" style="max-width:720px">
-      <div class="section-tag">Our Expertise</div>
+      <div class="section-tag light">Our Expertise</div>
       <h2 class="section-h2">BIM Services</h2>
       <p class="section-sub">A comprehensive range of BIM (Building Information Modelling) services tailored to enhance the efficiency and accuracy of your projects.</p>
     </div>
@@ -977,6 +994,7 @@ a{text-decoration:none;color:inherit}
     <div class="cta-banner-inline">
       <div><h3>Need a Custom Solution?</h3><p>Our team can tailor BIM services to your specific project requirements.</p></div>
       <button class="btn-gold" onclick="navigateTo('Contact')" style="white-space:nowrap">Contact Our Team <span class="arrow">&rarr;</span></button>
+    </div>
     </div>
   </section>
 </div>
