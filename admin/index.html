@@ -169,10 +169,12 @@ textarea{resize:vertical;min-height:80px}
 .sec-group-head .sec-arrow{margin-left:auto;font-size:11px;transition:transform .2s;color:var(--muted)}
 .sec-group-head.open .sec-arrow{transform:rotate(180deg)}
 .sec-group-head .sec-ico{font-size:16px;width:22px;text-align:center}
-.sec-group-body{display:none;padding:0 20px 20px;background:#fff}
+.sec-group-body{display:none;padding:6px 18px 18px;background:#fff}
 .sec-group-head.open+.sec-group-body{display:block}
-.sec-sub{margin-top:16px;border-left:3px solid var(--gold);padding-left:16px}
-.sec-sub>.lbl{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--teal-mid);margin-bottom:10px;display:block}
+.sec-sub{margin-top:16px;border:1px solid #eef1f1;border-left:3px solid var(--gold);border-radius:8px;padding:16px 18px 6px;background:#fbfcfc}
+.sec-sub:first-child{margin-top:8px}
+.sec-sub>.lbl{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--teal-mid);margin-bottom:14px;display:block}
+.sec-sub .field{margin-bottom:14px}
 @media(max-width:760px){.sidebar{width:64px;padding:18px 8px}.sidebar-logo span,.nav-item span:not(.ico),.sidebar-logo img{display:none}
   .main{margin-left:64px}.content,.topbar{padding-left:16px;padding-right:16px}}
 </style>
@@ -271,23 +273,75 @@ var SECTION_GROUPS=[
     {grp:'Our Core Services (home)',items:[
       {k:'coreTag',label:'Tag',type:'input'},{k:'coreH2',label:'Heading',type:'input'},
       {k:'coreSub',label:'Subtitle / description',type:'textarea'}]},
-    {grp:'BIM Services',items:[
+    {grp:'BIM Services — page header',items:[
       {k:'bimSvcTag',label:'Tag',type:'input'},{k:'bimSvcH2',label:'Heading',type:'input'},
       {k:'bimSvcSub',label:'Subtitle / description',type:'textarea'}]},
-    {grp:'BIM & Engineering Service',items:[
+    {grp:'BIM Services — service cards',items:[
+      {k:'bimCard1Title',label:'Card 1 — title',type:'input'},{k:'bimCard1Body',label:'Card 1 — description',type:'textarea'},
+      {k:'bimCard2Title',label:'Card 2 — title',type:'input'},{k:'bimCard2Body',label:'Card 2 — description',type:'textarea'},
+      {k:'bimCard3Title',label:'Card 3 — title',type:'input'},{k:'bimCard3Body',label:'Card 3 — description',type:'textarea'},
+      {k:'bimCard4Title',label:'Card 4 — title',type:'input'},{k:'bimCard4Body',label:'Card 4 — description',type:'textarea'}]},
+    {grp:'BIM & Engineering Service — page header',items:[
       {k:'bimEngTag',label:'Tag',type:'input'},{k:'bimEngH2',label:'Heading',type:'input'},
       {k:'bimEngSub',label:'Subtitle / description',type:'textarea'}]},
-    {grp:'Design & Detail Engineering',items:[
+    {grp:'BIM & Engineering — Architectural',items:[
+      {k:'engCard1Title',label:'Title',type:'input'},
+      {k:'engCard1L1',label:'Bullet 1',type:'input'},{k:'engCard1L2',label:'Bullet 2',type:'input'},
+      {k:'engCard1L3',label:'Bullet 3',type:'input'},{k:'engCard1L4',label:'Bullet 4',type:'input'}]},
+    {grp:'BIM & Engineering — Structural',items:[
+      {k:'engCard2Title',label:'Title',type:'input'},
+      {k:'engCard2L1',label:'Bullet 1',type:'input'},{k:'engCard2L2',label:'Bullet 2',type:'input'},
+      {k:'engCard2L3',label:'Bullet 3',type:'input'},{k:'engCard2L4',label:'Bullet 4',type:'input'}]},
+    {grp:'BIM & Engineering — Mechanical',items:[
+      {k:'engCard3Title',label:'Title',type:'input'},
+      {k:'engCard3L1',label:'Bullet 1',type:'input'},{k:'engCard3L2',label:'Bullet 2',type:'input'},
+      {k:'engCard3L3',label:'Bullet 3',type:'input'},{k:'engCard3L4',label:'Bullet 4',type:'input'}]},
+    {grp:'BIM & Engineering — Electrical',items:[
+      {k:'engCard4Title',label:'Title',type:'input'},
+      {k:'engCard4L1',label:'Bullet 1',type:'input'},{k:'engCard4L2',label:'Bullet 2',type:'input'},
+      {k:'engCard4L3',label:'Bullet 3',type:'input'},{k:'engCard4L4',label:'Bullet 4',type:'input'}]},
+    {grp:'Design & Detail Engineering — page header',items:[
       {k:'desEngTag',label:'Tag',type:'input'},{k:'desEngH2',label:'Heading',type:'input'},
-      {k:'desEngSub',label:'Subtitle / description',type:'textarea'}]}
+      {k:'desEngSub',label:'Subtitle / description',type:'textarea'}]},
+    {grp:'Design & Detail — service cards',items:[
+      {k:'desCard1Title',label:'Card 1 — title',type:'input'},{k:'desCard1Body',label:'Card 1 — description',type:'textarea'},
+      {k:'desCard2Title',label:'Card 2 — title',type:'input'},{k:'desCard2Body',label:'Card 2 — description',type:'textarea'},
+      {k:'desCard3Title',label:'Card 3 — title',type:'input'},{k:'desCard3Body',label:'Card 3 — description',type:'textarea'},
+      {k:'desCard4Title',label:'Card 4 — title',type:'input'},{k:'desCard4Body',label:'Card 4 — description',type:'textarea'},
+      {k:'desCard5Title',label:'Card 5 — title',type:'input'},{k:'desCard5Body',label:'Card 5 — description',type:'textarea'},
+      {k:'desCard6Title',label:'Card 6 — title',type:'input'},{k:'desCard6Body',label:'Card 6 — description',type:'textarea'}]}
   ]},
   {id:'about',label:'About',ico:'◈',subs:[
-    {grp:'Our Story',items:[
+    {grp:'Our Story — page header',items:[
       {k:'storyTag',label:'Tag',type:'input'},{k:'storyH2',label:'Heading',type:'input'},
       {k:'storySub',label:'Subtitle / description',type:'textarea'}]},
-    {grp:'Our Team',items:[
+    {grp:'Our Story — story text',items:[
+      {k:'storyBlockH3',label:'Story heading',type:'input'},
+      {k:'storyP1',label:'Paragraph 1',type:'textarea'},
+      {k:'storyP2',label:'Paragraph 2',type:'textarea'},
+      {k:'storyP3',label:'Paragraph 3',type:'textarea'}]},
+    {grp:'Core Values',items:[
+      {k:'valuesTag',label:'Tag',type:'input'},{k:'valuesH2',label:'Heading',type:'input'},
+      {k:'valuesSub',label:'Subtitle / description',type:'textarea'},
+      {k:'value1Title',label:'Value 1 — title',type:'input'},{k:'value1Desc',label:'Value 1 — description',type:'textarea'},
+      {k:'value2Title',label:'Value 2 — title',type:'input'},{k:'value2Desc',label:'Value 2 — description',type:'textarea'},
+      {k:'value3Title',label:'Value 3 — title',type:'input'},{k:'value3Desc',label:'Value 3 — description',type:'textarea'}]},
+    {grp:'Our Offices',items:[
+      {k:'officesTag',label:'Tag',type:'input'},{k:'officesH2',label:'Heading',type:'input'},
+      {k:'officesSub',label:'Subtitle / description',type:'textarea'},
+      {k:'office1City',label:'Office 1 — city',type:'input'},{k:'office1Country',label:'Office 1 — country / role',type:'input'},
+      {k:'office1Detail',label:'Office 1 — description',type:'textarea'},
+      {k:'office2City',label:'Office 2 — city',type:'input'},{k:'office2Country',label:'Office 2 — country / role',type:'input'},
+      {k:'office2Detail',label:'Office 2 — description',type:'textarea'}]},
+    {grp:'Our Team — page header',items:[
       {k:'teamTag',label:'Tag',type:'input'},{k:'teamH2',label:'Heading',type:'input'},
-      {k:'teamSub',label:'Subtitle / description',type:'textarea'}]}
+      {k:'teamSub',label:'Subtitle / description',type:'textarea'}]},
+    {grp:'Our Team — stat labels',items:[
+      {k:'teamStat1Label',label:'Stat 1 label',type:'input'},{k:'teamStat2Label',label:'Stat 2 label',type:'input'},
+      {k:'teamStat3Label',label:'Stat 3 label',type:'input'},{k:'teamStat4Label',label:'Stat 4 label',type:'input'}]},
+    {grp:'Organization Structure',items:[
+      {k:'orgTag',label:'Tag',type:'input'},{k:'orgH2',label:'Heading',type:'input'},
+      {k:'orgSub',label:'Subtitle / description',type:'textarea'}]}
   ]},
   {id:'contact',label:'Contact',ico:'✉',subs:[
     {grp:'Contact Page',items:[
@@ -298,6 +352,70 @@ var SECTION_GROUPS=[
       {k:'heroSub',label:'Hero subtitle / description',type:'textarea'}]}
   ]}
 ];
+
+/* Current public-site text — shown as the starting value so the editor
+   is pre-filled with the real content instead of blank fields. */
+var SECTION_DEFAULTS={
+  featTag:'Portfolio',featH2:'Featured Projects',
+  featSub:'A selection of mega-projects across Saudi Arabia showcasing our multi-discipline expertise.',
+  projTag:'Portfolio',projH2:'Our Projects',
+  projSub:'A selection of mega-projects across Saudi Arabia, showcasing our expertise in Architecture, Structural, MEP, and BIM disciplines.',
+  coreTag:'What We Do',coreH2:'Our Core Services',
+  coreSub:'Comprehensive engineering services across all disciplines — from concept design through construction documentation.',
+  bimSvcTag:'Our Expertise',bimSvcH2:'BIM Services',
+  bimSvcSub:'A comprehensive range of BIM (Building Information Modelling) services tailored to enhance the efficiency and accuracy of your projects.',
+  bimCard1Title:'BIM Implementation',bimCard1Body:'Seamless integration of BIM into your project workflow, ensuring enhanced collaboration and efficiency.',
+  bimCard2Title:'LOD Services',bimCard2Body:'Varying levels of development (LOD 100 to LOD 500), customized to meet specific project requirements.',
+  bimCard3Title:'BIM Coordination',bimCard3Body:'BIM Coordination Reviews to minimize conflicts and optimize construction processes.',
+  bimCard4Title:'PDF/CAD to BIM Modelling',bimCard4Body:'Transformation of PDF and CAD files into accurate BIM models for improved project visualization and coordination.',
+  bimEngTag:'Our Expertise',bimEngH2:'BIM & Engineering Service',
+  bimEngSub:'Complete design and engineering services across Architectural, Structural, Mechanical, and Electrical disciplines.',
+  engCard1Title:'Architectural',
+  engCard1L1:'Fit-out and interior design development',engCard1L2:'Detailed architectural layouts and finishes',
+  engCard1L3:'Coordination of architectural elements with MEP systems',engCard1L4:'Preparation of detailed drawings and BIM-based shop drawings',
+  engCard2Title:'Structural',
+  engCard2L1:'Structural analysis and design support',engCard2L2:'Reinforcement detailing and concrete shop drawings',
+  engCard2L3:'Steel structure modeling and connection detailing',engCard2L4:'Structural coordination with architectural and MEP systems',
+  engCard3Title:'Mechanical (HVAC, Plumbing, Fire Fighting, etc.)',
+  engCard3L1:'Mechanical system design and analysis (HVAC, plumbing, fire protection)',engCard3L2:'Ductwork, piping, and equipment modeling in BIM',
+  engCard3L3:'Preparation of detailed mechanical shop drawings and layouts',engCard3L4:'Coordination with architectural, structural, and electrical systems',
+  engCard4Title:'Electrical (Power, Lighting, ELV, etc.)',
+  engCard4L1:'Electrical system design and load analysis (power, lighting, ELV systems)',engCard4L2:'Cable routing, panel schedules, and equipment layout in BIM',
+  engCard4L3:'Preparation of detailed electrical shop drawings and schematics',engCard4L4:'Coordination with architectural, structural, and mechanical systems',
+  desEngTag:'Our Expertise',desEngH2:'Design & Detail Engineering',
+  desEngSub:'Expert BIM consultancy, digital construction management, and comprehensive project delivery services.',
+  desCard1Title:'BIM Consultancy',desCard1Body:'We offer expert BIM consultancy services to help clients navigate the complexities of BIM adoption and implementation.',
+  desCard2Title:'Digital Construction Management',desCard2Body:'Our digital construction management services help clients streamline their construction processes, improve collaboration, and reduce errors.',
+  desCard3Title:'3D Modelling and Visualization',desCard3Body:'We create detailed 3D models and visualizations to help clients better understand and communicate their projects.',
+  desCard4Title:'Clash Detection and Resolution',desCard4Body:'Our clash detection and resolution services help clients identify and resolve potential conflicts before they become major issues.',
+  desCard5Title:'Construction Documentation',desCard5Body:'We provide accurate and comprehensive construction documentation services to help clients ensure that their projects are completed on time and within budget.',
+  desCard6Title:'Project Management',desCard6Body:'Our project management services help clients oversee their projects from conception to completion, ensuring that they are completed on time, within budget, and to the required quality standards.',
+  storyTag:'About IES',storyH2:'Our Story',
+  storySub:'A specialized engineering services company delivering precision-driven BIM and design solutions across the Middle East.',
+  storyBlockH3:'Built on Engineering Precision',
+  storyP1:'Integrated Engineering Systems (IES) was founded with a clear mission: to deliver high-quality, BIM-based digital modeling solutions that meet the demanding standards of modern construction. Headquartered in Riyadh with a branch office in Cairo, we serve clients across the Middle East and international markets.',
+  storyP2:'Our team of 25+ engineering professionals brings together deep expertise across Architectural, Structural, and MEP disciplines. With members holding 15+ years of industry experience, we have built a track record of 90% on-time submission and successful delivery on mega-projects including high-rise buildings, hospitals, commercial developments, and stadiums.',
+  storyP3:'We believe in reducing project risks, enhancing coordination, and achieving successful outcomes through accurate, coordinated, and detail-driven engineering services.',
+  valuesTag:'Our Foundation',valuesH2:'Core Values',valuesSub:'The principles that guide every project we deliver.',
+  value1Title:'Excellence',value1Desc:'We pursue the highest standards in every deliverable, ensuring accuracy and quality across all disciplines.',
+  value2Title:'Collaboration',value2Desc:'We work closely with clients, consultants, and contractors to achieve integrated, coordinated project outcomes.',
+  value3Title:'Innovation',value3Desc:'We leverage advanced BIM technologies and engineering practices to deliver smarter, more efficient solutions.',
+  officesTag:'Global Presence',officesH2:'Our Offices',officesSub:'Strategically located to serve the Middle East region.',
+  office1City:'Riyadh',office1Country:'Saudi Arabia — Head Office',
+  office1Detail:'Our headquarters and primary engineering center, providing local coordination, client liaison, and on-site technical support for KSA projects.',
+  office2City:'Cairo',office2Country:'Egypt — Branch Office',
+  office2Detail:'Our branch office housing the majority of our design and BIM production teams, serving the Middle East region.',
+  teamTag:'About IES',teamH2:'Our Team',
+  teamSub:'A multi-discipline team of engineering professionals organized for efficiency and quality across every project phase.',
+  teamStat1Label:'Engineering Professionals',teamStat2Label:'Years of Experience',
+  teamStat3Label:'On-time Delivery',teamStat4Label:'Projects Completed',
+  orgTag:'Team',orgH2:'Organization Structure',
+  orgSub:'A multi-discipline team organized for efficiency and quality across every project phase.',
+  contactTag:'Get in Touch',contactH2:'Contact Us',
+  contactSub:'Ready to discuss your next project? Reach out to schedule a meeting with our engineering team.',
+  heroBadge:'BIM & Engineering Services',
+  heroSub:'Delivering high-quality BIM-based digital modeling solutions for Architectural, Structural, and MEP disciplines across the Middle East.'
+};
 
 /* ── toasts ── */
 function toast(msg,kind){
@@ -535,7 +653,8 @@ function renderSections(){
     g.subs.forEach(function(sub){
       html+='<div class="sec-sub"><span class="lbl">'+esc(sub.grp)+'</span>';
       sub.items.forEach(function(it){
-        var val=esc(s[it.k]||'');
+        var raw=(s[it.k]!=null&&s[it.k]!=='')?s[it.k]:(SECTION_DEFAULTS[it.k]||'');
+        var val=esc(raw);
         html+='<div class="field"><label>'+esc(it.label)+'</label>'+
           (it.type==='textarea'?'<textarea data-sec="'+it.k+'">'+val+'</textarea>':'<input data-sec="'+it.k+'" value="'+val+'">')+'</div>';
       });
