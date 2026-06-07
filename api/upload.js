@@ -69,10 +69,6 @@ module.exports = async (req, res) => {
         contentType: type,
         addRandomSuffix: true,
       };
-      if (!process.env.BLOB_READ_WRITE_TOKEN && process.env.BLOB_STORE_ID) {
-        opts.token = process.env.VERCEL_OIDC_TOKEN;
-        opts.storeId = process.env.BLOB_STORE_ID;
-      }
       const blob = await put('projects/' + filename, buf, opts);
       return send(res, 200, { ok: true, url: blob.url });
     } catch (e) {
