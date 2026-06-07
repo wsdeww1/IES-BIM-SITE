@@ -11,7 +11,8 @@
   --teal:#3B6C70;--teal-mid:#518D95;--teal-dark:#2d5356;--teal-deeper:#1e3d40;
   --gold:#F2DA92;--gold-dark:#d4b85e;
   --grey:#CCCCCC;--bg:#f4f6f6;--white:#fff;--dark:#2A2A2A;--muted:#6b7b7c;
-  --radius:10px;--shadow:0 4px 24px rgba(30,61,64,.10);--shadow-lg:0 12px 40px rgba(30,61,64,.18);
+  --ok:#2e9e5b;--warn:#e6a700;--danger:#c0392b;
+  --radius:12px;--shadow:0 4px 24px rgba(30,61,64,.08);--shadow-lg:0 12px 40px rgba(30,61,64,.18);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Noto Sans','Helvetica Neue',Arial,sans-serif;background:var(--bg);color:var(--dark);-webkit-font-smoothing:antialiased}
@@ -28,8 +29,8 @@ a{color:var(--teal-mid)}
 .btn-gold:hover{background:var(--gold-dark)}
 .btn-ghost{background:transparent;color:var(--teal);border:1px solid var(--grey)}
 .btn-ghost:hover{border-color:var(--teal-mid);color:var(--teal-mid)}
-.btn-danger{background:#fff;color:#c0392b;border:1px solid #e8b9b3}
-.btn-danger:hover{background:#c0392b;color:#fff;border-color:#c0392b}
+.btn-danger{background:#fff;color:var(--danger);border:1px solid #e8b9b3}
+.btn-danger:hover{background:var(--danger);color:#fff;border-color:var(--danger)}
 .btn-sm{padding:7px 12px;font-size:13px}
 .btn:disabled{opacity:.5;cursor:not-allowed}
 :focus-visible{outline:3px solid var(--gold);outline-offset:2px;border-radius:6px}
@@ -45,38 +46,61 @@ a{color:var(--teal-mid)}
 .field input,.field textarea,.field select{width:100%;padding:11px 13px;border:1px solid var(--grey);border-radius:8px;background:#fff;color:var(--dark)}
 .field input:focus,.field textarea:focus,.field select:focus{outline:none;border-color:var(--teal-mid);box-shadow:0 0 0 3px rgba(81,141,149,.15)}
 .field .hint{font-size:12px;color:var(--muted);margin-top:5px}
-.login-err{background:#fdecea;color:#c0392b;border:1px solid #f5c6c0;border-radius:8px;padding:10px;font-size:13px;margin-bottom:16px}
+.login-err{background:#fdecea;color:var(--danger);border:1px solid #f5c6c0;border-radius:8px;padding:10px;font-size:13px;margin-bottom:16px}
 .login-note{font-size:11px;color:var(--muted);margin-top:18px;line-height:1.5}
 
 /* ── App shell ── */
 #appView{display:flex;min-height:100vh}
-.sidebar{width:248px;background:linear-gradient(180deg,var(--teal),var(--teal-deeper));color:#fff;
-  display:flex;flex-direction:column;padding:22px 16px;position:fixed;top:0;bottom:0;left:0}
-.sidebar-logo{display:flex;align-items:center;justify-content:center;gap:10px;padding:10px 8px 26px}
-.sidebar-logo img{width:100%;max-width:140px;height:auto}
+.sidebar{width:250px;background:linear-gradient(180deg,var(--teal),var(--teal-deeper));color:#fff;
+  display:flex;flex-direction:column;padding:22px 16px;position:fixed;top:0;bottom:0;left:0;z-index:30;overflow-y:auto}
+.sidebar-logo{display:flex;align-items:center;justify-content:center;gap:10px;padding:6px 8px 18px}
+.sidebar-logo img{width:100%;max-width:150px;height:auto}
+.nav-sec{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.45);padding:14px 14px 6px}
 .nav-item{display:flex;align-items:center;gap:12px;width:100%;text-align:left;color:rgba(255,255,255,.82);
-  padding:12px 14px;border-radius:8px;font-size:14.5px;font-weight:500;transition:.15s;margin-bottom:4px}
+  padding:11px 14px;border-radius:8px;font-size:14px;font-weight:500;transition:.15s;margin-bottom:3px}
 .nav-item:hover{background:rgba(255,255,255,.08);color:#fff}
 .nav-item.active{background:rgba(242,218,146,.14);color:var(--gold);font-weight:600;box-shadow:inset 3px 0 0 var(--gold)}
 .nav-item .ico{width:20px;text-align:center;font-size:16px}
-.sidebar-spacer{flex:1}
-.sidebar-foot{border-top:1px solid rgba(255,255,255,.12);padding-top:12px}
-.main{margin-left:248px;flex:1;display:flex;flex-direction:column;min-width:0}
+.sidebar-spacer{flex:1;min-height:10px}
+.sidebar-foot{border-top:1px solid rgba(255,255,255,.12);padding-top:10px;margin-top:10px}
+.main{margin-left:250px;flex:1;display:flex;flex-direction:column;min-width:0}
 
 /* ── Topbar ── */
-.topbar{background:#fff;border-bottom:1px solid #e4e9e9;padding:16px 32px;display:flex;align-items:center;
+.topbar{background:#fff;border-bottom:1px solid #e4e9e9;padding:15px 30px;display:flex;align-items:center;
   gap:16px;position:sticky;top:0;z-index:20}
 .topbar h1{font-size:19px;color:var(--teal-dark)}
 .topbar .topsub{font-size:12.5px;color:var(--muted);margin-top:2px}
 .topbar-actions{margin-left:auto;display:flex;align-items:center;gap:10px}
+.menu-btn{display:none;font-size:22px;color:var(--teal-dark);width:38px;height:38px;border-radius:8px}
+.menu-btn:hover{background:#f0f3f3}
 .dirty-dot{display:none;align-items:center;gap:6px;font-size:12.5px;color:#b8860b;font-weight:600}
 .dirty-dot.on{display:inline-flex}
-.dirty-dot::before{content:'';width:8px;height:8px;border-radius:50%;background:#e6a700}
-.content{padding:28px 32px;max-width:1100px;width:100%}
+.dirty-dot::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--warn)}
+.content{padding:26px 30px;max-width:1180px;width:100%}
 
-/* ── Cards / grid ── */
-.helper{color:var(--muted);font-size:13.5px;margin-bottom:20px;line-height:1.5}
-.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+/* ── KPI cards ── */
+.kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px;margin-bottom:22px}
+.kpi{background:#fff;border:1px solid #e4e9e9;border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.kpi::after{content:'';position:absolute;right:-18px;top:-18px;width:64px;height:64px;border-radius:50%;background:rgba(81,141,149,.07)}
+.kpi .k-ico{font-size:18px;opacity:.7}
+.kpi .k-n{font-size:30px;font-weight:800;color:var(--teal);line-height:1.1;margin-top:6px}
+.kpi .k-l{font-size:12.5px;color:var(--muted);margin-top:4px}
+.kpi .k-sub{font-size:11.5px;color:var(--muted);margin-top:6px}
+.kpi.live .k-n{color:var(--ok)}
+.live-dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--ok);margin-right:6px;box-shadow:0 0 0 0 rgba(46,158,91,.6);animation:pulse 1.8s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(46,158,91,.55)}70%{box-shadow:0 0 0 9px rgba(46,158,91,0)}100%{box-shadow:0 0 0 0 rgba(46,158,91,0)}}
+
+/* ── Panels / grids ── */
+.helper{color:var(--muted);font-size:13.5px;margin-bottom:18px;line-height:1.5}
+.panel{background:#fff;border:1px solid #e4e9e9;border-radius:var(--radius);padding:20px 22px;box-shadow:var(--shadow);margin-bottom:18px}
+.panel-head{display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.panel-head h3{font-size:15px;color:var(--teal-dark)}
+.panel-head .panel-actions{margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:860px){.grid-2{grid-template-columns:1fr}}
+
+/* ── Cards (projects) ── */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
 .pcard{background:#fff;border:1px solid #e4e9e9;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column}
 .pcard-thumb{height:120px;background:linear-gradient(135deg,var(--teal),var(--teal-mid));background-size:cover;background-position:center;position:relative}
 .pcard-tag{position:absolute;top:10px;left:10px;background:rgba(0,0,0,.45);color:#fff;font-size:11px;font-weight:600;padding:4px 9px;border-radius:20px}
@@ -85,29 +109,31 @@ a{color:var(--teal-mid)}
 .pcard-meta{font-size:12px;color:var(--muted)}
 .pcard-actions{display:flex;gap:8px;margin-top:auto;padding-top:6px}
 
-/* ── Stats (dashboard) ── */
-.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:24px}
-.stat{background:#fff;border:1px solid #e4e9e9;border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
-.stat .n{font-size:30px;font-weight:800;color:var(--teal)}
-.stat .l{font-size:13px;color:var(--muted);margin-top:4px}
-.panel{background:#fff;border:1px solid #e4e9e9;border-radius:var(--radius);padding:22px;box-shadow:var(--shadow);margin-bottom:18px}
-.panel h3{font-size:15px;color:var(--teal-dark);margin-bottom:6px}
-.section-group{margin-bottom:26px}
-.section-group>.lbl{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--teal-mid);margin-bottom:12px;display:block}
+/* ── Charts ── */
+.chart-wrap{width:100%;overflow:hidden}
+.chart svg{width:100%;height:auto;display:block}
+.legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:10px;font-size:12.5px;color:var(--muted)}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.barlist{display:flex;flex-direction:column;gap:10px}
+.barrow{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;font-size:13px}
+.barrow .bl{color:var(--dark);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.barrow .bv{color:var(--muted);font-weight:600;font-size:12.5px}
+.bartrack{grid-column:1/3;height:8px;background:#eef3f3;border-radius:6px;overflow:hidden}
+.bartrack i{display:block;height:100%;background:linear-gradient(90deg,var(--teal-mid),var(--teal));border-radius:6px}
+.range-tabs{display:inline-flex;border:1px solid var(--grey);border-radius:8px;overflow:hidden}
+.range-tabs button{padding:7px 13px;font-size:13px;font-weight:600;color:var(--muted);background:#fff}
+.range-tabs button.on{background:var(--teal);color:#fff}
 
-/* ── Reorder list ── */
-.reorder-list{display:flex;flex-direction:column;gap:10px;max-width:680px}
+/* ── Reorder ── */
+.reorder-list{display:flex;flex-direction:column;gap:10px;max-width:720px}
 .ritem{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid #e4e9e9;border-radius:9px;padding:12px 14px;box-shadow:var(--shadow);cursor:grab}
-.ritem.dragging{opacity:.4}
-.ritem.over{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold)}
+.ritem.dragging{opacity:.4}.ritem.over{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold)}
 .rhandle{color:var(--teal-mid);font-size:20px;line-height:1;cursor:grab}
 .rnum{width:26px;height:26px;border-radius:50%;background:var(--teal);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.rtitle{font-weight:600;color:var(--teal-dark);font-size:14px}
-.rtag{font-size:11px;color:var(--muted)}
+.rtitle{font-weight:600;color:var(--teal-dark);font-size:14px}.rtag{font-size:11px;color:var(--muted)}
 
-/* ── Modal / dialog ── */
-.overlay{position:fixed;inset:0;background:rgba(20,40,42,.55);display:flex;align-items:flex-start;justify-content:center;
-  padding:40px 16px;z-index:60;overflow:auto}
+/* ── Modal ── */
+.overlay{position:fixed;inset:0;background:rgba(20,40,42,.55);display:flex;align-items:flex-start;justify-content:center;padding:40px 16px;z-index:60;overflow:auto}
 .modal-box{background:#fff;border-radius:14px;box-shadow:var(--shadow-lg);width:100%;max-width:640px;animation:pop .2s ease}
 @keyframes pop{from{transform:translateY(8px) scale(.98);opacity:0}to{transform:none;opacity:1}}
 .modal-head{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid #eef1f1}
@@ -120,74 +146,27 @@ a{color:var(--teal-mid)}
 @media(max-width:560px){.row2{grid-template-columns:1fr}}
 textarea{resize:vertical;min-height:80px}
 
-/* scope + images editors */
 .chip-list{display:flex;flex-direction:column;gap:8px}
-.chip{display:flex;gap:8px;align-items:center}
-.chip input{flex:1}
-.chip button{color:#c0392b;font-size:18px;width:32px;height:32px;border-radius:7px}
-.chip button:hover{background:#fdecea}
+.chip{display:flex;gap:8px;align-items:center}.chip input{flex:1}
+.chip button{color:var(--danger);font-size:18px;width:32px;height:32px;border-radius:7px}.chip button:hover{background:#fdecea}
 .img-grid{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
 .img-thumb{position:relative;width:84px;height:64px;border-radius:8px;background-size:cover;background-position:center;border:1px solid var(--grey)}
-.img-thumb button{position:absolute;top:-7px;right:-7px;background:#c0392b;color:#fff;width:22px;height:22px;border-radius:50%;font-size:13px;line-height:1;box-shadow:0 1px 4px rgba(0,0,0,.3)}
+.img-thumb button{position:absolute;top:-7px;right:-7px;background:var(--danger);color:#fff;width:22px;height:22px;border-radius:50%;font-size:13px;line-height:1}
 .dropzone{border:2px dashed var(--grey);border-radius:9px;padding:18px;text-align:center;color:var(--muted);font-size:13px;cursor:pointer;transition:.15s}
 .dropzone:hover,.dropzone.drag{border-color:var(--teal-mid);background:#f0f7f7;color:var(--teal-dark)}
 
-/* tooltips */
-.tip{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;
-  background:var(--teal-mid);color:#fff;font-size:11px;font-weight:700;margin-left:6px;cursor:help;position:relative}
-.tip::after{content:attr(data-tip);position:absolute;bottom:140%;left:50%;transform:translateX(-50%);
-  background:var(--dark);color:#fff;font-size:12px;font-weight:400;padding:7px 10px;border-radius:7px;width:200px;
-  opacity:0;pointer-events:none;transition:.15s;z-index:5;line-height:1.4;text-align:left}
+.tip{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:var(--teal-mid);color:#fff;font-size:11px;font-weight:700;margin-left:6px;cursor:help;position:relative}
+.tip::after{content:attr(data-tip);position:absolute;bottom:140%;left:50%;transform:translateX(-50%);background:var(--dark);color:#fff;font-size:12px;font-weight:400;padding:7px 10px;border-radius:7px;width:210px;opacity:0;pointer-events:none;transition:.15s;z-index:5;line-height:1.4;text-align:left}
 .tip:hover::after{opacity:1}
 
-/* toast */
 #toasts{position:fixed;bottom:24px;right:24px;display:flex;flex-direction:column;gap:10px;z-index:100}
-.toast{background:var(--teal-dark);color:#fff;padding:13px 18px;border-radius:9px;box-shadow:var(--shadow-lg);font-size:14px;
-  display:flex;align-items:center;gap:10px;animation:slideIn .25s ease;max-width:340px}
-.toast.ok{background:var(--teal)}.toast.err{background:#c0392b}
+.toast{background:var(--teal-dark);color:#fff;padding:13px 18px;border-radius:9px;box-shadow:var(--shadow-lg);font-size:14px;display:flex;align-items:center;gap:10px;animation:slideIn .25s ease;max-width:340px}
+.toast.ok{background:var(--teal)}.toast.err{background:var(--danger)}
 .toast::before{content:'✓';font-weight:700}.toast.err::before{content:'!'}
 @keyframes slideIn{from{transform:translateX(20px);opacity:0}to{transform:none;opacity:1}}
-
-/* tour */
-#tour{position:fixed;inset:0;z-index:90;display:none}
-#tour.on{display:block}
-.tour-mask{position:absolute;inset:0;background:rgba(20,40,42,.6)}
-.tour-spot{position:absolute;border-radius:10px;box-shadow:0 0 0 4px var(--gold),0 0 0 9999px rgba(20,40,42,.6);transition:.25s;pointer-events:none}
-.tour-pop{position:absolute;background:#fff;border-radius:12px;box-shadow:var(--shadow-lg);max-width:300px;padding:18px 20px}
-.tour-pop h4{color:var(--teal-dark);font-size:15px;margin-bottom:6px}
-.tour-pop p{font-size:13.5px;color:var(--dark);line-height:1.55;margin-bottom:14px}
-.tour-foot{display:flex;align-items:center;justify-content:space-between}
-.tour-step{font-size:12px;color:var(--muted)}
-.tour-btns{display:flex;gap:8px}
 .empty{text-align:center;color:var(--muted);padding:50px 20px}
 
-/* ── Section accordion (two-level, sliding) ── */
-.sec-group{margin-bottom:12px;border:1px solid #e4e9e9;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);background:#fff}
-.sec-group-head{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:16px 20px;
-  background:#fff;font-size:15px;font-weight:700;color:var(--teal-dark);cursor:pointer;transition:.15s;border:none;font-family:inherit}
-.sec-group-head:hover{background:#f8fafa}
-.sec-group-head.open{background:#f4f8f8}
-.sec-group-head .sec-ico{font-size:16px;width:22px;text-align:center}
-
-/* sliding wrapper (animates open/closed) */
-.sec-acc{display:grid;grid-template-rows:0fr;transition:grid-template-rows .28s ease}
-.sec-acc.open{grid-template-rows:1fr}
-.sec-acc-inner{overflow:hidden;min-height:0}
-.sec-arrow{margin-left:auto;font-size:10px;transition:transform .25s;color:var(--muted)}
-.sec-group-head.open .sec-arrow,.sec-sub-head.open .sec-arrow{transform:rotate(180deg)}
-.sec-group>.sec-acc>.sec-acc-inner{padding:6px 18px 16px}
-
-/* sub-section: a section and its cards, itself collapsible */
-.sec-sub{margin-top:12px;border:1px solid #eef1f1;border-left:3px solid var(--gold);border-radius:8px;background:#fbfcfc;overflow:hidden}
-.sec-sub:first-child{margin-top:8px}
-.sec-sub-head{display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:none;background:none;font-family:inherit;cursor:pointer;
-  padding:13px 16px;font-size:12.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--teal-mid);transition:.15s}
-.sec-sub-head:hover{background:#f1f6f6}
-.sec-sub-head.open{background:#eef5f5}
-.sec-sub>.sec-acc>.sec-acc-inner{padding:6px 16px 4px}
-.sec-sub .field{margin-bottom:14px}
-
-/* sections toolbar: search + expand/collapse all */
+/* ── Section accordion ── */
 .sec-toolbar{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
 .sec-search{position:relative;flex:1;min-width:200px}
 .sec-search input{width:100%;padding:11px 13px 11px 38px;border:1px solid var(--grey);border-radius:8px;background:#fff;color:var(--dark)}
@@ -198,8 +177,34 @@ textarea{resize:vertical;min-height:80px}
 .field-check{display:flex;align-items:center;gap:10px;margin-bottom:12px}
 .field-check input[type=checkbox]{width:18px;height:18px;accent-color:var(--teal);cursor:pointer;flex-shrink:0}
 .field-check label{font-size:13.5px;color:var(--dark);cursor:pointer;margin:0}
-@media(max-width:760px){.sidebar{width:64px;padding:18px 8px}.sidebar-logo span,.nav-item span:not(.ico),.sidebar-logo img{display:none}
-  .main{margin-left:64px}.content,.topbar{padding-left:16px;padding-right:16px}}
+.sec-group{margin-bottom:12px;border:1px solid #e4e9e9;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);background:#fff}
+.sec-group-head{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:16px 20px;background:#fff;font-size:15px;font-weight:700;color:var(--teal-dark);cursor:pointer;transition:.15s;font-family:inherit}
+.sec-group-head:hover{background:#f8fafa}.sec-group-head.open{background:#f4f8f8}
+.sec-group-head .sec-ico{font-size:16px;width:22px;text-align:center}
+.sec-acc{display:grid;grid-template-rows:0fr;transition:grid-template-rows .28s ease}
+.sec-acc.open{grid-template-rows:1fr}
+.sec-acc-inner{overflow:hidden;min-height:0}
+.sec-arrow{margin-left:auto;font-size:10px;transition:transform .25s;color:var(--muted)}
+.sec-group-head.open .sec-arrow,.sec-sub-head.open .sec-arrow{transform:rotate(180deg)}
+.sec-group>.sec-acc>.sec-acc-inner{padding:6px 18px 16px}
+.sec-sub{margin-top:12px;border:1px solid #eef1f1;border-left:3px solid var(--gold);border-radius:8px;background:#fbfcfc;overflow:hidden}
+.sec-sub:first-child{margin-top:8px}
+.sec-sub-head{display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:none;background:none;font-family:inherit;cursor:pointer;padding:13px 16px;font-size:12.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--teal-mid);transition:.15s}
+.sec-sub-head:hover{background:#f1f6f6}.sec-sub-head.open{background:#eef5f5}
+.sec-sub>.sec-acc>.sec-acc-inner{padding:6px 16px 4px}
+.sec-sub .field{margin-bottom:14px}
+
+/* ── Mobile ── */
+.scrim{display:none;position:fixed;inset:0;background:rgba(20,40,42,.45);z-index:25}
+@media(max-width:860px){
+  .sidebar{transform:translateX(-100%);transition:transform .25s;box-shadow:var(--shadow-lg)}
+  .sidebar.open{transform:none}
+  .main{margin-left:0}
+  .menu-btn{display:inline-flex;align-items:center;justify-content:center}
+  .scrim.on{display:block}
+  .content,.topbar{padding-left:16px;padding-right:16px}
+  .topbar-actions .lbl{display:none}
+}
 </style>
 </head>
 <body>
@@ -210,14 +215,10 @@ textarea{resize:vertical;min-height:80px}
     <img src="../assets/logo-admin-login.svg" alt="IES — Integrated Engineering Systems" style="max-width:220px">
     <div class="sub">Admin Control Panel — authorised access only</div>
     <div class="login-err hidden" id="loginErr"></div>
-    <div class="field">
-      <label for="email">Email</label>
-      <input type="email" id="email" autocomplete="username" required>
-    </div>
-    <div class="field">
-      <label for="password">Password</label>
-      <input type="password" id="password" autocomplete="current-password" required>
-    </div>
+    <div class="field"><label for="email">Email</label>
+      <input type="email" id="email" autocomplete="username" required></div>
+    <div class="field"><label for="password">Password</label>
+      <input type="password" id="password" autocomplete="current-password" required></div>
     <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center" id="loginBtn">Sign in</button>
     <div class="login-note">This is a private area for IES administrators. There is no public sign-up.</div>
   </form>
@@ -225,14 +226,24 @@ textarea{resize:vertical;min-height:80px}
 
 <!-- ══════════ APP ══════════ -->
 <div id="appView" class="hidden">
-  <aside class="sidebar">
-    <div class="sidebar-logo"><img src="../assets/logo-new-white.svg" alt="IES — Integrated Engineering Systems"></div>
+  <div class="scrim" id="scrim"></div>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo"><img src="../assets/logo-new-white.svg" alt="IES"></div>
+
+    <div class="nav-sec">Overview</div>
     <button class="nav-item active" data-view="dashboard"><span class="ico">▦</span><span>Dashboard</span></button>
-    <button class="nav-item" data-view="projects" id="navProjects"><span class="ico">▤</span><span>Projects</span></button>
-    <button class="nav-item" data-view="sections"><span class="ico">✎</span><span>Sections / Concepts</span></button>
-    <button class="nav-item" data-view="reorder" id="navReorder"><span class="ico">⇅</span><span>Reorder</span></button>
+    <button class="nav-item" data-view="analytics"><span class="ico">📈</span><span>Analytics</span></button>
+
+    <div class="nav-sec">Edit the website</div>
+    <button class="nav-item" data-view="projects"><span class="ico">▤</span><span>Project Cards</span></button>
+    <button class="nav-item" data-view="text"><span class="ico">✎</span><span>Titles &amp; Texts</span></button>
+    <button class="nav-item" data-view="contact"><span class="ico">✉</span><span>Contact &amp; Team</span></button>
+    <button class="nav-item" data-view="seo"><span class="ico">🔍</span><span>SEO &amp; Visibility</span></button>
+    <button class="nav-item" data-view="reorder"><span class="ico">⇅</span><span>Reorder Projects</span></button>
+
     <div class="sidebar-spacer"></div>
     <div class="sidebar-foot">
+      <a class="nav-item" href="/" target="_blank"><span class="ico">↗</span><span>View public site</span></a>
       <button class="nav-item" id="helpBtn"><span class="ico">?</span><span>Help / Guide</span></button>
       <button class="nav-item" id="logoutBtn"><span class="ico">⎋</span><span>Logout</span></button>
     </div>
@@ -240,51 +251,58 @@ textarea{resize:vertical;min-height:80px}
 
   <div class="main">
     <div class="topbar">
+      <button class="menu-btn" id="menuBtn">☰</button>
       <div>
         <h1 id="viewTitle">Dashboard</h1>
-        <div class="topsub" id="viewSub">Overview of your portfolio content.</div>
+        <div class="topsub" id="viewSub">Your website at a glance.</div>
       </div>
       <div class="topbar-actions">
-        <span class="dirty-dot" id="dirtyDot">Unsaved changes</span>
-        <button class="btn btn-ghost btn-sm" id="discardBtn">Discard changes</button>
-        <button class="btn btn-gold" id="saveBtn" data-tour="save">Save / Publish</button>
+        <span class="dirty-dot" id="dirtyDot"><span class="lbl">Unsaved changes</span></span>
+        <button class="btn btn-ghost btn-sm" id="discardBtn">Discard</button>
+        <button class="btn btn-gold" id="saveBtn">Save / Publish</button>
       </div>
     </div>
     <div class="content">
       <div id="view-dashboard"></div>
+      <div id="view-analytics" class="hidden"></div>
       <div id="view-projects" class="hidden"></div>
-      <div id="view-sections" class="hidden"></div>
+      <div id="view-text" class="hidden"></div>
+      <div id="view-contact" class="hidden"></div>
+      <div id="view-seo" class="hidden"></div>
       <div id="view-reorder" class="hidden"></div>
     </div>
   </div>
 </div>
 
-<!-- modal mount, dialogs, toasts, tour -->
 <div id="modalMount"></div>
 <div id="toasts"></div>
-<div id="tour"><div class="tour-mask"></div><div class="tour-spot"></div><div class="tour-pop"></div></div>
 
 <script>
 /* ═══════════════════════════════════════════════════════════
    IES Admin Control Panel — vanilla JS, no build step.
-   Talks to the /api/* serverless functions. All persistence is
-   server-side; this file holds no secrets.
+   Screens: Dashboard, Analytics, Project Cards, Titles & Texts,
+   Contact & Team, SEO & Visibility, Reorder.
+   Talks to /api/* serverless functions; holds no secrets.
    ═══════════════════════════════════════════════════════════ */
 (function(){
 'use strict';
-
-/* ── tiny DOM helpers ── */
 var $=function(s,r){return (r||document).querySelector(s)};
 var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 function el(html){var d=document.createElement('div');d.innerHTML=html.trim();return d.firstChild}
+function nf(n){return (Number(n)||0).toLocaleString()}
 
-/* ── state ── */
-var state={content:null,view:'dashboard',dirty:false};
+var state={content:null,view:'dashboard',dirty:false,stats:null,range:14};
 var DISCIPLINES=['Architecture','Structural','MEP','BIM'];
 var STATUSES=['Completed','In Progress','On Hold','Planned'];
+
+/* ── Section field definitions, grouped by SCREEN ──
+   screen: 'text'  → Titles & Texts
+           'contact' → Contact & Team
+           'seo'   → SEO & Visibility                                  */
 var SECTION_GROUPS=[
-  {id:'projects',label:'Our Projects',ico:'▤',subs:[
+  /* ===== TITLES & TEXTS ===== */
+  {screen:'text',id:'projects',label:'Portfolio — Projects',ico:'▤',subs:[
     {grp:'Featured Projects (home)',items:[
       {k:'featTag',label:'Tag',type:'input'},{k:'featH2',label:'Heading',type:'input'},
       {k:'featSub',label:'Subtitle / description',type:'textarea'}]},
@@ -292,7 +310,7 @@ var SECTION_GROUPS=[
       {k:'projTag',label:'Tag',type:'input'},{k:'projH2',label:'Heading',type:'input'},
       {k:'projSub',label:'Subtitle / description',type:'textarea'}]}
   ]},
-  {id:'services',label:'Services',ico:'✎',subs:[
+  {screen:'text',id:'services',label:'Services',ico:'✎',subs:[
     {grp:'Our Core Services (home)',items:[
       {k:'coreTag',label:'Tag',type:'input'},{k:'coreH2',label:'Heading',type:'input'},
       {k:'coreSub',label:'Subtitle / description',type:'textarea'}]},
@@ -334,7 +352,7 @@ var SECTION_GROUPS=[
       {k:'desCard5Title',label:'Card 5 — title',type:'input'},{k:'desCard5Body',label:'Card 5 — description',type:'textarea'},
       {k:'desCard6Title',label:'Card 6 — title',type:'input'},{k:'desCard6Body',label:'Card 6 — description',type:'textarea'}]}
   ]},
-  {id:'about',label:'About',ico:'◈',subs:[
+  {screen:'text',id:'about',label:'About',ico:'◈',subs:[
     {grp:'Our Story — page header',items:[
       {k:'storyTag',label:'Tag',type:'input'},{k:'storyH2',label:'Heading',type:'input'},
       {k:'storySub',label:'Subtitle / description',type:'textarea'}]},
@@ -349,7 +367,7 @@ var SECTION_GROUPS=[
       {k:'value1Title',label:'Value 1 — title',type:'input'},{k:'value1Desc',label:'Value 1 — description',type:'textarea'},
       {k:'value2Title',label:'Value 2 — title',type:'input'},{k:'value2Desc',label:'Value 2 — description',type:'textarea'},
       {k:'value3Title',label:'Value 3 — title',type:'input'},{k:'value3Desc',label:'Value 3 — description',type:'textarea'}]},
-    {grp:'Our Offices',items:[
+    {grp:'Our Offices (About page summary)',items:[
       {k:'officesTag',label:'Tag',type:'input'},{k:'officesH2',label:'Heading',type:'input'},
       {k:'officesSub',label:'Subtitle / description',type:'textarea'},
       {k:'office1City',label:'Office 1 — city',type:'input'},{k:'office1Country',label:'Office 1 — country / role',type:'input'},
@@ -366,15 +384,44 @@ var SECTION_GROUPS=[
       {k:'orgTag',label:'Tag',type:'input'},{k:'orgH2',label:'Heading',type:'input'},
       {k:'orgSub',label:'Subtitle / description',type:'textarea'}]}
   ]},
-  {id:'contact',label:'Contact',ico:'✉',subs:[
-    {grp:'Contact Page',items:[
+  {screen:'text',id:'contactText',label:'Contact & Hero text',ico:'❝',subs:[
+    {grp:'Contact Page header',items:[
       {k:'contactTag',label:'Tag',type:'input'},{k:'contactH2',label:'Heading',type:'input'},
       {k:'contactSub',label:'Subtitle / description',type:'textarea'}]},
     {grp:'Hero (home top)',items:[
       {k:'heroBadge',label:'Hero badge',type:'input'},
       {k:'heroSub',label:'Hero subtitle / description',type:'textarea'}]}
   ]},
-  {id:'seo',label:'SEO / Search & Social',ico:'🔍',subs:[
+
+  /* ===== CONTACT & TEAM (details) ===== */
+  {screen:'contact',id:'office1',label:'Riyadh office (Saudi Arabia)',ico:'📍',subs:[
+    {grp:'Contact card details',items:[
+      {k:'office1Label',label:'Heading (city / country)',type:'input'},
+      {k:'office1Addr',label:'Address',type:'textarea'},
+      {k:'office1Tel',label:'Telephone',type:'input'},
+      {k:'office1Mobil',label:'Mobile',type:'input'},
+      {k:'office1Email',label:'Email',type:'input'}]}
+  ]},
+  {screen:'contact',id:'office2',label:'Cairo office (Egypt)',ico:'📍',subs:[
+    {grp:'Contact card details',items:[
+      {k:'office2Label',label:'Heading (city / country)',type:'input'},
+      {k:'office2Addr',label:'Address',type:'textarea'},
+      {k:'office2Tel',label:'Telephone',type:'input'},
+      {k:'office2Mobil',label:'Mobile',type:'input'},
+      {k:'office2Email',label:'Email',type:'input'}]}
+  ]},
+  {screen:'contact',id:'teamNums',label:'Team statistics (the big numbers)',ico:'📊',subs:[
+    {grp:'Numbers shown on the Our Team page',hint:'Type the number with its suffix, e.g. “25+” or “90%”. The label for each is under Titles & Texts → About → Our Team.',items:[
+      {k:'teamStat1Num',label:'Stat 1 number',type:'input'},{k:'teamStat2Num',label:'Stat 2 number',type:'input'},
+      {k:'teamStat3Num',label:'Stat 3 number',type:'input'},{k:'teamStat4Num',label:'Stat 4 number',type:'input'}]}
+  ]},
+  {screen:'contact',id:'footer',label:'Footer',ico:'▾',subs:[
+    {grp:'Footer',items:[
+      {k:'footerTagline',label:'Footer tagline',type:'textarea'}]}
+  ]},
+
+  /* ===== SEO & VISIBILITY ===== */
+  {screen:'seo',id:'seo',label:'SEO / Search & Social',ico:'🔍',subs:[
     {grp:'Shared',items:[
       {k:'seoOgImage',label:'Social share image URL (Open Graph) — used when your link is shared',type:'input'}]},
     {grp:'Home page',items:[
@@ -402,7 +449,7 @@ var SECTION_GROUPS=[
       {k:'seoContactTitle',label:'Browser/Google title',type:'input'},
       {k:'seoContactDesc',label:'Meta description',type:'textarea'}]}
   ]},
-  {id:'visibility',label:'Show / Hide sections',ico:'👁',subs:[
+  {screen:'seo',id:'visibility',label:'Show / Hide sections',ico:'👁',subs:[
     {grp:'Toggle parts of the public site on or off',hint:'Tick to HIDE that element from visitors. Leave unticked to show it (default).',items:[
       {k:'hideContactTag',label:'Hide the “Get in Touch” tag on Contact',type:'checkbox'},
       {k:'hideValuesH2',label:'Hide the Core Values heading',type:'checkbox'},
@@ -411,8 +458,7 @@ var SECTION_GROUPS=[
   ]}
 ];
 
-/* Current public-site text — shown as the starting value so the editor
-   is pre-filled with the real content instead of blank fields. */
+/* Current public-site text — shown as starting values so editors are pre-filled. */
 var SECTION_DEFAULTS={
   featTag:'Portfolio',featH2:'Featured Projects',
   featSub:'A selection of mega-projects across Saudi Arabia showcasing our multi-discipline expertise.',
@@ -467,12 +513,20 @@ var SECTION_DEFAULTS={
   teamSub:'A multi-discipline team of engineering professionals organized for efficiency and quality across every project phase.',
   teamStat1Label:'Engineering Professionals',teamStat2Label:'Years of Experience',
   teamStat3Label:'On-time Delivery',teamStat4Label:'Projects Completed',
+  teamStat1Num:'25+',teamStat2Num:'15+',teamStat3Num:'90%',teamStat4Num:'50+',
   orgTag:'Team',orgH2:'Organization Structure',
   orgSub:'A multi-discipline team organized for efficiency and quality across every project phase.',
   contactTag:'Get in Touch',contactH2:'Contact Us',
   contactSub:'Ready to discuss your next project? Reach out to schedule a meeting with our engineering team.',
   heroBadge:'BIM & Engineering Services',
-  heroSub:'Delivering high-quality BIM-based digital modeling solutions for Architectural, Structural, and MEP disciplines across the Middle East.'
+  heroSub:'Delivering high-quality BIM-based digital modeling solutions for Architectural, Structural, and MEP disciplines across the Middle East.',
+  office1Label:'Saudi Arabia, Riyadh',
+  office1Addr:'Riyadh – Al Olaya – Olaya street – Shafi building beside Aloft Hotel. C.R: 1010798314 · p.o: 12341 · P.C: 11721',
+  office1Tel:'00966 112 69 4437',office1Mobil:'00966 50 001 5316',office1Email:'info@ies-bim.com',
+  office2Label:'Egypt, Cairo',
+  office2Addr:'Block 34, Building 10, Africa – Extension of Mostafa El-Nahas Street, 10th District, Nasr City, Cairo, Egypt.',
+  office2Tel:'02 247 333 89',office2Mobil:'0020 115 107 9838',office2Email:'info@ies-bim.com',
+  footerTagline:'Delivering high-quality BIM-based digital modeling solutions for Architectural, Structural, and MEP disciplines.'
 };
 
 /* ── toasts ── */
@@ -489,7 +543,8 @@ var api={
   logout:function(){return fetch('/api/logout',{method:'POST'})},
   getContent:function(){return fetch('/api/content',{cache:'no-store'}).then(function(r){return r.json()})},
   putContent:function(c){return fetch('/api/content',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(c)})},
-  upload:function(file){return fetch('/api/upload',{method:'POST',headers:{'Content-Type':file.type,'x-filename':file.name},body:file})}
+  upload:function(file){return fetch('/api/upload',{method:'POST',headers:{'Content-Type':file.type,'x-filename':file.name},body:file})},
+  stats:function(days){return fetch('/api/stats?days='+(days||14),{cache:'no-store'}).then(function(r){return r.ok?r.json():Promise.reject()})}
 };
 
 /* ── dirty tracking ── */
@@ -499,85 +554,219 @@ window.addEventListener('beforeunload',function(e){if(state.dirty){e.preventDefa
 /* ═══════════ AUTH ═══════════ */
 function showLogin(){$('#loginView').classList.remove('hidden');$('#appView').classList.add('hidden')}
 function showApp(){$('#loginView').classList.add('hidden');$('#appView').classList.remove('hidden')}
-
 $('#loginForm').addEventListener('submit',function(e){
   e.preventDefault();
-  var btn=$('#loginBtn');btn.disabled=true;btn.textContent='Signing in…';
-  $('#loginErr').classList.add('hidden');
-  api.login($('#email').value,$('#password').value).then(function(r){
-    return r.json().then(function(d){return{ok:r.ok,d:d}});
-  }).then(function(res){
+  var btn=$('#loginBtn');btn.disabled=true;btn.textContent='Signing in…';$('#loginErr').classList.add('hidden');
+  api.login($('#email').value,$('#password').value).then(function(r){return r.json().then(function(d){return{ok:r.ok,d:d}})}).then(function(res){
     btn.disabled=false;btn.textContent='Sign in';
     if(res.ok){$('#password').value='';boot();}
     else{var e2=$('#loginErr');e2.textContent=res.d.error||'Invalid credentials';e2.classList.remove('hidden')}
-  }).catch(function(){
-    btn.disabled=false;btn.textContent='Sign in';
-    var e2=$('#loginErr');e2.textContent='Could not reach the server. Please try again.';e2.classList.remove('hidden');
-  });
+  }).catch(function(){btn.disabled=false;btn.textContent='Sign in';var e2=$('#loginErr');e2.textContent='Could not reach the server. Please try again.';e2.classList.remove('hidden')});
 });
-
 $('#logoutBtn').addEventListener('click',function(){
   if(state.dirty && !confirm('You have unsaved changes. Logout anyway?'))return;
   api.logout().then(function(){location.reload()});
 });
-
-/* inactivity auto-logout (30 min) */
 var idleTimer;
 function resetIdle(){clearTimeout(idleTimer);idleTimer=setTimeout(function(){
   api.logout().then(function(){alert('Session expired due to inactivity. Please sign in again.');location.reload()});
 },30*60*1000)}
 ['click','keydown','mousemove','scroll'].forEach(function(ev){document.addEventListener(ev,resetIdle,{passive:true})});
 
-/* ═══════════ NAV / VIEWS ═══════════ */
+/* ═══════════ NAV ═══════════ */
 var VIEW_META={
-  dashboard:{t:'Dashboard',s:'Overview of your portfolio content.'},
-  projects:{t:'Projects',s:'Add, edit or delete the projects shown on your website.'},
-  sections:{t:'Sections / Concepts',s:'Edit the headings, subtitles and descriptions on the public site.'},
-  reorder:{t:'Reorder',s:'Drag the cards into the order you want, then Save / Publish.'}
+  dashboard:{t:'Dashboard',s:'Your website at a glance — live visitors and recent activity.'},
+  analytics:{t:'Analytics',s:'Live visitor analysis for your website.'},
+  projects:{t:'Project Cards',s:'Add, edit or delete the project cards in your portfolio.'},
+  text:{t:'Titles & Texts',s:'Edit every heading, subtitle and description across the site.'},
+  contact:{t:'Contact & Team',s:'Edit office contact details, team numbers and the footer.'},
+  seo:{t:'SEO & Visibility',s:'Search/social previews and show-or-hide controls.'},
+  reorder:{t:'Reorder Projects',s:'Drag the cards into the order you want, then Save / Publish.'}
 };
+var VIEWS=['dashboard','analytics','projects','text','contact','seo','reorder'];
 function go(view){
-  state.view=view;
+  state.view=view;stopPolling();
   $$('.nav-item[data-view]').forEach(function(b){b.classList.toggle('active',b.dataset.view===view)});
-  ['dashboard','projects','sections','reorder'].forEach(function(v){$('#view-'+v).classList.toggle('hidden',v!==view)});
+  VIEWS.forEach(function(v){$('#view-'+v).classList.toggle('hidden',v!==view)});
   $('#viewTitle').textContent=VIEW_META[view].t;$('#viewSub').textContent=VIEW_META[view].s;
+  closeSidebar();
   if(view==='dashboard')renderDashboard();
+  if(view==='analytics')renderAnalytics();
   if(view==='projects')renderProjects();
-  if(view==='sections')renderSections();
+  if(view==='text')renderSectionScreen('text','#view-text');
+  if(view==='contact')renderSectionScreen('contact','#view-contact');
+  if(view==='seo')renderSectionScreen('seo','#view-seo');
   if(view==='reorder')renderReorder();
 }
 $$('.nav-item[data-view]').forEach(function(b){b.addEventListener('click',function(){go(b.dataset.view)})});
 
+/* mobile sidebar */
+function openSidebar(){$('#sidebar').classList.add('open');$('#scrim').classList.add('on')}
+function closeSidebar(){$('#sidebar').classList.remove('open');$('#scrim').classList.remove('on')}
+$('#menuBtn').addEventListener('click',openSidebar);
+$('#scrim').addEventListener('click',closeSidebar);
+
+/* ═══════════ LIVE POLLING (dashboard + analytics) ═══════════ */
+var pollTimer=null;
+function startPolling(fn){stopPolling();fn();pollTimer=setInterval(fn,15000)}
+function stopPolling(){if(pollTimer){clearInterval(pollTimer);pollTimer=null}}
+
 /* ═══════════ DASHBOARD ═══════════ */
 function renderDashboard(){
   var p=state.content.projects;
-  var byDisc=DISCIPLINES.map(function(d){return{d:d,n:p.filter(function(x){return x.discipline===d}).length}});
-  var html='<p class="helper">Welcome to the IES control panel. Manage everything that appears on your public website from here — no code needed.</p>';
-  html+='<div class="stat-row"><div class="stat"><div class="n">'+p.length+'</div><div class="l">Total projects</div></div>';
-  byDisc.forEach(function(b){html+='<div class="stat"><div class="n">'+b.n+'</div><div class="l">'+b.d+'</div></div>'});
-  html+='</div>';
-  html+='<div class="panel"><h3>Quick start</h3><p class="helper" style="margin:0">'+
-    '1. Go to <b>Projects</b> to add or edit a project. &nbsp; 2. Use <b>Sections / Concepts</b> to change page text. &nbsp;'+
-    '3. Use <b>Reorder</b> to drag projects into the order you want. &nbsp; 4. Click <b>Save / Publish</b> to make changes live.</p>'+
-    '<div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">'+
-    '<button class="btn btn-primary btn-sm" id="dashAdd">+ Add Project</button>'+
-    '<button class="btn btn-ghost btn-sm" id="dashTour">Replay guided tour</button>'+
-    '<a class="btn btn-ghost btn-sm" href="/" target="_blank">View public site ↗</a></div></div>';
-  if(state.content.updatedAt)html+='<p class="helper">Last published: '+new Date(state.content.updatedAt).toLocaleString()+'</p>';
-  $('#view-dashboard').innerHTML=html;
+  var c=$('#view-dashboard');
+  c.innerHTML=
+    '<div class="kpi-row" id="dashKpis">'+kpiSkeleton(4)+'</div>'+
+    '<div class="grid-2">'+
+      '<div class="panel"><div class="panel-head"><h3>Visitors — last 14 days</h3>'+
+        '<div class="panel-actions"><a class="btn btn-ghost btn-sm" data-go="analytics">Open Analytics →</a></div></div>'+
+        '<div class="chart-wrap chart" id="dashChart"><p class="helper" style="margin:0">Loading…</p></div></div>'+
+      '<div class="panel"><div class="panel-head"><h3>Your content</h3></div>'+
+        '<div class="kpi-row" style="margin:0">'+
+          '<div class="kpi"><div class="k-ico">▤</div><div class="k-n">'+p.length+'</div><div class="k-l">Projects</div></div>'+
+          DISCIPLINES.map(function(d){return '<div class="kpi"><div class="k-ico">◧</div><div class="k-n">'+p.filter(function(x){return x.discipline===d}).length+'</div><div class="k-l">'+d+'</div></div>'}).join('')+
+        '</div>'+
+        '<div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">'+
+          '<button class="btn btn-primary btn-sm" id="dashAdd">+ Add project</button>'+
+          '<button class="btn btn-ghost btn-sm" data-go="text">Edit page text</button>'+
+          '<button class="btn btn-ghost btn-sm" data-go="seo">SEO settings</button></div>'+
+        (state.content.updatedAt?'<p class="helper" style="margin:14px 0 0">Last published: '+new Date(state.content.updatedAt).toLocaleString()+'</p>':'')+
+      '</div>'+
+    '</div>';
   $('#dashAdd').onclick=function(){go('projects');openProjectEditor(null)};
-  $('#dashTour').onclick=function(){startTour()};
+  $$('#view-dashboard [data-go]').forEach(function(b){b.onclick=function(){go(b.dataset.go)}});
+  startPolling(function(){
+    api.stats(14).then(function(s){
+      state.stats=s;
+      $('#dashKpis').innerHTML=
+        kpi('live','●','Live visitors now',s.live,'active in the last 5 min',true)+
+        kpi('','👁','Visitors today',s.uvToday,nf(s.pvToday)+' page views')+
+        kpi('','✎','Edits published today',s.editsToday,nf(s.editsAll)+' all-time')+
+        kpi('','∑','Page views (total)',s.pvAll,'since tracking began');
+      $('#dashChart').innerHTML=lineChart(s.series,[
+        {label:'Visitors',color:'#3B6C70',values:s.uvSeries},
+        {label:'Page views',color:'#d4b85e',values:s.pvSeries}
+      ])+legend([{label:'Visitors',color:'#3B6C70'},{label:'Page views',color:'#d4b85e'}]);
+    }).catch(function(){
+      $('#dashKpis').innerHTML='<div class="panel" style="grid-column:1/-1;margin:0"><p class="helper" style="margin:0">Analytics will appear once visitors arrive (and, in production, once Vercel KV is connected).</p></div>';
+      $('#dashChart').innerHTML='<p class="helper" style="margin:0">No analytics data yet.</p>';
+    });
+  });
+}
+function kpiSkeleton(n){var o='';for(var i=0;i<n;i++)o+='<div class="kpi"><div class="k-n">—</div><div class="k-l">Loading…</div></div>';return o}
+function kpi(cls,ico,label,n,sub,live){
+  return '<div class="kpi '+(cls==='live'?'live':'')+'">'+
+    '<div class="k-ico">'+(live?'<span class="live-dot"></span>':esc(ico))+'</div>'+
+    '<div class="k-n">'+nf(n)+'</div><div class="k-l">'+esc(label)+'</div>'+
+    (sub?'<div class="k-sub">'+esc(sub)+'</div>':'')+'</div>';
 }
 
-/* ═══════════ PROJECTS ═══════════ */
+/* ═══════════ ANALYTICS ═══════════ */
+function renderAnalytics(){
+  var c=$('#view-analytics');
+  c.innerHTML=
+    '<div class="sec-toolbar">'+
+      '<span class="helper" style="margin:0;flex:1">Live first-party analytics, collected on your own site. Numbers for “today” reset at midnight (UTC).</span>'+
+      '<div class="range-tabs" id="rangeTabs">'+
+        [7,14,30].map(function(d){return '<button data-d="'+d+'"'+(state.range===d?' class="on"':'')+'>'+d+'d</button>'}).join('')+'</div>'+
+      '<button class="btn btn-ghost btn-sm" id="csvBtn">⬇ Export CSV</button></div>'+
+    '<div class="kpi-row" id="anKpis">'+kpiSkeleton(5)+'</div>'+
+    '<div class="panel"><div class="panel-head"><h3>Traffic over time</h3></div>'+
+      '<div class="chart-wrap chart" id="anChart"><p class="helper" style="margin:0">Loading…</p></div></div>'+
+    '<div class="grid-2">'+
+      '<div class="panel"><div class="panel-head"><h3>Top pages (today)</h3></div><div id="anPages"></div></div>'+
+      '<div class="panel"><div class="panel-head"><h3>Traffic sources (today)</h3></div><div id="anSrc"></div></div>'+
+    '</div>'+
+    '<div class="grid-2">'+
+      '<div class="panel"><div class="panel-head"><h3>Devices (today)</h3></div><div id="anDev"></div></div>'+
+      '<div class="panel"><div class="panel-head"><h3>Edits published</h3></div><div class="chart-wrap chart" id="anEdits"></div></div>'+
+    '</div>';
+  $$('#rangeTabs button').forEach(function(b){b.onclick=function(){state.range=+b.dataset.d;renderAnalytics()}});
+  $('#csvBtn').onclick=exportCsv;
+  startPolling(loadAnalytics);
+}
+function loadAnalytics(){
+  api.stats(state.range).then(function(s){
+    state.stats=s;
+    $('#anKpis').innerHTML=
+      kpi('live','●','Live now',s.live,'active in last 5 min',true)+
+      kpi('','👁','Visitors today',s.uvToday,'unique')+
+      kpi('','∑','Page views today',s.pvToday,nf(s.pvAll)+' all-time')+
+      kpi('','✎','Edits today',s.editsToday,nf(s.editsAll)+' all-time')+
+      kpi('','📅','Visitors ('+state.range+'d)',s.uvSeries.reduce(add,0),nf(s.pvSeries.reduce(add,0))+' page views');
+    $('#anChart').innerHTML=lineChart(s.series,[
+      {label:'Visitors',color:'#3B6C70',values:s.uvSeries},
+      {label:'Page views',color:'#d4b85e',values:s.pvSeries}
+    ])+legend([{label:'Visitors',color:'#3B6C70'},{label:'Page views',color:'#d4b85e'}]);
+    $('#anPages').innerHTML=barList(s.topPages.map(function(x){return{label:friendlyPage(x.name),value:x.count}}));
+    $('#anSrc').innerHTML=barList(objToRows(s.sources));
+    $('#anDev').innerHTML=barList(objToRows(s.devices));
+    $('#anEdits').innerHTML=lineChart(s.series,[{label:'Edits',color:'#518D95',values:s.editSeries}])+legend([{label:'Edits published',color:'#518D95'}]);
+  }).catch(function(){
+    $('#anKpis').innerHTML='<div class="panel" style="grid-column:1/-1;margin:0"><p class="helper" style="margin:0">No analytics data yet. In production, connect Vercel KV so visits are stored; numbers appear as visitors arrive.</p></div>';
+    ['#anChart','#anPages','#anSrc','#anDev','#anEdits'].forEach(function(id){$(id).innerHTML='<p class="helper" style="margin:0">—</p>'});
+  });
+}
+function add(a,b){return a+(Number(b)||0)}
+function objToRows(o){return Object.keys(o||{}).map(function(k){return{label:cap(k),value:o[k]}}).sort(function(a,b){return b.value-a.value})}
+function cap(s){s=String(s||'');return s.charAt(0).toUpperCase()+s.slice(1)}
+function friendlyPage(p){var m={Home:'Home',Projects:'Projects',BIMServices:'BIM Services',DesignEngineering:'BIM & Engineering',DesignEngineering1:'Design & Detail',AboutStory:'About — Story',AboutTeam:'About — Team',Contact:'Contact'};return m[p]||p}
+function exportCsv(){
+  var s=state.stats;if(!s){toast('Nothing to export yet.');return}
+  var rows=[['Date','Page views','Unique visitors','Edits published']];
+  s.series.forEach(function(d,i){rows.push([d,s.pvSeries[i]||0,s.uvSeries[i]||0,s.editSeries[i]||0])});
+  var csv=rows.map(function(r){return r.join(',')}).join('\n');
+  var blob=new Blob([csv],{type:'text/csv'});var a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);a.download='ies-analytics-'+s.today+'.csv';a.click();
+  setTimeout(function(){URL.revokeObjectURL(a.href)},2000);
+  toast('CSV downloaded.','ok');
+}
+
+/* ── lightweight SVG charts (no dependencies) ── */
+function lineChart(labels,datasets){
+  var W=620,H=210,pad=30,bottom=24;
+  var max=1;datasets.forEach(function(d){d.values.forEach(function(v){if(v>max)max=v})});
+  var n=labels.length;
+  function x(i){return pad+(W-pad*2)*(n<=1?0.5:i/(n-1))}
+  function y(v){return pad+(H-pad-bottom)*(1-v/max)}
+  var svg='<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none" role="img">';
+  // gridlines
+  for(var g=0;g<=4;g++){var gy=pad+(H-pad-bottom)*g/4;svg+='<line x1="'+pad+'" y1="'+gy+'" x2="'+(W-pad)+'" y2="'+gy+'" stroke="#eef3f3" stroke-width="1"/>';
+    svg+='<text x="'+(pad-6)+'" y="'+(gy+3)+'" font-size="9" fill="#9bb0b1" text-anchor="end">'+Math.round(max*(1-g/4))+'</text>';}
+  datasets.forEach(function(d){
+    var pts=d.values.map(function(v,i){return x(i)+','+y(v)});
+    // area
+    svg+='<polyline points="'+x(0)+','+y(0)+' '+pts.join(' ')+' '+x(n-1)+','+y(0)+'" fill="'+d.color+'" opacity="0.08"/>';
+    svg+='<polyline points="'+pts.join(' ')+'" fill="none" stroke="'+d.color+'" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>';
+    d.values.forEach(function(v,i){svg+='<circle cx="'+x(i)+'" cy="'+y(v)+'" r="2.6" fill="'+d.color+'"><title>'+labels[i]+': '+v+'</title></circle>'});
+  });
+  // x labels (first, mid, last)
+  [0,Math.floor((n-1)/2),n-1].forEach(function(i){if(i>=0&&labels[i])svg+='<text x="'+x(i)+'" y="'+(H-6)+'" font-size="9" fill="#9bb0b1" text-anchor="middle">'+labels[i].slice(5)+'</text>'});
+  svg+='</svg>';
+  return svg;
+}
+function legend(items){return '<div class="legend">'+items.map(function(it){return '<span><i style="background:'+it.color+'"></i>'+esc(it.label)+'</span>'}).join('')+'</div>'}
+function barList(rows){
+  if(!rows||!rows.length)return '<p class="helper" style="margin:0">No data yet today.</p>';
+  var total=rows.reduce(function(a,r){return a+(Number(r.value)||0)},0)||1;
+  return '<div class="barlist">'+rows.slice(0,10).map(function(r){
+    var pct=Math.round((Number(r.value)||0)/total*100);
+    return '<div class="barrow"><span class="bl">'+esc(r.label)+'</span><span class="bv">'+nf(r.value)+' · '+pct+'%</span>'+
+      '<span class="bartrack"><i style="width:'+pct+'%"></i></span></div>';
+  }).join('')+'</div>';
+}
+
+/* ═══════════ PROJECT CARDS ═══════════ */
 function renderProjects(){
   var p=state.content.projects;
-  var head='<div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">'+
-    '<button class="btn btn-primary" id="addProj" data-tour="add">+ Add Project</button>'+
-    '<span class="helper" style="margin:0">Click a project to edit it, or use the buttons on each card.</span></div>';
+  var head='<div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap">'+
+    '<button class="btn btn-primary" id="addProj">+ Add Project</button>'+
+    '<button class="btn btn-ghost btn-sm" data-go="reorder">⇅ Reorder</button>'+
+    '<span class="helper" style="margin:0">Click a card to edit it.</span></div>';
   var grid='';
   if(!p.length){grid='<div class="empty">No projects yet. Click <b>+ Add Project</b> to create your first one.</div>';}
   else{
-    grid='<div class="cards" data-tour="list">'+p.map(function(x,i){
+    grid='<div class="cards">'+p.map(function(x,i){
       var bg=x.images&&x.images[0]?'style="background-image:url('+esc(x.images[0])+')"':'';
       return '<div class="pcard"><div class="pcard-thumb" '+bg+'><span class="pcard-tag">'+esc(x.badge||x.discipline)+'</span></div>'+
         '<div class="pcard-body"><div class="pcard-title">'+esc(x.title||'Untitled')+'</div>'+
@@ -588,33 +777,22 @@ function renderProjects(){
   }
   $('#view-projects').innerHTML=head+grid;
   $('#addProj').onclick=function(){openProjectEditor(null)};
-  $$('#view-projects [data-edit]').forEach(function(b){
-    b.onclick=function(e){e.stopPropagation();openProjectEditor(+b.dataset.edit)};
-  });
-  $$('#view-projects [data-del]').forEach(function(b){
-    b.onclick=function(e){e.stopPropagation();confirmDelete(+b.dataset.del)};
-  });
+  $$('#view-projects [data-go]').forEach(function(b){b.onclick=function(){go(b.dataset.go)}});
+  $$('#view-projects [data-edit]').forEach(function(b){b.onclick=function(e){e.stopPropagation();openProjectEditor(+b.dataset.edit)}});
+  $$('#view-projects [data-del]').forEach(function(b){b.onclick=function(e){e.stopPropagation();confirmDelete(+b.dataset.del)}});
   $$('#view-projects .pcard-title').forEach(function(t,i){t.style.cursor='pointer';t.onclick=function(){openProjectEditor(i)}});
 }
-
 function confirmDelete(i){
   var p=state.content.projects[i];
-  openDialog({
-    title:'Delete project?',
-    body:'<p>Are you sure you want to delete <b>'+esc(p.title||'this project')+'</b>?<br>This cannot be undone once you publish.</p>',
+  openDialog({title:'Delete project?',body:'<p>Are you sure you want to delete <b>'+esc(p.title||'this project')+'</b>?<br>This cannot be undone once you publish.</p>',
     confirmText:'Delete',confirmClass:'btn-danger',
-    onConfirm:function(){state.content.projects.splice(i,1);setDirty(true);closeDialog();renderProjects();toast('Project removed. Remember to Save / Publish.','ok')}
-  });
+    onConfirm:function(){state.content.projects.splice(i,1);setDirty(true);closeDialog();renderProjects();toast('Project removed. Remember to Save / Publish.','ok')}});
 }
-
-/* project editor modal */
 function openProjectEditor(idx){
   var isNew=idx===null;
   var p=isNew?{title:'',badge:'',discipline:'Architecture',desc:'',fullDesc:'',client:'',location:'',area:'',status:'Completed',scope:[''],images:[]}
              :JSON.parse(JSON.stringify(state.content.projects[idx]));
-  if(!p.scope||!p.scope.length)p.scope=[''];
-  if(!p.images)p.images=[];
-
+  if(!p.scope||!p.scope.length)p.scope=[''];if(!p.images)p.images=[];
   var box=el('<div class="overlay"><div class="modal-box"><div class="modal-head">'+
     '<h2>'+(isNew?'Add Project':'Edit Project')+'</h2><button class="modal-x">&times;</button></div>'+
     '<div class="modal-body"></div>'+
@@ -639,76 +817,54 @@ function openProjectEditor(idx){
       '<div class="img-grid" id="f-images"></div>'+
       '<div class="dropzone" id="f-drop" style="margin-top:10px">Click to upload, or drag an image here<br><small>JPG, PNG, WEBP, SVG · max 6 MB</small></div>'+
       '<input type="file" id="f-file" accept="image/*" multiple class="hidden"></div>';
-
-  function renderScope(){
-    var c=$('#f-scope',body);c.innerHTML='';
-    p.scope.forEach(function(s,i){
-      var r=el('<div class="chip"><input value="'+esc(s)+'"><button title="Remove">&times;</button></div>');
-      $('input',r).oninput=function(){p.scope[i]=this.value};
-      $('button',r).onclick=function(){p.scope.splice(i,1);if(!p.scope.length)p.scope=[''];renderScope()};
-      c.appendChild(r);
-    });
-  }
-  function renderImages(){
-    var c=$('#f-images',body);c.innerHTML='';
-    p.images.forEach(function(u,i){
-      var t=el('<div class="img-thumb" style="background-image:url('+esc(u)+')"><button title="Remove">&times;</button></div>');
-      $('button',t).onclick=function(){p.images.splice(i,1);renderImages()};
-      c.appendChild(t);
-    });
-  }
+  function renderScope(){var cc=$('#f-scope',body);cc.innerHTML='';p.scope.forEach(function(s,i){
+    var r=el('<div class="chip"><input value="'+esc(s)+'"><button title="Remove">&times;</button></div>');
+    $('input',r).oninput=function(){p.scope[i]=this.value};
+    $('button',r).onclick=function(){p.scope.splice(i,1);if(!p.scope.length)p.scope=[''];renderScope()};cc.appendChild(r);});}
+  function renderImages(){var cc=$('#f-images',body);cc.innerHTML='';p.images.forEach(function(u,i){
+    var t=el('<div class="img-thumb" style="background-image:url('+esc(u)+')"><button title="Remove">&times;</button></div>');
+    $('button',t).onclick=function(){p.images.splice(i,1);renderImages()};cc.appendChild(t);});}
   renderScope();renderImages();
   $('#addScope',body).onclick=function(){p.scope.push('');renderScope()};
-
-  function doUpload(files){
-    Array.prototype.forEach.call(files,function(file){
-      if(!/^image\//.test(file.type)){toast('Only image files are allowed.','err');return}
-      toast('Uploading '+file.name+'…');
-      api.upload(file).then(function(r){return r.json().then(function(d){return{ok:r.ok,d:d}})}).then(function(res){
-        if(res.ok&&res.d.url){p.images.push(res.d.url);renderImages();toast('Image added.','ok')}
-        else toast(res.d.error||'Upload failed.','err');
-      }).catch(function(){toast('Upload failed.','err')});
-    });
-  }
+  function doUpload(files){Array.prototype.forEach.call(files,function(file){
+    if(!/^image\//.test(file.type)){toast('Only image files are allowed.','err');return}
+    toast('Uploading '+file.name+'…');
+    api.upload(file).then(function(r){return r.json().then(function(d){return{ok:r.ok,d:d}})}).then(function(res){
+      if(res.ok&&res.d.url){p.images.push(res.d.url);renderImages();toast('Image added.','ok')}else toast(res.d.error||'Upload failed.','err');
+    }).catch(function(){toast('Upload failed.','err')});});}
   var drop=$('#f-drop',body),file=$('#f-file',body);
-  drop.onclick=function(){file.click()};
-  file.onchange=function(){doUpload(file.files);file.value=''};
+  drop.onclick=function(){file.click()};file.onchange=function(){doUpload(file.files);file.value=''};
   drop.ondragover=function(e){e.preventDefault();drop.classList.add('drag')};
   drop.ondragleave=function(){drop.classList.remove('drag')};
   drop.ondrop=function(e){e.preventDefault();drop.classList.remove('drag');doUpload(e.dataTransfer.files)};
-
   function close(){box.remove()}
   $('.modal-x',box).onclick=close;$('[data-cancel]',box).onclick=close;
   box.addEventListener('click',function(e){if(e.target===box)close()});
   $('[data-save]',box).onclick=function(){
     p.title=$('#f-title',body).value.trim();
     if(!p.title){toast('Please enter a project title.','err');$('#f-title',body).focus();return}
-    p.discipline=$('#f-discipline',body).value;
-    p.badge=$('#f-badge',body).value.trim()||p.discipline;
-    p.desc=$('#f-desc',body).value.trim();
-    p.fullDesc=$('#f-fullDesc',body).value.trim();
-    p.client=$('#f-client',body).value.trim();
-    p.location=$('#f-location',body).value.trim();
-    p.area=$('#f-area',body).value.trim();
-    p.status=$('#f-status',body).value;
+    p.discipline=$('#f-discipline',body).value;p.badge=$('#f-badge',body).value.trim()||p.discipline;
+    p.desc=$('#f-desc',body).value.trim();p.fullDesc=$('#f-fullDesc',body).value.trim();
+    p.client=$('#f-client',body).value.trim();p.location=$('#f-location',body).value.trim();
+    p.area=$('#f-area',body).value.trim();p.status=$('#f-status',body).value;
     p.scope=p.scope.map(function(s){return s.trim()}).filter(Boolean);
     if(isNew)state.content.projects.push(p);else state.content.projects[idx]=p;
     setDirty(true);close();renderProjects();
     toast(isNew?'Project added. Remember to Save / Publish.':'Project updated. Remember to Save / Publish.','ok');
   };
-  $('#modalMount').appendChild(box);
-  $('#f-title',body).focus();
+  $('#modalMount').appendChild(box);$('#f-title',body).focus();
 }
 
-/* ═══════════ SECTIONS / CONCEPTS ═══════════ */
-function renderSections(){
+/* ═══════════ SECTION SCREENS (text / contact / seo) ═══════════ */
+function renderSectionScreen(screen,containerId){
   var s=state.content.sections||{};
-  var html='<p class="helper">Edit the text shown on your public pages. Use the search box to jump straight to any field. Click a section to expand it. Changes go live after you click <b>Save / Publish</b>.</p>';
+  var groups=SECTION_GROUPS.filter(function(g){return g.screen===screen});
+  var html='<p class="helper">Edit and click <b>Save / Publish</b> to make changes live. Use the search box to jump to any field.</p>';
   html+='<div class="sec-toolbar">'+
-    '<div class="sec-search"><input id="secSearch" type="search" placeholder="Search all fields — e.g. “BIM”, “meta”, “Cairo”…" autocomplete="off"></div>'+
-    '<button class="btn btn-ghost btn-sm" id="secExpand">Expand all</button>'+
-    '<button class="btn btn-ghost btn-sm" id="secCollapse">Collapse all</button></div>';
-  SECTION_GROUPS.forEach(function(g){
+    '<div class="sec-search"><input class="secSearch" type="search" placeholder="Search fields…" autocomplete="off"></div>'+
+    '<button class="btn btn-ghost btn-sm secExpand">Expand all</button>'+
+    '<button class="btn btn-ghost btn-sm secCollapse">Collapse all</button></div>';
+  groups.forEach(function(g){
     html+='<div class="sec-group" data-search="'+esc(g.label.toLowerCase())+'">';
     html+='<button class="sec-group-head"><span class="sec-ico">'+g.ico+'</span>'+esc(g.label)+'<span class="sec-arrow">&#9660;</span></button>';
     html+='<div class="sec-acc"><div class="sec-acc-inner">';
@@ -722,8 +878,7 @@ function renderSections(){
         var searchTxt=esc((it.label+' '+it.k).toLowerCase());
         if(it.type==='checkbox'){
           var on=st==='1'||st===true||st==='true';
-          html+='<div class="field-check" data-search="'+searchTxt+'">'+
-            '<input type="checkbox" id="chk-'+it.k+'" data-sec="'+it.k+'" data-type="checkbox"'+(on?' checked':'')+'>'+
+          html+='<div class="field-check" data-search="'+searchTxt+'"><input type="checkbox" id="chk-'+it.k+'" data-sec="'+it.k+'" data-type="checkbox"'+(on?' checked':'')+'>'+
             '<label for="chk-'+it.k+'">'+esc(it.label)+'</label></div>';
         }else{
           var raw=(st!=null&&st!=='')?st:(SECTION_DEFAULTS[it.k]||'');
@@ -736,77 +891,48 @@ function renderSections(){
     });
     html+='</div></div></div>';
   });
-  html+='<div class="sec-noresult hidden" id="secNoResult">No fields match your search.</div>';
-  $('#view-sections').innerHTML=html;
-
-  // text inputs / textareas
-  $$('#view-sections [data-sec]:not([data-type="checkbox"])').forEach(function(f){
-    f.oninput=function(){state.content.sections[f.dataset.sec]=f.value;setDirty(true)};
-  });
-  // checkboxes (visibility toggles)
-  $$('#view-sections [data-type="checkbox"]').forEach(function(f){
-    f.onchange=function(){state.content.sections[f.dataset.sec]=f.checked?'1':'';setDirty(true)};
-  });
-  // expand / collapse on header click
-  $$('#view-sections .sec-group-head, #view-sections .sec-sub-head').forEach(function(btn){
-    btn.addEventListener('click',function(){
-      btn.classList.toggle('open');
-      var acc=btn.nextElementSibling;
-      if(acc&&acc.classList.contains('sec-acc'))acc.classList.toggle('open');
-    });
-  });
-  function setOpen(open){
-    $$('#view-sections .sec-group-head, #view-sections .sec-sub-head').forEach(function(b){b.classList.toggle('open',open)});
-    $$('#view-sections .sec-acc').forEach(function(a){a.classList.toggle('open',open)});
-  }
-  $('#secExpand').onclick=function(){setOpen(true)};
-  $('#secCollapse').onclick=function(){setOpen(false)};
-
-  // live search/filter
-  $('#secSearch').oninput=function(){
-    var q=this.value.trim().toLowerCase();
-    var anyVisible=false;
-    $$('#view-sections .sec-group').forEach(function(grp){
+  html+='<div class="sec-noresult hidden">No fields match your search.</div>';
+  var C=$(containerId);C.innerHTML=html;
+  $$('[data-sec]:not([data-type="checkbox"])',C).forEach(function(f){f.oninput=function(){state.content.sections[f.dataset.sec]=f.value;setDirty(true)}});
+  $$('[data-type="checkbox"]',C).forEach(function(f){f.onchange=function(){state.content.sections[f.dataset.sec]=f.checked?'1':'';setDirty(true)}});
+  $$('.sec-group-head, .sec-sub-head',C).forEach(function(btn){btn.addEventListener('click',function(){
+    btn.classList.toggle('open');var acc=btn.nextElementSibling;if(acc&&acc.classList.contains('sec-acc'))acc.classList.toggle('open');})});
+  function setOpen(open){$$('.sec-group-head, .sec-sub-head',C).forEach(function(b){b.classList.toggle('open',open)});$$('.sec-acc',C).forEach(function(a){a.classList.toggle('open',open)})}
+  $('.secExpand',C).onclick=function(){setOpen(true)};
+  $('.secCollapse',C).onclick=function(){setOpen(false)};
+  $('.secSearch',C).oninput=function(){
+    var q=this.value.trim().toLowerCase(),anyVisible=false;
+    $$('.sec-group',C).forEach(function(grp){
       var grpHit=false;
       $$('.sec-sub',grp).forEach(function(sub){
         var subHit=false;
         $$('[data-search]',sub).forEach(function(f){
           if(!f.classList.contains('field')&&!f.classList.contains('field-check'))return;
-          var match=!q||f.getAttribute('data-search').indexOf(q)>-1;
-          f.classList.toggle('hidden',!match);
-          if(match)subHit=true;
-        });
-        // also match on the sub-group's own label
+          var match=!q||f.getAttribute('data-search').indexOf(q)>-1;f.classList.toggle('hidden',!match);if(match)subHit=true;});
         if(q&&sub.getAttribute('data-search').indexOf(q)>-1)subHit=true;
         sub.classList.toggle('hidden',!subHit);
-        // when searching, auto-open matching subs; when cleared, collapse
-        var subHead=$('.sec-sub-head',sub),subAcc=subHead&&subHead.nextElementSibling;
-        if(q){subHead.classList.toggle('open',subHit);if(subAcc)subAcc.classList.toggle('open',subHit);}
-        else{subHead.classList.remove('open');if(subAcc)subAcc.classList.remove('open');}
-        if(subHit)grpHit=true;
-      });
+        var sh=$('.sec-sub-head',sub),sa=sh&&sh.nextElementSibling;
+        if(q){sh.classList.toggle('open',subHit);if(sa)sa.classList.toggle('open',subHit)}else{sh.classList.remove('open');if(sa)sa.classList.remove('open')}
+        if(subHit)grpHit=true;});
       grp.classList.toggle('hidden',!grpHit);
-      var grpHead=$('.sec-group-head',grp),grpAcc=grpHead&&grpHead.nextElementSibling;
-      if(q){grpHead.classList.toggle('open',grpHit);if(grpAcc)grpAcc.classList.toggle('open',grpHit);}
-      else{grpHead.classList.remove('open');if(grpAcc)grpAcc.classList.remove('open');}
-      if(grpHit)anyVisible=true;
-    });
-    $('#secNoResult').classList.toggle('hidden',anyVisible);
+      var gh=$('.sec-group-head',grp),ga=gh&&gh.nextElementSibling;
+      if(q){gh.classList.toggle('open',grpHit);if(ga)ga.classList.toggle('open',grpHit)}else{gh.classList.remove('open');if(ga)ga.classList.remove('open')}
+      if(grpHit)anyVisible=true;});
+    $('.sec-noresult',C).classList.toggle('hidden',anyVisible);
   };
 }
 
-/* ═══════════ REORDER (drag & drop) ═══════════ */
+/* ═══════════ REORDER ═══════════ */
 function renderReorder(){
   var p=state.content.projects;
-  var html='<p class="helper">Grab a card by the <b>⠿</b> handle and drag it up or down to change the order on your website. Then click <b>Save / Publish</b>.</p>';
+  var html='<p class="helper">Grab a card by the <b>⠿</b> handle and drag it to change the order on your website. Then click <b>Save / Publish</b>.</p>';
   if(!p.length){$('#view-reorder').innerHTML=html+'<div class="empty">No projects to reorder yet.</div>';return}
-  html+='<div class="reorder-list" id="reList" data-tour="reorder">'+p.map(function(x,i){
+  html+='<div class="reorder-list" id="reList">'+p.map(function(x,i){
     return '<div class="ritem" draggable="true" data-i="'+i+'"><span class="rhandle" title="Drag to reorder">⠿</span>'+
       '<span class="rnum">'+(i+1)+'</span><div><div class="rtitle">'+esc(x.title||'Untitled')+'</div>'+
       '<div class="rtag">'+esc(x.badge||x.discipline)+' · '+esc(x.location||'')+'</div></div></div>';
   }).join('')+'</div>';
-  $('#view-reorder').innerHTML=html;
-  wireDrag();
+  $('#view-reorder').innerHTML=html;wireDrag();
 }
 function wireDrag(){
   var list=$('#reList'),dragEl=null;
@@ -816,14 +942,10 @@ function wireDrag(){
     it.addEventListener('dragover',function(e){e.preventDefault();
       var after=e.clientY>it.getBoundingClientRect().top+it.offsetHeight/2;
       $$('.ritem',list).forEach(function(x){x.classList.remove('over')});it.classList.add('over');
-      if(it!==dragEl){list.insertBefore(dragEl,after?it.nextSibling:it)}
-    });
+      if(it!==dragEl){list.insertBefore(dragEl,after?it.nextSibling:it)}});
   });
-  function commitOrder(){
-    var ids=$$('.ritem',list).map(function(x){return +x.dataset.i});
-    state.content.projects=ids.map(function(i){return state.content.projects[i]});
-    setDirty(true);renderReorder();
-  }
+  function commitOrder(){var ids=$$('.ritem',list).map(function(x){return +x.dataset.i});
+    state.content.projects=ids.map(function(i){return state.content.projects[i]});setDirty(true);renderReorder();}
 }
 
 /* ═══════════ SAVE / DISCARD ═══════════ */
@@ -849,32 +971,37 @@ function openDialog(o){
   box.id='dialog';
   $('.modal-x',box).onclick=closeDialog;$('[data-cancel]',box).onclick=closeDialog;
   box.addEventListener('click',function(e){if(e.target===box)closeDialog()});
-  $('[data-ok]',box).onclick=o.onConfirm;
-  $('#modalMount').appendChild(box);
+  $('[data-ok]',box).onclick=o.onConfirm;$('#modalMount').appendChild(box);
 }
 function closeDialog(){var d=$('#dialog');if(d)d.remove()}
 
 /* ═══════════ GUIDED TOUR ═══════════ */
 var TOUR=[
-  {sel:'#navProjects',title:'Your Projects',text:'This is your Projects list — add, edit, or delete the projects shown on your website here.'},
-  {sel:'[data-tour="add"],#addProj,#navProjects',title:'Add a project',text:'Click + Add Project to create one. Fill in the title, subtitle, description, client, location, scale, status, and upload photos.'},
-  {sel:'.nav-item[data-view="sections"]',title:'Edit page text',text:'To change section concepts, subtitles and descriptions on the site, open Sections / Concepts.'},
-  {sel:'#navReorder',title:'Reorder by dragging',text:'Go to Reorder and simply drag and drop the cards into the order you want — then Save.'},
-  {sel:'#saveBtn',title:'Save / Publish',text:'Always click Save / Publish to make your changes go live. Use Logout when you are done.'}
+  {sel:'.nav-item[data-view="dashboard"]',title:'Dashboard',text:'Your home screen — live visitors right now, visitors today, and how many edits you published today.'},
+  {sel:'.nav-item[data-view="analytics"]',title:'Analytics',text:'Full live website analysis: traffic charts, top pages, sources, devices, with a date range and CSV export.'},
+  {sel:'.nav-item[data-view="projects"]',title:'Project Cards',text:'Add, edit, delete and reorder the project cards in your portfolio.'},
+  {sel:'.nav-item[data-view="text"]',title:'Titles & Texts',text:'Edit every heading, subtitle and description across the whole site. Use the search box to find any field fast.'},
+  {sel:'.nav-item[data-view="contact"]',title:'Contact & Team',text:'Edit office phone numbers, emails, addresses, the team statistics and the footer.'},
+  {sel:'#saveBtn',title:'Save / Publish',text:'Always click Save / Publish to make your changes go live.'}
 ];
-var tourIdx=0;
-function startTour(){tourIdx=0;$('#tour').classList.add('on');showTourStep()}
-function endTour(){$('#tour').classList.remove('on');try{localStorage.setItem('ies_tour_done','1')}catch(e){}}
+var tourIdx=0,tourBox=null;
+function startTour(){tourIdx=0;showTourStep()}
+function endTour(){if(tourBox){tourBox.remove();tourBox=null}try{localStorage.setItem('ies_tour_done','2')}catch(e){}}
 function showTourStep(){
-  var step=TOUR[tourIdx];var target=document.querySelector(step.sel.split(',')[0])||document.querySelector(step.sel.split(',').pop());
+  var step=TOUR[tourIdx];var target=document.querySelector(step.sel);
   var r=target?target.getBoundingClientRect():{top:80,left:260,width:200,height:40};
-  var spot=$('.tour-spot'),pop=$('.tour-pop');
+  if(!tourBox){tourBox=el('<div style="position:fixed;inset:0;z-index:90"><div style="position:absolute;inset:0;background:rgba(20,40,42,.6)"></div>'+
+    '<div class="spot" style="position:absolute;border-radius:10px;box-shadow:0 0 0 4px var(--gold),0 0 0 9999px rgba(20,40,42,.6);transition:.25s;pointer-events:none"></div>'+
+    '<div class="pop" style="position:absolute;background:#fff;border-radius:12px;box-shadow:var(--shadow-lg);max-width:300px;padding:18px 20px"></div></div>');
+    document.body.appendChild(tourBox);}
+  var spot=$('.spot',tourBox),pop=$('.pop',tourBox);
   spot.style.top=(r.top-6)+'px';spot.style.left=(r.left-6)+'px';spot.style.width=(r.width+12)+'px';spot.style.height=(r.height+12)+'px';
-  pop.innerHTML='<h4>'+esc(step.title)+'</h4><p>'+esc(step.text)+'</p><div class="tour-foot"><span class="tour-step">Step '+(tourIdx+1)+' of '+TOUR.length+'</span>'+
-    '<div class="tour-btns"><button class="btn btn-ghost btn-sm" data-skip>Skip tour</button><button class="btn btn-primary btn-sm" data-next>'+(tourIdx===TOUR.length-1?'Got it':'Next')+'</button></div></div>';
+  pop.innerHTML='<h4 style="color:var(--teal-dark);font-size:15px;margin-bottom:6px">'+esc(step.title)+'</h4>'+
+    '<p style="font-size:13.5px;color:var(--dark);line-height:1.55;margin-bottom:14px">'+esc(step.text)+'</p>'+
+    '<div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:12px;color:var(--muted)">Step '+(tourIdx+1)+' of '+TOUR.length+'</span>'+
+    '<div style="display:flex;gap:8px"><button class="btn btn-ghost btn-sm" data-skip>Skip</button><button class="btn btn-primary btn-sm" data-next>'+(tourIdx===TOUR.length-1?'Got it':'Next')+'</button></div></div>';
   var top=r.top+r.height+14;if(top+150>window.innerHeight)top=Math.max(14,r.top-160);
-  var left=Math.min(Math.max(14,r.left),window.innerWidth-320);
-  pop.style.top=top+'px';pop.style.left=left+'px';
+  pop.style.top=top+'px';pop.style.left=Math.min(Math.max(14,r.left),window.innerWidth-320)+'px';
   $('[data-skip]',pop).onclick=endTour;
   $('[data-next]',pop).onclick=function(){if(tourIdx<TOUR.length-1){tourIdx++;showTourStep()}else endTour()};
 }
@@ -893,7 +1020,7 @@ function boot(){
     showApp();resetIdle();
     loadContent().then(function(){
       go('dashboard');
-      try{if(!localStorage.getItem('ies_tour_done'))setTimeout(startTour,500)}catch(e){}
+      try{if(localStorage.getItem('ies_tour_done')!=='2')setTimeout(startTour,600)}catch(e){}
     });
   }).catch(showLogin);
 }

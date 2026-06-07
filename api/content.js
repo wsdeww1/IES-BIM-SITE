@@ -3,6 +3,7 @@
  * PUT  /api/content → admin only: validates and saves the content.
  */
 const { send, readJson, requireAuth, getContent, setContent } = require('./_lib/util');
+const { recordEdit } = require('./_lib/stats');
 
 const DISCIPLINES = ['Architecture', 'Structural', 'MEP', 'BIM'];
 
@@ -87,6 +88,7 @@ module.exports = async (req, res) => {
       return send(res, 400, { error: 'Nothing to save.' });
     }
     const saved = await setContent(clean);
+    try { await recordEdit(); } catch (e) { /* analytics is best-effort */ }
     return send(res, 200, { ok: true, updatedAt: saved.updatedAt });
   }
 

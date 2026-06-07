@@ -1196,10 +1196,10 @@ a{text-decoration:none;color:inherit}
       <p class="section-sub" id="teamSub">A multi-discipline team of engineering professionals organized for efficiency and quality across every project phase.</p>
     </div>
     <div class="team-stats" id="teamStats">
-      <div class="team-stat"><div class="stat-number" data-target="25" data-suffix="+">0</div><div class="stat-label" id="teamStat1Label">Engineering Professionals</div></div>
-      <div class="team-stat"><div class="stat-number" data-target="15" data-suffix="+">0</div><div class="stat-label" id="teamStat2Label">Years of Experience</div></div>
-      <div class="team-stat"><div class="stat-number" data-target="90" data-suffix="%">0</div><div class="stat-label" id="teamStat3Label">On-time Delivery</div></div>
-      <div class="team-stat"><div class="stat-number" data-target="50" data-suffix="+">0</div><div class="stat-label" id="teamStat4Label">Projects Completed</div></div>
+      <div class="team-stat"><div class="stat-number" id="teamStat1Num" data-target="25" data-suffix="+">0</div><div class="stat-label" id="teamStat1Label">Engineering Professionals</div></div>
+      <div class="team-stat"><div class="stat-number" id="teamStat2Num" data-target="15" data-suffix="+">0</div><div class="stat-label" id="teamStat2Label">Years of Experience</div></div>
+      <div class="team-stat"><div class="stat-number" id="teamStat3Num" data-target="90" data-suffix="%">0</div><div class="stat-label" id="teamStat3Label">On-time Delivery</div></div>
+      <div class="team-stat"><div class="stat-number" id="teamStat4Num" data-target="50" data-suffix="+">0</div><div class="stat-label" id="teamStat4Label">Projects Completed</div></div>
     </div>
   </section>
 
@@ -1242,13 +1242,13 @@ a{text-decoration:none;color:inherit}
       <div class="office-card-v2">
         <div class="office-card-top">
           <div class="office-details">
-            <div class="office-label">Saudi Arabia, Riyadh</div>
-            <p class="office-addr">Riyadh – Al Olaya – Olaya street – Shafi building beside Aloft Hotel.<br>C.R: 1010798314 · p.o: 12341 · P.C: 11721</p>
+            <div class="office-label" id="office1Label">Saudi Arabia, Riyadh</div>
+            <p class="office-addr" id="office1Addr">Riyadh – Al Olaya – Olaya street – Shafi building beside Aloft Hotel.<br>C.R: 1010798314 · p.o: 12341 · P.C: 11721</p>
             <div class="office-contact-row">
-              <div class="office-contact-item"><strong>Tel:</strong> 00966 112 69 4437</div>
-              <div class="office-contact-item"><strong>Mobil:</strong> 00966 50 001 5316</div>
+              <div class="office-contact-item"><strong>Tel:</strong> <span id="office1Tel">00966 112 69 4437</span></div>
+              <div class="office-contact-item"><strong>Mobil:</strong> <span id="office1Mobil">00966 50 001 5316</span></div>
             </div>
-            <div class="office-email">info@ies-bim.com</div>
+            <div class="office-email" id="office1Email">info@ies-bim.com</div>
           </div>
         </div>
         <iframe class="office-map" src="https://www.openstreetmap.org/export/embed.html?bbox=46.5953%2C24.6636%2C46.7553%2C24.7636&layer=mapnik&marker=24.7136%2C46.6753" title="Riyadh Office" loading="lazy"></iframe>
@@ -1258,13 +1258,13 @@ a{text-decoration:none;color:inherit}
       <div class="office-card-v2">
         <div class="office-card-top">
           <div class="office-details">
-            <div class="office-label">Egypt, Cairo</div>
-            <p class="office-addr">Block 34, Building 10, Africa – Extension of Mostafa El-Nahas Street, 10th District, Nasr City, Cairo, Egypt.</p>
+            <div class="office-label" id="office2Label">Egypt, Cairo</div>
+            <p class="office-addr" id="office2Addr">Block 34, Building 10, Africa – Extension of Mostafa El-Nahas Street, 10th District, Nasr City, Cairo, Egypt.</p>
             <div class="office-contact-row">
-              <div class="office-contact-item"><strong>Tel:</strong> 02 247 333 89</div>
-              <div class="office-contact-item"><strong>Mobil:</strong> 0020 115 107 9838</div>
+              <div class="office-contact-item"><strong>Tel:</strong> <span id="office2Tel">02 247 333 89</span></div>
+              <div class="office-contact-item"><strong>Mobil:</strong> <span id="office2Mobil">0020 115 107 9838</span></div>
             </div>
-            <div class="office-email">info@ies-bim.com</div>
+            <div class="office-email" id="office2Email">info@ies-bim.com</div>
           </div>
         </div>
         <iframe class="office-map" src="https://www.openstreetmap.org/export/embed.html?bbox=31.1557%2C29.9944%2C31.3157%2C30.0944&layer=mapnik&marker=30.0444%2C31.2357" title="Cairo Office" loading="lazy"></iframe>
@@ -1307,7 +1307,7 @@ a{text-decoration:none;color:inherit}
   <div class="footer-top">
     <div class="footer-brand">
       <img src="./assets/logo-horizontal-white.svg" class="footer-logo" alt="IES">
-      <p class="footer-tagline">Delivering high-quality BIM-based digital modeling solutions for Architectural, Structural, and MEP disciplines.</p>
+      <p class="footer-tagline" id="footerTagline">Delivering high-quality BIM-based digital modeling solutions for Architectural, Structural, and MEP disciplines.</p>
     </div>
     <div>
       <div class="footer-col-title">Services</div>
@@ -1372,6 +1372,7 @@ function navigateTo(p){
   var t=document.getElementById('page-'+p);if(t)t.classList.add('active');
   updateNav();closeMobile();window.scrollTo({top:0,behavior:'smooth'});
   if(typeof applySeo==='function')applySeo(p);
+  if(window.__iesTrack)window.__iesTrack();
   if(p==='Projects')renderProjects();
   if(p==='Contact')initMap();
   if(p==='AboutTeam'){countersStarted=false;var ts=document.getElementById('teamStats');if(ts)statsObs.observe(ts)}
@@ -1871,12 +1872,43 @@ function initGlobe(canvasId){
    visibility can be re-applied whenever the visitor navigates. */
 var LIVE_SECTIONS={};
 
+/* ═══ FIRST-PARTY ANALYTICS BEACON ═══
+   Sends a lightweight pageview to /api/track on load and on every in-page
+   navigation, plus a heartbeat so the admin can show "live visitors now".
+   No personal data: just a random visitor id kept in localStorage.          */
+(function analytics(){
+  if(!window.fetch)return;
+  var vid;
+  try{
+    vid=localStorage.getItem('ies_vid');
+    if(!vid){vid='v-'+Date.now().toString(36)+Math.random().toString(36).slice(2,10);localStorage.setItem('ies_vid',vid);}
+  }catch(e){vid='v-'+Math.random().toString(36).slice(2,12);}
+  function send(){
+    try{
+      fetch('/api/track',{method:'POST',keepalive:true,headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({visitorId:vid,page:(typeof currentPage!=='undefined'?currentPage:'Home'),ref:document.referrer||''})});
+    }catch(e){}
+  }
+  window.__iesTrack=send;          // navigateTo() calls this on page change
+  send();                          // initial pageview
+  setInterval(send,60000);         // heartbeat (keeps "live" status fresh)
+  document.addEventListener('visibilitychange',function(){if(!document.hidden)send();});
+})();
+
 function applySections(s){
   LIVE_SECTIONS=s||{};
   Object.keys(s).forEach(function(k){
     if(k.indexOf('seo')===0||k.indexOf('hide')===0)return; // meta keys, not on-page text
     var elx=document.getElementById(k);
-    if(elx&&s[k])elx.textContent=s[k];
+    if(!elx||!s[k])return;
+    // Animated team-stat numbers (e.g. "25+"): feed the counter via data-target.
+    if(/Num$/.test(k)&&elx.hasAttribute('data-target')){
+      var m=String(s[k]).match(/^\s*([\d.,]+)\s*(.*)$/);
+      if(m){elx.dataset.target=m[1].replace(/[.,]/g,'');elx.dataset.suffix=m[2]||'';}
+      elx.textContent=s[k];
+      return;
+    }
+    elx.textContent=s[k];
   });
   applySeo(currentPage);
 }

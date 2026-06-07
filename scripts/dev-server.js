@@ -18,7 +18,7 @@ const url = require('url');
 
 const ROOT = path.join(__dirname, '..');
 const PORT = process.env.PORT || 3001;
-const API_ROUTES = ['login', 'logout', 'me', 'content', 'upload'];
+const API_ROUTES = ['login', 'logout', 'me', 'content', 'upload', 'track', 'stats'];
 
 const MIME = {
   '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8',

@@ -11,6 +11,7 @@ node_modules/
 
 # Local test mode (no-cloud) — generated at runtime, never commit
 data/content.local.json
+data/stats.local.json
 assets/uploads/
 
 .vercel
