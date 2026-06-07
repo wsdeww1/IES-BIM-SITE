@@ -1,0 +1,16 @@
+{
+  "name": "ies-bim-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "IES — Integrated Engineering Systems portfolio website + private admin control panel (Vercel).",
+  "scripts": {
+    "dev": "node scripts/dev-server.js",
+    "hash-password": "node scripts/hash-password.js"
+  },
+  "dependencies": {
+    "@vercel/blob": "^0.27.0",
+    "@vercel/kv": "^3.0.0",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2"
+  }
+}

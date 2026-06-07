@@ -1,0 +1,206 @@
+{
+  "projects": [
+    {
+      "id": "house-of-al-saud-diriyah-gate",
+      "title": "House of Al Saud, Diriyah Gate",
+      "badge": "Architecture",
+      "discipline": "Architecture",
+      "desc": "Fit-out package for the Diriyah Gate exhibition — 70,414m² BUA.",
+      "fullDesc": "Comprehensive architectural fit-out design and documentation for the House of Al Saud exhibition pavilion within the Diriyah Gate Development. The project encompassed interior architecture, detailed construction drawings, and material specifications across a built-up area of 70,414 square meters.",
+      "client": "Diriyah Gate Development Authority",
+      "location": "Diriyah, Riyadh, KSA",
+      "area": "70,414 m² BUA",
+      "status": "Completed",
+      "scope": [
+        "Interior architecture design and documentation",
+        "Construction drawings and specifications",
+        "Material selection and detailing",
+        "Coordination with MEP and structural disciplines",
+        "Shop drawing review and approval"
+      ],
+      "images": [],
+      "order": 0
+    },
+    {
+      "id": "e-gaming-boulevard-gate",
+      "title": "E-Gaming Boulevard Gate",
+      "badge": "Structural",
+      "discipline": "Structural",
+      "desc": "14-meter landmark entrance gate with steel framework and foundation design.",
+      "fullDesc": "Structural design and engineering for a 14-meter-tall landmark entrance gate for the E-Gaming Boulevard. The project involved complex steel framework analysis, foundation design, and construction documentation for this iconic gateway structure.",
+      "client": "Qiddiya Investment Company",
+      "location": "Qiddiya, KSA",
+      "area": "14m Height",
+      "status": "Completed",
+      "scope": [
+        "Structural analysis and design",
+        "Steel framework detailing",
+        "Foundation design and documentation",
+        "Shop drawings and fabrication details",
+        "Construction supervision support"
+      ],
+      "images": [],
+      "order": 1
+    },
+    {
+      "id": "six-flags-qiddiya-cr1-tunnel",
+      "title": "Six Flags Qiddiya CR1 Tunnel",
+      "badge": "Structural",
+      "discipline": "Structural",
+      "desc": "Structural shop drawings including formwork layouts and reinforcement detailing.",
+      "fullDesc": "Preparation of comprehensive structural shop drawings for the CR1 Tunnel section of the Six Flags theme park at Qiddiya.",
+      "client": "Qiddiya Investment Company",
+      "location": "Qiddiya, KSA",
+      "area": "Tunnel Section",
+      "status": "Completed",
+      "scope": [
+        "Structural shop drawings preparation",
+        "Formwork layout design",
+        "Reinforcement detailing and bar bending schedules",
+        "Construction sequencing documentation",
+        "Quality assurance review"
+      ],
+      "images": [],
+      "order": 2
+    },
+    {
+      "id": "kafd-signage-design",
+      "title": "KAFD Signage Design",
+      "badge": "Structural",
+      "discipline": "Structural",
+      "desc": "Signage structural design integrated with existing tower slab and columns.",
+      "fullDesc": "Structural design for signage systems at King Abdullah Financial District, requiring careful integration with existing tower slabs and columns.",
+      "client": "KAFD Development Management",
+      "location": "KAFD, Riyadh, KSA",
+      "area": "Multiple Towers",
+      "status": "Completed",
+      "scope": [
+        "Structural load analysis for signage",
+        "Connection design to existing structure",
+        "Shop drawings and specifications",
+        "Coordination with façade consultants",
+        "On-site technical support"
+      ],
+      "images": [],
+      "order": 3
+    },
+    {
+      "id": "business-square-riyadh",
+      "title": "Business Square Riyadh",
+      "badge": "Structural",
+      "discipline": "Structural",
+      "desc": "Structural design for residential villas with varying levels and elevations.",
+      "fullDesc": "Complete structural design package for a residential villa compound in Riyadh, featuring villas with varying floor levels and complex elevation profiles.",
+      "client": "Private Developer",
+      "location": "Riyadh, KSA",
+      "area": "Villa Compound",
+      "status": "Completed",
+      "scope": [
+        "Foundation design and analysis",
+        "Superstructure design",
+        "Retaining wall design",
+        "Structural calculations and reports",
+        "Construction drawings and specifications"
+      ],
+      "images": [],
+      "order": 4
+    },
+    {
+      "id": "king-salman-university",
+      "title": "King Salman University",
+      "badge": "BIM",
+      "discipline": "BIM",
+      "desc": "Comprehensive structural shop drawings for the Diriyah Gate campus.",
+      "fullDesc": "BIM-based structural shop drawing production for King Salman University within the Diriyah Gate development.",
+      "client": "Diriyah Gate Development Authority",
+      "location": "Diriyah, Riyadh, KSA",
+      "area": "University Campus",
+      "status": "Completed",
+      "scope": [
+        "BIM modeling (LOD 400)",
+        "3D structural shop drawings",
+        "Clash detection and resolution",
+        "Rebar detailing and schedules",
+        "Model coordination with other disciplines"
+      ],
+      "images": [],
+      "order": 5
+    },
+    {
+      "id": "ministry-of-commerce-al-qurayyat",
+      "title": "Ministry of Commerce, Al-Qurayyat",
+      "badge": "MEP",
+      "discipline": "MEP",
+      "desc": "Full MEP design and documentation for the Ministry branch office.",
+      "fullDesc": "Complete MEP engineering design for the Ministry of Commerce branch office in Al-Qurayyat.",
+      "client": "Ministry of Commerce",
+      "location": "Al-Qurayyat, KSA",
+      "area": "Government Office",
+      "status": "Completed",
+      "scope": [
+        "HVAC system design",
+        "Electrical power and lighting design",
+        "Plumbing and drainage systems",
+        "Fire protection design",
+        "Compliance with Saudi building codes"
+      ],
+      "images": [],
+      "order": 6
+    },
+    {
+      "id": "hilton-al-dail-jeddah-garden-inn",
+      "title": "Hilton Al Dail Jeddah Garden Inn",
+      "badge": "MEP",
+      "discipline": "MEP",
+      "desc": "Value engineering for MEP systems — optimized cost and performance.",
+      "fullDesc": "MEP value engineering services for the Hilton Garden Inn in Al Dail, Jeddah.",
+      "client": "Private Developer",
+      "location": "Jeddah, KSA",
+      "area": "Hotel",
+      "status": "Completed",
+      "scope": [
+        "MEP value engineering analysis",
+        "System optimization recommendations",
+        "Cost-benefit analysis",
+        "Revised construction documentation",
+        "Coordination with design team"
+      ],
+      "images": [],
+      "order": 7
+    },
+    {
+      "id": "residential-tower-kaec",
+      "title": "Residential Tower, KAEC",
+      "badge": "Architecture",
+      "discipline": "Architecture",
+      "desc": "Architectural design and BIM coordination for a mixed-use residential tower.",
+      "fullDesc": "Full architectural design services for a high-rise residential tower in King Abdullah Economic City.",
+      "client": "KAEC Developer",
+      "location": "KAEC, KSA",
+      "area": "High-Rise Tower",
+      "status": "In Progress",
+      "scope": [
+        "Architectural concept and design development",
+        "Construction documentation",
+        "BIM coordination (LOD 300)",
+        "Interior design guidelines",
+        "Authority submission packages"
+      ],
+      "images": [],
+      "order": 8
+    }
+  ],
+  "sections": {
+    "heroBadge": "BIM & Engineering Services",
+    "heroSub": "Delivering high-quality BIM-based digital modeling solutions for Architectural, Structural, and MEP disciplines across the Middle East.",
+    "coreTag": "What We Do",
+    "coreH2": "Our Core Services",
+    "coreSub": "Comprehensive engineering services across all disciplines — from concept design through construction documentation.",
+    "featTag": "Portfolio",
+    "featH2": "Featured Projects",
+    "featSub": "A selection of mega-projects across Saudi Arabia showcasing our multi-discipline expertise.",
+    "projTag": "Portfolio",
+    "projH2": "Our Projects",
+    "projSub": "A selection of mega-projects across Saudi Arabia, showcasing our expertise in Architecture, Structural, MEP, and BIM disciplines."
+  }
+}

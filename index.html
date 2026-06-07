@@ -855,12 +855,12 @@ a{text-decoration:none;color:inherit}
     <div class="hero-glow"></div>
     <div class="hero-content">
       <div class="hero-text">
-        <div class="hero-badge">BIM &amp; Engineering Services</div>
+        <div class="hero-badge" id="heroBadge">BIM &amp; Engineering Services</div>
         <div class="hero-lockup">
           <img src="./assets/logo-icon-color.svg" class="hero-logo" alt="IES">
           <h1 class="hero-h1"><span class="hero-word-shift" style="color:#fff">Integrated</span><br>Engineering<br><span class="hero-word-shift">Systems</span></h1>
         </div>
-        <p class="hero-sub">Delivering high-quality BIM-based digital modeling solutions for Architectural, Structural, and MEP disciplines across the Middle East.</p>
+        <p class="hero-sub" id="heroSub">Delivering high-quality BIM-based digital modeling solutions for Architectural, Structural, and MEP disciplines across the Middle East.</p>
         <div class="hero-btns">
           <button class="btn-gold" onclick="navigateTo('Projects')">View Our Portfolio <span class="arrow">&rarr;</span></button>
           <button class="btn-outline" onclick="navigateTo('Contact')">Contact Us</button>
@@ -885,9 +885,9 @@ a{text-decoration:none;color:inherit}
   <!-- Services Preview -->
   <section class="section">
     <div class="section-header centered">
-      <div class="section-tag">What We Do</div>
-      <h2 class="section-h2">Our Core Services</h2>
-      <p class="section-sub">Comprehensive engineering services across all disciplines — from concept design through construction documentation.</p>
+      <div class="section-tag" id="coreTag">What We Do</div>
+      <h2 class="section-h2" id="coreH2">Our Core Services</h2>
+      <p class="section-sub" id="coreSub">Comprehensive engineering services across all disciplines — from concept design through construction documentation.</p>
     </div>
     <div class="services-grid" id="homeServicesGrid"></div>
   </section>
@@ -897,9 +897,9 @@ a{text-decoration:none;color:inherit}
     <canvas class="particle-canvas" id="particleHome"></canvas>
     <div style="position:relative;z-index:1">
       <div class="section-header">
-        <div class="section-tag light">Portfolio</div>
-        <h2 class="section-h2">Featured Projects</h2>
-        <p class="section-sub">A selection of mega-projects across Saudi Arabia showcasing our multi-discipline expertise.</p>
+        <div class="section-tag light" id="featTag">Portfolio</div>
+        <h2 class="section-h2" id="featH2">Featured Projects</h2>
+        <p class="section-sub" id="featSub">A selection of mega-projects across Saudi Arabia showcasing our multi-discipline expertise.</p>
       </div>
       <div class="projects-grid" id="homeProjGrid"></div>
       <div style="text-align:center;margin-top:48px">
@@ -926,9 +926,9 @@ a{text-decoration:none;color:inherit}
     <canvas class="particle-canvas" id="particleProjects"></canvas>
     <div style="position:relative;z-index:1">
       <div class="section-header" style="max-width:700px">
-        <div class="section-tag light">Portfolio</div>
-        <h2 class="section-h2">Our Projects</h2>
-        <p class="section-sub">A selection of mega-projects across Saudi Arabia, showcasing our expertise in Architecture, Structural, MEP, and BIM disciplines.</p>
+        <div class="section-tag light" id="projTag">Portfolio</div>
+        <h2 class="section-h2" id="projH2">Our Projects</h2>
+        <p class="section-sub" id="projSub">A selection of mega-projects across Saudi Arabia, showcasing our expertise in Architecture, Structural, MEP, and BIM disciplines.</p>
       </div>
       <div class="filter-bar" id="projectFilters"></div>
       <div class="projects-grid" id="projectGrid"></div>
@@ -993,9 +993,14 @@ a{text-decoration:none;color:inherit}
 
 <!-- ═══ DESIGN & DETAIL ENGINEERING PAGE ═══ -->
 <div class="page-section" id="page-DesignEngineering">
-  <section class="section" style="padding-top:140px">
+  <section class="section section-dark" style="padding-top:140px;position:relative;overflow:hidden">
+    <video class="bim-video" autoplay muted loop playsinline preload="auto">
+      <source src="./videos/bim-bg.mp4" type="video/mp4">
+    </video>
+    <div class="bim-video-overlay"></div>
+    <div style="position:relative;z-index:3">
     <div class="section-header" style="max-width:720px">
-      <div class="section-tag">Our Expertise</div>
+      <div class="section-tag light">Our Expertise</div>
       <h2 class="section-h2">BIM &amp; Engineering Service</h2>
       <p class="section-sub">Complete design and engineering services across Architectural, Structural, Mechanical, and Electrical disciplines.</p>
     </div>
@@ -1050,14 +1055,20 @@ a{text-decoration:none;color:inherit}
       <div><h3>Need a Custom Solution?</h3><p>Our team can tailor engineering services to your specific project requirements.</p></div>
       <button class="btn-gold" onclick="navigateTo('Contact')" style="white-space:nowrap">Contact Our Team <span class="arrow">&rarr;</span></button>
     </div>
+    </div>
   </section>
 </div>
 
 <!-- ═══ DESIGN & DETAIL ENGINEERING-1 PAGE ═══ -->
 <div class="page-section" id="page-DesignEngineering1">
-  <section class="section" style="padding-top:140px">
+  <section class="section section-dark" style="padding-top:140px;position:relative;overflow:hidden">
+    <video class="bim-video" autoplay muted loop playsinline preload="auto">
+      <source src="./videos/bim-bg.mp4" type="video/mp4">
+    </video>
+    <div class="bim-video-overlay"></div>
+    <div style="position:relative;z-index:3">
     <div class="section-header" style="max-width:720px">
-      <div class="section-tag">Our Expertise</div>
+      <div class="section-tag light">Our Expertise</div>
       <h2 class="section-h2">Design &amp; Detail Engineering</h2>
       <p class="section-sub">Expert BIM consultancy, digital construction management, and comprehensive project delivery services.</p>
     </div>
@@ -1109,6 +1120,7 @@ a{text-decoration:none;color:inherit}
     <div class="cta-banner-inline">
       <div><h3>Need a Custom Solution?</h3><p>Our team can tailor services to your specific project requirements.</p></div>
       <button class="btn-gold" onclick="navigateTo('Contact')" style="white-space:nowrap">Contact Our Team <span class="arrow">&rarr;</span></button>
+    </div>
     </div>
   </section>
 </div>
@@ -1498,8 +1510,11 @@ function renderProjectCards(container,items){
     var card=document.createElement('div');card.className='project-card';
     card.style.animation='fadeUp 0.4s ease '+(i*0.06)+'s both';
     card.onclick=function(){openModal(p)};
+    var thumb=(p.images&&p.images[0])
+      ?'<div class="project-thumb" style="background-image:url('+esc(p.images[0])+');background-size:cover;background-position:center">'
+      :'<div class="project-thumb"><span class="project-thumb-text">Project Photo</span>';
     card.innerHTML=
-      '<div class="project-thumb"><span class="project-thumb-text">Project Photo</span>'+
+      thumb+
       '<div class="project-thumb-overlay"><button class="overlay-btn">View Case Study →</button></div></div>'+
       '<div class="project-info">'+
       '<div class="project-tags"><span class="project-tag '+(TAG_CLASS[p.discipline]||'tag-arch')+'">'+esc(p.badge)+'</span></div>'+
@@ -1533,8 +1548,14 @@ function openModal(p){
   document.getElementById('m-location').textContent=p.location;
   document.getElementById('m-area').textContent=p.area;
   document.getElementById('m-status').textContent=p.status;
+  var mi=document.querySelector('#modal .modal-img');
+  if(mi){
+    var mit=mi.querySelector('.modal-img-text');
+    if(p.images&&p.images[0]){mi.style.backgroundImage='url('+p.images[0]+')';mi.style.backgroundSize='cover';mi.style.backgroundPosition='center';if(mit)mit.style.display='none'}
+    else{mi.style.backgroundImage='';if(mit)mit.style.display=''}
+  }
   var sc=document.getElementById('m-scope');sc.innerHTML='';
-  p.scope.forEach(function(s){var li=document.createElement('li');li.className='scope-item';li.textContent=s;sc.appendChild(li)});
+  (p.scope||[]).forEach(function(s){var li=document.createElement('li');li.className='scope-item';li.textContent=s;sc.appendChild(li)});
   document.getElementById('modal').classList.add('open');document.body.style.overflow='hidden';
 }
 function closeModal(){document.getElementById('modal').classList.remove('open');document.body.style.overflow=''}
@@ -1819,6 +1840,29 @@ function initGlobe(canvasId){
   initGlobe('globeContact');
   initVideoScrub('heroVideo');
 })();
+
+/* ═══ LIVE CONTENT — load admin-managed content if available ═══
+   Falls back silently to the built-in defaults above so the public
+   site always works, even if the API/backend is unavailable.        */
+(function loadLiveContent(){
+  if(!window.fetch)return;
+  fetch('/api/content',{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(c){
+    if(!c)return;
+    if(Array.isArray(c.projects)&&c.projects.length){
+      PROJECTS=c.projects;
+      renderHomeProjGrid();
+      if(currentPage==='Projects')renderProjects();
+    }
+    if(c.sections)applySections(c.sections);
+  }).catch(function(){/* keep built-in defaults */});
+})();
+
+function applySections(s){
+  Object.keys(s).forEach(function(k){
+    var elx=document.getElementById(k);
+    if(elx&&s[k])elx.textContent=s[k];
+  });
+}
 
 /* ═══ HERO VIDEO — mouse-scrub interaction ═══ */
 function initVideoScrub(id){

@@ -1,0 +1,16 @@
+# Dependencies
+node_modules/
+
+# Secrets / local env (NEVER commit these)
+.env
+.env.local
+.env.*.local
+
+# Vercel
+.vercel
+
+# Local test mode (no-cloud) — generated at runtime, never commit
+data/content.local.json
+assets/uploads/
+
+.vercel
