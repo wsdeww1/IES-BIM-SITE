@@ -631,7 +631,7 @@ $('#scrim').addEventListener('click',closeSidebar);
 
 /* ═══════════ LIVE POLLING (dashboard + analytics) ═══════════ */
 var pollTimer=null;
-function startPolling(fn){stopPolling();fn();pollTimer=setInterval(fn,15000)}
+function startPolling(fn){stopPolling();fn();pollTimer=setInterval(fn,8000)}
 function stopPolling(){if(pollTimer){clearInterval(pollTimer);pollTimer=null}}
 
 /* ═══════════ DASHBOARD ═══════════ */
@@ -639,6 +639,7 @@ function renderDashboard(){
   var p=state.content.projects;
   var c=$('#view-dashboard');
   c.innerHTML=
+    '<div id="dashLastWeek"></div>'+
     '<div class="kpi-row" id="dashKpis">'+kpiSkeleton(4)+'</div>'+
     '<div class="grid-2">'+
       '<div class="panel"><div class="panel-head"><h3>Visitors — last 14 days</h3>'+
@@ -661,8 +662,9 @@ function renderDashboard(){
   startPolling(function(){
     api.stats(14).then(function(s){
       state.stats=s;
+      renderDashLastWeek();
       $('#dashKpis').innerHTML=
-        kpi('live','●','Live visitors now',s.live,'active in the last 5 min',true)+
+        kpi('live','●','Live visitors now',s.live,'active in the last minute',true)+
         kpi('','👁','Visitors today',s.uvToday,nf(s.pvToday)+' page views')+
         kpi('','✎','Edits published today',s.editsToday,nf(s.editsAll)+' all-time')+
         kpi('','∑','Page views (total)',s.pvAll,'since tracking began');
@@ -692,7 +694,8 @@ function renderAnalytics(){
       '<span class="helper" style="margin:0;flex:1">Live first-party analytics, collected on your own site. Numbers for “today” reset at midnight (UTC).</span>'+
       '<div class="range-tabs" id="rangeTabs">'+
         [7,14,30].map(function(d){return '<button data-d="'+d+'"'+(state.range===d?' class="on"':'')+'>'+d+'d</button>'}).join('')+'</div>'+
-      '<button class="btn btn-ghost btn-sm" id="csvBtn">⬇ Export CSV</button></div>'+
+      '<span id="lastWeekSlot"></span>'+
+      '<button class="btn btn-ghost btn-sm" id="xlsxBtn">⬇ Export Excel</button></div>'+
     '<div class="kpi-row" id="anKpis">'+kpiSkeleton(5)+'</div>'+
     '<div class="panel"><div class="panel-head"><h3>Traffic over time</h3></div>'+
       '<div class="chart-wrap chart" id="anChart"><p class="helper" style="margin:0">Loading…</p></div></div>'+
@@ -705,18 +708,21 @@ function renderAnalytics(){
       '<div class="panel"><div class="panel-head"><h3>Edits published</h3></div><div class="chart-wrap chart" id="anEdits"></div></div>'+
     '</div>';
   $$('#rangeTabs button').forEach(function(b){b.onclick=function(){state.range=+b.dataset.d;renderAnalytics()}});
-  $('#csvBtn').onclick=exportCsv;
+  $('#xlsxBtn').onclick=exportExcelRange;
   startPolling(loadAnalytics);
 }
 function loadAnalytics(){
   api.stats(state.range).then(function(s){
     state.stats=s;
+    var tw=thisWeekRange(),twr=sliceSeries(s,tw.start,tw.end);
+    var twPv=twr.reduce(function(a,r){return a+r.pv},0),twUv=twr.reduce(function(a,r){return a+r.uv},0);
     $('#anKpis').innerHTML=
-      kpi('live','●','Live now',s.live,'active in last 5 min',true)+
+      kpi('live','●','Live now',s.live,'active in the last minute',true)+
+      kpi('','🗓','This week',twPv,nf(twUv)+' visits — resets Monday')+
       kpi('','👁','Visitors today',s.uvToday,'unique')+
       kpi('','∑','Page views today',s.pvToday,nf(s.pvAll)+' all-time')+
-      kpi('','✎','Edits today',s.editsToday,nf(s.editsAll)+' all-time')+
-      kpi('','📅','Visitors ('+state.range+'d)',s.uvSeries.reduce(add,0),nf(s.pvSeries.reduce(add,0))+' page views');
+      kpi('','✎','Edits today',s.editsToday,nf(s.editsAll)+' all-time');
+    renderLastWeekSlot('#lastWeekSlot');
     $('#anChart').innerHTML=lineChart(s.series,[
       {label:'Visitors',color:'#3B6C70',values:s.uvSeries},
       {label:'Page views',color:'#d4b85e',values:s.pvSeries}
@@ -734,15 +740,115 @@ function add(a,b){return a+(Number(b)||0)}
 function objToRows(o){return Object.keys(o||{}).map(function(k){return{label:cap(k),value:o[k]}}).sort(function(a,b){return b.value-a.value})}
 function cap(s){s=String(s||'');return s.charAt(0).toUpperCase()+s.slice(1)}
 function friendlyPage(p){var m={Home:'Home',Projects:'Projects',BIMServices:'BIM Services',DesignEngineering:'BIM & Engineering',DesignEngineering1:'Design & Detail',AboutStory:'About — Story',AboutTeam:'About — Team',Contact:'Contact'};return m[p]||p}
-function exportCsv(){
-  var s=state.stats;if(!s){toast('Nothing to export yet.');return}
-  var rows=[['Date','Page views','Unique visitors','Edits published']];
-  s.series.forEach(function(d,i){rows.push([d,s.pvSeries[i]||0,s.uvSeries[i]||0,s.editSeries[i]||0])});
-  var csv=rows.map(function(r){return r.join(',')}).join('\n');
-  var blob=new Blob([csv],{type:'text/csv'});var a=document.createElement('a');
-  a.href=URL.createObjectURL(blob);a.download='ies-analytics-'+s.today+'.csv';a.click();
+/* ═══════════ WEEKLY ANALYTICS (resets every Monday, UTC) ═══════════ */
+function ymd(d){return d.toISOString().slice(0,10)}
+function mondayOf(d){var x=new Date(Date.UTC(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate()));x.setUTCDate(x.getUTCDate()-((x.getUTCDay()+6)%7));return x}
+function thisWeekRange(){var s=mondayOf(new Date()),e=new Date(s);e.setUTCDate(e.getUTCDate()+6);return{start:ymd(s),end:ymd(e)}}
+function lastWeekRange(){var s=mondayOf(new Date());s.setUTCDate(s.getUTCDate()-7);var e=new Date(s);e.setUTCDate(e.getUTCDate()+6);return{start:ymd(s),end:ymd(e)}}
+/* True only during the 24h right after a week ends (i.e. all of Monday, UTC). */
+function lastWeekWindowOpen(){var diff=Date.now()-mondayOf(new Date()).getTime();return diff>=0&&diff<86400000}
+function sliceSeries(s,startKey,endKey){var out=[];for(var i=0;i<s.series.length;i++){var d=s.series[i];if(d>=startKey&&d<=endKey)out.push({date:d,pv:s.pvSeries[i]||0,uv:s.uvSeries[i]||0,ed:s.editSeries[i]||0})}return out}
+
+/* Renders the time-limited "Download last week" button into a slot, if open. */
+function renderLastWeekSlot(sel){
+  var slot=$(sel);if(!slot)return;
+  if(!lastWeekWindowOpen()){slot.innerHTML='';return}
+  if(!slot.firstChild){
+    slot.innerHTML='<button class="btn btn-primary btn-sm" title="Available for 24h after the week ends">⬇ Last week’s report</button>';
+    slot.firstChild.onclick=exportLastWeek;
+  }
+}
+
+/* Dashboard banner version of the time-limited last-week download. */
+function renderDashLastWeek(){
+  var el=$('#dashLastWeek');if(!el)return;
+  if(!lastWeekWindowOpen()){el.innerHTML='';return}
+  if(el.firstChild)return;
+  el.innerHTML='<div class="panel" style="margin:0 0 14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">'+
+    '<div style="flex:1;min-width:200px"><b>Last week’s report is ready</b>'+
+    '<div class="helper" style="margin:2px 0 0">Available to download for the next 24 hours.</div></div>'+
+    '<button class="btn btn-primary btn-sm">⬇ Download Excel</button></div>';
+  el.querySelector('button').onclick=exportLastWeek;
+}
+
+/* ── build the report sheets for a date range ── */
+function reportSheets(s,startKey,endKey,title){
+  var rows=sliceSeries(s,startKey,endKey),totPv=0,totUv=0,totEd=0,busy={d:'',v:-1};
+  rows.forEach(function(r){totPv+=r.pv;totUv+=r.uv;totEd+=r.ed;if(r.pv>busy.v)busy={d:r.date,v:r.pv}});
+  var summary=[[title],['Period',startKey+'  to  '+endKey],['Generated',new Date().toLocaleString()],[],
+    ['Page views (total)',totPv],['Unique visitors (daily sum)',totUv],['Edits published',totEd],
+    ['Busiest day',busy.d?busy.d+' ('+busy.v+' views)':'—'],['Active days',rows.filter(function(r){return r.pv>0}).length]];
+  var daily=[['Date','Page views','Unique visitors','Edits published']];
+  rows.forEach(function(r){daily.push([r.date,r.pv,r.uv,r.ed])});
+  daily.push(['Total',totPv,totUv,totEd]);
+  return [{name:'Summary',rows:summary},{name:'Daily',rows:daily}];
+}
+function exportExcelRange(){
+  var s=state.stats;if(!s||!s.series.length){toast('Nothing to export yet.');return}
+  var start=s.series[0],end=s.series[s.series.length-1];
+  downloadXlsx('ies-analytics-'+end+'.xlsx',reportSheets(s,start,end,'IES Analytics — last '+s.series.length+' days'));
+  toast('Excel file downloaded.','ok');
+}
+function exportLastWeek(){
+  var w=lastWeekRange();
+  api.stats(21).then(function(s){
+    state.stats=s;
+    downloadXlsx('ies-weekly-report-'+w.start+'_to_'+w.end+'.xlsx',reportSheets(s,w.start,w.end,'IES Weekly Report — '+w.start+' to '+w.end));
+    toast('Last week’s report downloaded.','ok');
+  }).catch(function(){toast('Could not load last week’s data.')});
+}
+
+/* ═══════════ MINIMAL .XLSX WRITER (no dependencies) ═══════════
+   Builds a real OpenXML workbook (zip + XML) so it opens cleanly in Excel,
+   Google Sheets and Numbers — no "format mismatch" warning. */
+function _xlCol(n){var s='';n++;while(n>0){var m=(n-1)%26;s=String.fromCharCode(65+m)+s;n=(n-m-1)/26}return s}
+function _xlEsc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function _sheetXml(rows){
+  var x='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetData>';
+  rows.forEach(function(row,ri){
+    x+='<row r="'+(ri+1)+'">';
+    (row||[]).forEach(function(cell,ci){
+      var ref=_xlCol(ci)+(ri+1);
+      if(typeof cell==='number'&&isFinite(cell))x+='<c r="'+ref+'"><v>'+cell+'</v></c>';
+      else x+='<c r="'+ref+'" t="inlineStr"><is><t xml:space="preserve">'+_xlEsc(cell==null?'':cell)+'</t></is></c>';
+    });
+    x+='</row>';
+  });
+  return x+'</sheetData></worksheet>';
+}
+function _u8(s){return new TextEncoder().encode(s)}
+function _concat(arrs){var n=0;arrs.forEach(function(a){n+=a.length});var o=new Uint8Array(n),p=0;arrs.forEach(function(a){o.set(a,p);p+=a.length});return o}
+function _crc32(buf){var t=_crc32.t;if(!t){t=[];for(var n=0;n<256;n++){var c=n;for(var k=0;k<8;k++)c=c&1?(0xEDB88320^(c>>>1)):(c>>>1);t[n]=c>>>0}_crc32.t=t}var crc=-1;for(var i=0;i<buf.length;i++)crc=(crc>>>8)^t[(crc^buf[i])&255];return (crc^-1)>>>0}
+function _zip(files){
+  function u16(n){return new Uint8Array([n&255,(n>>>8)&255])}
+  function u32(n){return new Uint8Array([n&255,(n>>>8)&255,(n>>>16)&255,(n>>>24)&255])}
+  var chunks=[],central=[],offset=0;
+  files.forEach(function(f){
+    var name=_u8(f.name),data=f.data,crc=_crc32(data);
+    chunks.push(_concat([u32(0x04034b50),u16(20),u16(0),u16(0),u16(0),u16(0),u32(crc),u32(data.length),u32(data.length),u16(name.length),u16(0)]),name,data);
+    central.push(_concat([u32(0x02014b50),u16(20),u16(20),u16(0),u16(0),u16(0),u16(0),u32(crc),u32(data.length),u32(data.length),u16(name.length),u16(0),u16(0),u16(0),u16(0),u32(0),u32(offset)]),name);
+    offset+=30+name.length+data.length;
+  });
+  var cb=_concat(central),end=_concat([u32(0x06054b50),u16(0),u16(0),u16(files.length),u16(files.length),u32(cb.length),u32(offset),u16(0)]);
+  return _concat(chunks.concat([cb,end]));
+}
+function downloadXlsx(filename,sheets){
+  var names=sheets.map(function(s){return s.name});
+  var ct='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>';
+  names.forEach(function(_,i){ct+='<Override PartName="/xl/worksheets/sheet'+(i+1)+'.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>'});
+  ct+='</Types>';
+  var wb='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>';
+  names.forEach(function(n,i){wb+='<sheet name="'+_xlEsc(n)+'" sheetId="'+(i+1)+'" r:id="rId'+(i+1)+'"/>'});
+  wb+='</sheets></workbook>';
+  var wbr='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">';
+  names.forEach(function(_,i){wbr+='<Relationship Id="rId'+(i+1)+'" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet'+(i+1)+'.xml"/>'});
+  wbr+='</Relationships>';
+  var rels='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>';
+  var files=[{name:'[Content_Types].xml',data:_u8(ct)},{name:'_rels/.rels',data:_u8(rels)},{name:'xl/workbook.xml',data:_u8(wb)},{name:'xl/_rels/workbook.xml.rels',data:_u8(wbr)}];
+  sheets.forEach(function(s,i){files.push({name:'xl/worksheets/sheet'+(i+1)+'.xml',data:_u8(_sheetXml(s.rows))})});
+  var blob=new Blob([_zip(files)],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+  var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename;a.click();
   setTimeout(function(){URL.revokeObjectURL(a.href)},2000);
-  toast('CSV downloaded.','ok');
 }
 
 /* ── lightweight SVG charts (no dependencies) ── */
@@ -1085,7 +1191,7 @@ function closeDialog(){var d=$('#dialog');if(d)d.remove()}
 /* ═══════════ GUIDED TOUR ═══════════ */
 var TOUR=[
   {sel:'.nav-item[data-view="dashboard"]',title:'Dashboard',text:'Your home screen — live visitors right now, visitors today, and how many edits you published today.'},
-  {sel:'.nav-item[data-view="analytics"]',title:'Analytics',text:'Full live website analysis: traffic charts, top pages, sources, devices, with a date range and CSV export.'},
+  {sel:'.nav-item[data-view="analytics"]',title:'Analytics',text:'Full live website analysis: traffic charts, top pages, sources, devices, with a date range and Excel export. Resets every week; on Mondays you can download last week’s full report for 24 hours.'},
   {sel:'.nav-item[data-view="projects"]',title:'Project Cards',text:'Add, edit, delete and reorder the project cards in your portfolio.'},
   {sel:'.nav-item[data-view="cards"]',title:'Cards',text:'Every other card on the site in one place — home service cards, the service-page cards, About values & offices, and the contact office cards.'},
   {sel:'.nav-item[data-view="text"]',title:'Titles & Texts',text:'Edit every heading, subtitle and description across the whole site. Use the search box to find any field fast.'},

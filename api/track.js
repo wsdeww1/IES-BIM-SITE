@@ -4,7 +4,7 @@
  * as a periodic heartbeat (to power the "live visitors" count).
  * Body: { visitorId, page, ref }.  Always replies 204 quickly and never throws.
  */
-const { recordView } = require('./_lib/stats');
+const { recordView, touchLive, removeLive } = require('./_lib/stats');
 
 async function readBody(req) {
   if (req.body && typeof req.body === 'object') return req.body;
@@ -25,14 +25,22 @@ module.exports = async (req, res) => {
   try {
     const body = await readBody(req);
     const host = req.headers.host || '';
-    await recordView({
-      visitorId: body.visitorId,
-      page: body.page,
-      ref: body.ref || req.headers.referer || '',
-      ua: req.headers['user-agent'] || '',
-      host,
-      ip: clientIp(req),
-    });
+    if (body.leave) {
+      // Tab closed/hidden — drop from "live" right away so the count falls.
+      await removeLive(body.visitorId);
+    } else if (body.beat) {
+      // Periodic heartbeat — refresh presence only, never counts as a pageview.
+      await touchLive(body.visitorId);
+    } else {
+      await recordView({
+        visitorId: body.visitorId,
+        page: body.page,
+        ref: body.ref || req.headers.referer || '',
+        ua: req.headers['user-agent'] || '',
+        host,
+        ip: clientIp(req),
+      });
+    }
   } catch (e) { /* analytics must never break */ }
   res.statusCode = 204;
   res.end();

@@ -19,7 +19,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const LIVE_WINDOW_MS = 5 * 60 * 1000;     // "online now" = active in last 5 min
+const LIVE_WINDOW_MS = 45 * 1000;         // "online now" = active in the last 45s (heartbeat every 15s)
 const DAY_TTL_SEC = 120 * 24 * 3600;      // keep daily buckets ~4 months
 const LOCAL_FILE = path.join(process.cwd(), 'data', 'stats.local.json');
 
@@ -70,10 +70,48 @@ function ensure(o) {
   return o;
 }
 
+function normId(visitorId) { return String(visitorId || '').slice(0, 64); }
+
+/* ═══════════ HEARTBEAT — refresh "live" presence only ═══════════
+   Fired periodically by the public site while a tab is open. It only updates
+   the live set, so a visitor sitting on a page does NOT inflate page views. */
+async function touchLive(visitorId) {
+  const vid = normId(visitorId);
+  if (!vid) return;
+  const now = Date.now();
+  const kv = getKv();
+  if (kv) {
+    try {
+      await kv.zadd('st:live', { score: now, member: vid });
+      await kv.zremrangebyscore('st:live', 0, now - LIVE_WINDOW_MS);
+    } catch (e) {}
+    return;
+  }
+  const o = ensure(readLocal());
+  o.live[vid] = now;
+  writeLocal(o);
+}
+
+/* ═══════════ LEAVE — drop a visitor from "live" immediately ═══════════
+   Fired via sendBeacon when the tab is closed/hidden, so the count falls
+   without waiting for the live window to expire. */
+async function removeLive(visitorId) {
+  const vid = normId(visitorId);
+  if (!vid) return;
+  const kv = getKv();
+  if (kv) {
+    try { await kv.zrem('st:live', vid); } catch (e) {}
+    return;
+  }
+  const o = ensure(readLocal());
+  delete o.live[vid];
+  writeLocal(o);
+}
+
 /* ═══════════ RECORD A PAGEVIEW ═══════════ */
 async function recordView({ visitorId, page, ref, ua, host }) {
   const day = dayKey();
-  const vid = String(visitorId || '').slice(0, 64) || 'anon-' + Math.random().toString(36).slice(2);
+  const vid = normId(visitorId) || 'anon-' + Math.random().toString(36).slice(2);
   const pg = String(page || '/').slice(0, 80);
   const src = classifySource(ref, host);
   const dev = classifyDevice(ua);
@@ -189,4 +227,4 @@ function toSorted(obj) {
     .sort((a, b) => b.count - a.count).slice(0, 12);
 }
 
-module.exports = { recordView, recordEdit, getStats, classifySource, classifyDevice };
+module.exports = { recordView, recordEdit, getStats, touchLive, removeLive, classifySource, classifyDevice };

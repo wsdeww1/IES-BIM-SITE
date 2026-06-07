@@ -1890,16 +1890,34 @@ var LIVE_SECTIONS={};
     vid=localStorage.getItem('ies_vid');
     if(!vid){vid='v-'+Date.now().toString(36)+Math.random().toString(36).slice(2,10);localStorage.setItem('ies_vid',vid);}
   }catch(e){vid='v-'+Math.random().toString(36).slice(2,12);}
-  function send(){
+  function post(payload){
+    var body=JSON.stringify(payload);
     try{
-      fetch('/api/track',{method:'POST',keepalive:true,headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({visitorId:vid,page:(typeof currentPage!=='undefined'?currentPage:'Home'),ref:document.referrer||''})});
+      // sendBeacon survives the page being closed — essential for "leave".
+      if(payload.leave&&navigator.sendBeacon){
+        navigator.sendBeacon('/api/track',new Blob([body],{type:'application/json'}));
+        return;
+      }
+      fetch('/api/track',{method:'POST',keepalive:true,headers:{'Content-Type':'application/json'},body:body});
     }catch(e){}
+  }
+  function send(){   // full pageview (load + in-page navigation)
+    post({visitorId:vid,page:(typeof currentPage!=='undefined'?currentPage:'Home'),ref:document.referrer||''});
+  }
+  function beat(){   // presence-only heartbeat (does NOT count as a pageview)
+    post({visitorId:vid,beat:true});
+  }
+  function leave(){  // tab closed/hidden — drop from "live" right away
+    post({visitorId:vid,leave:true});
   }
   window.__iesTrack=send;          // navigateTo() calls this on page change
   send();                          // initial pageview
-  setInterval(send,60000);         // heartbeat (keeps "live" status fresh)
-  document.addEventListener('visibilitychange',function(){if(!document.hidden)send();});
+  setInterval(beat,15000);         // frequent heartbeat → fast, accurate "live" count
+  document.addEventListener('visibilitychange',function(){
+    if(document.hidden)leave();    // switched away/minimised → count drops now
+    else beat();                   // came back → count rises now
+  });
+  window.addEventListener('pagehide',leave);  // closing/navigating away
 })();
 
 function applySections(s){
