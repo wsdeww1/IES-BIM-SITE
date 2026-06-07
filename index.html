@@ -4,6 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>IES — Integrated Engineering Systems | BIM &amp; Engineering Services</title>
+<!-- SEO / social meta. These are kept up to date per-page by the admin-managed
+     content (see applySeo()); the values below are sensible defaults so the
+     page is fully described even before the live content loads. -->
+<meta name="description" id="metaDescription" content="IES — Integrated Engineering Systems delivers high-quality BIM-based digital modeling for Architectural, Structural, and MEP disciplines across the Middle East.">
+<meta property="og:type" content="website">
+<meta property="og:title" id="metaOgTitle" content="IES — Integrated Engineering Systems | BIM &amp; Engineering Services">
+<meta property="og:description" id="metaOgDesc" content="High-quality BIM-based digital modeling for Architectural, Structural, and MEP disciplines across the Middle East.">
+<meta property="og:image" id="metaOgImage" content="">
+<meta name="twitter:card" content="summary_large_image">
 <style>
 /* ── Fonts ──────────────────────────────────────────────── */
 @font-face{font-family:'Noto Sans';src:url('fonts/Noto Sans Regular.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
@@ -1362,6 +1371,7 @@ function navigateTo(p){
   document.querySelectorAll('.page-section').forEach(function(el){el.classList.remove('active')});
   var t=document.getElementById('page-'+p);if(t)t.classList.add('active');
   updateNav();closeMobile();window.scrollTo({top:0,behavior:'smooth'});
+  if(typeof applySeo==='function')applySeo(p);
   if(p==='Projects')renderProjects();
   if(p==='Contact')initMap();
   if(p==='AboutTeam'){countersStarted=false;var ts=document.getElementById('teamStats');if(ts)statsObs.observe(ts)}
@@ -1853,14 +1863,49 @@ function initGlobe(canvasId){
       renderHomeProjGrid();
       if(currentPage==='Projects')renderProjects();
     }
-    if(c.sections)applySections(c.sections);
+    if(c.sections){applySections(c.sections);applyVisibility(c.sections);}
   }).catch(function(){/* keep built-in defaults */});
 })();
 
+/* Live, admin-managed section text. Kept globally so per-page SEO and
+   visibility can be re-applied whenever the visitor navigates. */
+var LIVE_SECTIONS={};
+
 function applySections(s){
+  LIVE_SECTIONS=s||{};
   Object.keys(s).forEach(function(k){
+    if(k.indexOf('seo')===0||k.indexOf('hide')===0)return; // meta keys, not on-page text
     var elx=document.getElementById(k);
     if(elx&&s[k])elx.textContent=s[k];
+  });
+  applySeo(currentPage);
+}
+
+/* Per-page SEO: the admin stores keys like seoHomeTitle / seoHomeDesc and a
+   single seoOgImage. We update <title> and the meta tags for the active page,
+   falling back to the built-in defaults when a field is empty. */
+function applySeo(page){
+  var s=LIVE_SECTIONS||{};
+  var title=s['seo'+page+'Title'];
+  var desc=s['seo'+page+'Desc'];
+  var ogImg=s.seoOgImage;
+  if(title){document.title=title;setMeta('metaOgTitle',title);}
+  if(desc){setMeta('metaDescription',desc);setMeta('metaOgDesc',desc);}
+  if(ogImg)setMeta('metaOgImage',ogImg);
+}
+function setMeta(id,val){var m=document.getElementById(id);if(m)m.setAttribute('content',val);}
+
+/* Per-section show/hide: the admin stores keys like hideHomeServices=1 to hide
+   an element by id. Only honours explicit "hide" flags so the site shows
+   everything by default. */
+function applyVisibility(s){
+  Object.keys(s).forEach(function(k){
+    if(k.indexOf('hide')!==0)return;
+    var targetId=k.charAt(4).toLowerCase()+k.slice(5); // hideContactTag -> contactTag
+    var elx=document.getElementById(targetId);
+    if(!elx)return;
+    var on=s[k]==='1'||s[k]===true||s[k]==='true';
+    elx.style.display=on?'none':'';
   });
 }
 

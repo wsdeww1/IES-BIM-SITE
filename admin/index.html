@@ -186,6 +186,18 @@ textarea{resize:vertical;min-height:80px}
 .sec-sub-head.open{background:#eef5f5}
 .sec-sub>.sec-acc>.sec-acc-inner{padding:6px 16px 4px}
 .sec-sub .field{margin-bottom:14px}
+
+/* sections toolbar: search + expand/collapse all */
+.sec-toolbar{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.sec-search{position:relative;flex:1;min-width:200px}
+.sec-search input{width:100%;padding:11px 13px 11px 38px;border:1px solid var(--grey);border-radius:8px;background:#fff;color:var(--dark)}
+.sec-search input:focus{outline:none;border-color:var(--teal-mid);box-shadow:0 0 0 3px rgba(81,141,149,.15)}
+.sec-search::before{content:'🔍';position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:14px;opacity:.6}
+.sec-hint{font-size:12px;color:var(--muted);margin:2px 0 10px}
+.sec-noresult{text-align:center;color:var(--muted);padding:30px 20px}
+.field-check{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.field-check input[type=checkbox]{width:18px;height:18px;accent-color:var(--teal);cursor:pointer;flex-shrink:0}
+.field-check label{font-size:13.5px;color:var(--dark);cursor:pointer;margin:0}
 @media(max-width:760px){.sidebar{width:64px;padding:18px 8px}.sidebar-logo span,.nav-item span:not(.ico),.sidebar-logo img{display:none}
   .main{margin-left:64px}.content,.topbar{padding-left:16px;padding-right:16px}}
 </style>
@@ -361,6 +373,41 @@ var SECTION_GROUPS=[
     {grp:'Hero (home top)',items:[
       {k:'heroBadge',label:'Hero badge',type:'input'},
       {k:'heroSub',label:'Hero subtitle / description',type:'textarea'}]}
+  ]},
+  {id:'seo',label:'SEO / Search & Social',ico:'🔍',subs:[
+    {grp:'Shared',items:[
+      {k:'seoOgImage',label:'Social share image URL (Open Graph) — used when your link is shared',type:'input'}]},
+    {grp:'Home page',items:[
+      {k:'seoHomeTitle',label:'Browser/Google title',type:'input'},
+      {k:'seoHomeDesc',label:'Meta description (≈155 chars, shown under the Google result)',type:'textarea'}]},
+    {grp:'Projects page',items:[
+      {k:'seoProjectsTitle',label:'Browser/Google title',type:'input'},
+      {k:'seoProjectsDesc',label:'Meta description',type:'textarea'}]},
+    {grp:'BIM Services page',items:[
+      {k:'seoBIMServicesTitle',label:'Browser/Google title',type:'input'},
+      {k:'seoBIMServicesDesc',label:'Meta description',type:'textarea'}]},
+    {grp:'BIM & Engineering Service page',items:[
+      {k:'seoDesignEngineeringTitle',label:'Browser/Google title',type:'input'},
+      {k:'seoDesignEngineeringDesc',label:'Meta description',type:'textarea'}]},
+    {grp:'Design & Detail Engineering page',items:[
+      {k:'seoDesignEngineering1Title',label:'Browser/Google title',type:'input'},
+      {k:'seoDesignEngineering1Desc',label:'Meta description',type:'textarea'}]},
+    {grp:'About — Our Story page',items:[
+      {k:'seoAboutStoryTitle',label:'Browser/Google title',type:'input'},
+      {k:'seoAboutStoryDesc',label:'Meta description',type:'textarea'}]},
+    {grp:'About — Our Team page',items:[
+      {k:'seoAboutTeamTitle',label:'Browser/Google title',type:'input'},
+      {k:'seoAboutTeamDesc',label:'Meta description',type:'textarea'}]},
+    {grp:'Contact page',items:[
+      {k:'seoContactTitle',label:'Browser/Google title',type:'input'},
+      {k:'seoContactDesc',label:'Meta description',type:'textarea'}]}
+  ]},
+  {id:'visibility',label:'Show / Hide sections',ico:'👁',subs:[
+    {grp:'Toggle parts of the public site on or off',hint:'Tick to HIDE that element from visitors. Leave unticked to show it (default).',items:[
+      {k:'hideContactTag',label:'Hide the “Get in Touch” tag on Contact',type:'checkbox'},
+      {k:'hideValuesH2',label:'Hide the Core Values heading',type:'checkbox'},
+      {k:'hideOrgH2',label:'Hide the Organization Structure heading',type:'checkbox'},
+      {k:'hideTeamH2',label:'Hide the Our Team heading',type:'checkbox'}]}
   ]}
 ];
 
@@ -656,29 +703,51 @@ function openProjectEditor(idx){
 /* ═══════════ SECTIONS / CONCEPTS ═══════════ */
 function renderSections(){
   var s=state.content.sections||{};
-  var html='<p class="helper">Edit the text shown on your public pages. Click a section to expand it. Changes go live after you click <b>Save / Publish</b>.</p>';
+  var html='<p class="helper">Edit the text shown on your public pages. Use the search box to jump straight to any field. Click a section to expand it. Changes go live after you click <b>Save / Publish</b>.</p>';
+  html+='<div class="sec-toolbar">'+
+    '<div class="sec-search"><input id="secSearch" type="search" placeholder="Search all fields — e.g. “BIM”, “meta”, “Cairo”…" autocomplete="off"></div>'+
+    '<button class="btn btn-ghost btn-sm" id="secExpand">Expand all</button>'+
+    '<button class="btn btn-ghost btn-sm" id="secCollapse">Collapse all</button></div>';
   SECTION_GROUPS.forEach(function(g){
-    html+='<div class="sec-group">';
+    html+='<div class="sec-group" data-search="'+esc(g.label.toLowerCase())+'">';
     html+='<button class="sec-group-head"><span class="sec-ico">'+g.ico+'</span>'+esc(g.label)+'<span class="sec-arrow">&#9660;</span></button>';
     html+='<div class="sec-acc"><div class="sec-acc-inner">';
     g.subs.forEach(function(sub){
-      html+='<div class="sec-sub">';
+      html+='<div class="sec-sub" data-search="'+esc((sub.grp+' '+g.label).toLowerCase())+'">';
       html+='<button class="sec-sub-head">'+esc(sub.grp)+'<span class="sec-arrow">&#9660;</span></button>';
       html+='<div class="sec-acc"><div class="sec-acc-inner">';
+      if(sub.hint)html+='<p class="sec-hint">'+esc(sub.hint)+'</p>';
       sub.items.forEach(function(it){
-        var raw=(s[it.k]!=null&&s[it.k]!=='')?s[it.k]:(SECTION_DEFAULTS[it.k]||'');
-        var val=esc(raw);
-        html+='<div class="field"><label>'+esc(it.label)+'</label>'+
-          (it.type==='textarea'?'<textarea data-sec="'+it.k+'">'+val+'</textarea>':'<input data-sec="'+it.k+'" value="'+val+'">')+'</div>';
+        var st=(it.k in s)?s[it.k]:'';
+        var searchTxt=esc((it.label+' '+it.k).toLowerCase());
+        if(it.type==='checkbox'){
+          var on=st==='1'||st===true||st==='true';
+          html+='<div class="field-check" data-search="'+searchTxt+'">'+
+            '<input type="checkbox" id="chk-'+it.k+'" data-sec="'+it.k+'" data-type="checkbox"'+(on?' checked':'')+'>'+
+            '<label for="chk-'+it.k+'">'+esc(it.label)+'</label></div>';
+        }else{
+          var raw=(st!=null&&st!=='')?st:(SECTION_DEFAULTS[it.k]||'');
+          var val=esc(raw);
+          html+='<div class="field" data-search="'+searchTxt+'"><label>'+esc(it.label)+'</label>'+
+            (it.type==='textarea'?'<textarea data-sec="'+it.k+'">'+val+'</textarea>':'<input data-sec="'+it.k+'" value="'+val+'">')+'</div>';
+        }
       });
       html+='</div></div></div>';
     });
     html+='</div></div></div>';
   });
+  html+='<div class="sec-noresult hidden" id="secNoResult">No fields match your search.</div>';
   $('#view-sections').innerHTML=html;
-  $$('#view-sections [data-sec]').forEach(function(f){
+
+  // text inputs / textareas
+  $$('#view-sections [data-sec]:not([data-type="checkbox"])').forEach(function(f){
     f.oninput=function(){state.content.sections[f.dataset.sec]=f.value;setDirty(true)};
   });
+  // checkboxes (visibility toggles)
+  $$('#view-sections [data-type="checkbox"]').forEach(function(f){
+    f.onchange=function(){state.content.sections[f.dataset.sec]=f.checked?'1':'';setDirty(true)};
+  });
+  // expand / collapse on header click
   $$('#view-sections .sec-group-head, #view-sections .sec-sub-head').forEach(function(btn){
     btn.addEventListener('click',function(){
       btn.classList.toggle('open');
@@ -686,6 +755,44 @@ function renderSections(){
       if(acc&&acc.classList.contains('sec-acc'))acc.classList.toggle('open');
     });
   });
+  function setOpen(open){
+    $$('#view-sections .sec-group-head, #view-sections .sec-sub-head').forEach(function(b){b.classList.toggle('open',open)});
+    $$('#view-sections .sec-acc').forEach(function(a){a.classList.toggle('open',open)});
+  }
+  $('#secExpand').onclick=function(){setOpen(true)};
+  $('#secCollapse').onclick=function(){setOpen(false)};
+
+  // live search/filter
+  $('#secSearch').oninput=function(){
+    var q=this.value.trim().toLowerCase();
+    var anyVisible=false;
+    $$('#view-sections .sec-group').forEach(function(grp){
+      var grpHit=false;
+      $$('.sec-sub',grp).forEach(function(sub){
+        var subHit=false;
+        $$('[data-search]',sub).forEach(function(f){
+          if(!f.classList.contains('field')&&!f.classList.contains('field-check'))return;
+          var match=!q||f.getAttribute('data-search').indexOf(q)>-1;
+          f.classList.toggle('hidden',!match);
+          if(match)subHit=true;
+        });
+        // also match on the sub-group's own label
+        if(q&&sub.getAttribute('data-search').indexOf(q)>-1)subHit=true;
+        sub.classList.toggle('hidden',!subHit);
+        // when searching, auto-open matching subs; when cleared, collapse
+        var subHead=$('.sec-sub-head',sub),subAcc=subHead&&subHead.nextElementSibling;
+        if(q){subHead.classList.toggle('open',subHit);if(subAcc)subAcc.classList.toggle('open',subHit);}
+        else{subHead.classList.remove('open');if(subAcc)subAcc.classList.remove('open');}
+        if(subHit)grpHit=true;
+      });
+      grp.classList.toggle('hidden',!grpHit);
+      var grpHead=$('.sec-group-head',grp),grpAcc=grpHead&&grpHead.nextElementSibling;
+      if(q){grpHead.classList.toggle('open',grpHit);if(grpAcc)grpAcc.classList.toggle('open',grpHit);}
+      else{grpHead.classList.remove('open');if(grpAcc)grpAcc.classList.remove('open');}
+      if(grpHit)anyVisible=true;
+    });
+    $('#secNoResult').classList.toggle('hidden',anyVisible);
+  };
 }
 
 /* ═══════════ REORDER (drag & drop) ═══════════ */

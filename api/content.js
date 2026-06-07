@@ -5,12 +5,20 @@
 const { send, readJson, requireAuth, getContent, setContent } = require('./_lib/util');
 
 const DISCIPLINES = ['Architecture', 'Structural', 'MEP', 'BIM'];
-const SECTION_KEYS = [
-  'heroBadge', 'heroSub',
-  'coreTag', 'coreH2', 'coreSub',
-  'featTag', 'featH2', 'featSub',
-  'projTag', 'projH2', 'projSub',
-];
+
+/*
+ * Section content is an open-ended map of key → text. The admin panel exposes
+ * ~120 fields today (hero, services, BIM cards, about, team, contact, SEO …)
+ * and that list grows over time, so instead of a brittle hard-coded whitelist
+ * we accept ANY key that looks like a safe identifier and clamp its value.
+ * This keeps defense-in-depth (key-name validation blocks prototype-pollution
+ * and junk; values are length-clamped; the public site renders them with
+ * textContent, so they can't inject HTML) without the backend needing an edit
+ * every time the admin adds a field.
+ */
+const SECTION_KEY_RE = /^[A-Za-z][A-Za-z0-9_]{0,59}$/; // letter-led identifier, ≤60 chars
+const MAX_SECTION_KEYS = 600;   // generous cap; current panel uses ~120
+const MAX_SECTION_LEN = 8000;   // per-field character clamp (covers long paragraphs)
 
 function s(v, max) {
   return String(v == null ? '' : v).slice(0, max || 2000);
@@ -54,7 +62,13 @@ function sanitize(input) {
   out.projects.forEach((p, i) => { p.order = i; });
 
   const sec = (input.sections && typeof input.sections === 'object') ? input.sections : {};
-  SECTION_KEYS.forEach((k) => { out.sections[k] = s(sec[k], 1000); });
+  let kept = 0;
+  Object.keys(sec).forEach((k) => {
+    if (kept >= MAX_SECTION_KEYS) return;
+    if (!SECTION_KEY_RE.test(k)) return;            // reject unsafe / junk keys
+    out.sections[k] = s(sec[k], MAX_SECTION_LEN);   // clamp value length
+    kept += 1;
+  });
 
   return out;
 }
