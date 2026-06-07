@@ -1859,6 +1859,7 @@ function initGlobe(canvasId){
   if(!window.fetch)return;
   fetch('/api/content',{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(c){
     if(!c)return;
+    var rerendered=false;
     if(Array.isArray(c.projects)&&c.projects.length){
       PROJECTS=c.projects;
       renderHomeProjGrid();
@@ -1870,8 +1871,13 @@ function initGlobe(canvasId){
         page:s.page||'',features:Array.isArray(s.features)?s.features:[]
       }});
       renderHomeServices();
+      rerendered=true;
     }
     if(c.sections){applySections(c.sections);applyVisibility(c.sections);}
+    // Newly rendered cards carry the .animate-on-scroll class but were created
+    // after the initial observer ran, so they'd stay invisible (opacity:0)
+    // forever. Re-arm the scroll-reveal observer so they fade in correctly.
+    if(rerendered)initScrollAnimations();
   }).catch(function(){/* keep built-in defaults */});
 })();
 
