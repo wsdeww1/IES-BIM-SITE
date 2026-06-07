@@ -236,6 +236,7 @@ textarea{resize:vertical;min-height:80px}
 
     <div class="nav-sec">Edit the website</div>
     <button class="nav-item" data-view="projects"><span class="ico">▤</span><span>Project Cards</span></button>
+    <button class="nav-item" data-view="cards"><span class="ico">⬡</span><span>Cards</span></button>
     <button class="nav-item" data-view="text"><span class="ico">✎</span><span>Titles &amp; Texts</span></button>
     <button class="nav-item" data-view="contact"><span class="ico">✉</span><span>Contact &amp; Team</span></button>
     <button class="nav-item" data-view="seo"><span class="ico">🔍</span><span>SEO &amp; Visibility</span></button>
@@ -266,6 +267,7 @@ textarea{resize:vertical;min-height:80px}
       <div id="view-dashboard"></div>
       <div id="view-analytics" class="hidden"></div>
       <div id="view-projects" class="hidden"></div>
+      <div id="view-cards" class="hidden"></div>
       <div id="view-text" class="hidden"></div>
       <div id="view-contact" class="hidden"></div>
       <div id="view-seo" class="hidden"></div>
@@ -297,12 +299,13 @@ var DISCIPLINES=['Architecture','Structural','MEP','BIM'];
 var STATUSES=['Completed','In Progress','On Hold','Planned'];
 
 /* ── Section field definitions, grouped by SCREEN ──
-   screen: 'text'  → Titles & Texts
-           'contact' → Contact & Team
-           'seo'   → SEO & Visibility                                  */
+   screen: 'text'    → Titles & Texts (headings, intros, paragraphs, labels)
+           'cards'   → Cards (every card across the site)
+           'contact' → Contact & Team (team numbers, footer)
+           'seo'     → SEO & Visibility                                  */
 var SECTION_GROUPS=[
   /* ===== TITLES & TEXTS ===== */
-  {screen:'text',id:'projects',label:'Portfolio — Projects',ico:'▤',subs:[
+  {screen:'text',id:'projectsText',label:'Portfolio — Projects',ico:'▤',subs:[
     {grp:'Featured Projects (home)',items:[
       {k:'featTag',label:'Tag',type:'input'},{k:'featH2',label:'Heading',type:'input'},
       {k:'featSub',label:'Subtitle / description',type:'textarea'}]},
@@ -310,49 +313,21 @@ var SECTION_GROUPS=[
       {k:'projTag',label:'Tag',type:'input'},{k:'projH2',label:'Heading',type:'input'},
       {k:'projSub',label:'Subtitle / description',type:'textarea'}]}
   ]},
-  {screen:'text',id:'services',label:'Services',ico:'✎',subs:[
+  {screen:'text',id:'servicesText',label:'Services — page headers',ico:'✎',subs:[
     {grp:'Our Core Services (home)',items:[
       {k:'coreTag',label:'Tag',type:'input'},{k:'coreH2',label:'Heading',type:'input'},
       {k:'coreSub',label:'Subtitle / description',type:'textarea'}]},
     {grp:'BIM Services — page header',items:[
       {k:'bimSvcTag',label:'Tag',type:'input'},{k:'bimSvcH2',label:'Heading',type:'input'},
       {k:'bimSvcSub',label:'Subtitle / description',type:'textarea'}]},
-    {grp:'BIM Services — service cards',items:[
-      {k:'bimCard1Title',label:'Card 1 — title',type:'input'},{k:'bimCard1Body',label:'Card 1 — description',type:'textarea'},
-      {k:'bimCard2Title',label:'Card 2 — title',type:'input'},{k:'bimCard2Body',label:'Card 2 — description',type:'textarea'},
-      {k:'bimCard3Title',label:'Card 3 — title',type:'input'},{k:'bimCard3Body',label:'Card 3 — description',type:'textarea'},
-      {k:'bimCard4Title',label:'Card 4 — title',type:'input'},{k:'bimCard4Body',label:'Card 4 — description',type:'textarea'}]},
     {grp:'BIM & Engineering Service — page header',items:[
       {k:'bimEngTag',label:'Tag',type:'input'},{k:'bimEngH2',label:'Heading',type:'input'},
       {k:'bimEngSub',label:'Subtitle / description',type:'textarea'}]},
-    {grp:'BIM & Engineering — Architectural',items:[
-      {k:'engCard1Title',label:'Title',type:'input'},
-      {k:'engCard1L1',label:'Bullet 1',type:'input'},{k:'engCard1L2',label:'Bullet 2',type:'input'},
-      {k:'engCard1L3',label:'Bullet 3',type:'input'},{k:'engCard1L4',label:'Bullet 4',type:'input'}]},
-    {grp:'BIM & Engineering — Structural',items:[
-      {k:'engCard2Title',label:'Title',type:'input'},
-      {k:'engCard2L1',label:'Bullet 1',type:'input'},{k:'engCard2L2',label:'Bullet 2',type:'input'},
-      {k:'engCard2L3',label:'Bullet 3',type:'input'},{k:'engCard2L4',label:'Bullet 4',type:'input'}]},
-    {grp:'BIM & Engineering — Mechanical',items:[
-      {k:'engCard3Title',label:'Title',type:'input'},
-      {k:'engCard3L1',label:'Bullet 1',type:'input'},{k:'engCard3L2',label:'Bullet 2',type:'input'},
-      {k:'engCard3L3',label:'Bullet 3',type:'input'},{k:'engCard3L4',label:'Bullet 4',type:'input'}]},
-    {grp:'BIM & Engineering — Electrical',items:[
-      {k:'engCard4Title',label:'Title',type:'input'},
-      {k:'engCard4L1',label:'Bullet 1',type:'input'},{k:'engCard4L2',label:'Bullet 2',type:'input'},
-      {k:'engCard4L3',label:'Bullet 3',type:'input'},{k:'engCard4L4',label:'Bullet 4',type:'input'}]},
     {grp:'Design & Detail Engineering — page header',items:[
       {k:'desEngTag',label:'Tag',type:'input'},{k:'desEngH2',label:'Heading',type:'input'},
-      {k:'desEngSub',label:'Subtitle / description',type:'textarea'}]},
-    {grp:'Design & Detail — service cards',items:[
-      {k:'desCard1Title',label:'Card 1 — title',type:'input'},{k:'desCard1Body',label:'Card 1 — description',type:'textarea'},
-      {k:'desCard2Title',label:'Card 2 — title',type:'input'},{k:'desCard2Body',label:'Card 2 — description',type:'textarea'},
-      {k:'desCard3Title',label:'Card 3 — title',type:'input'},{k:'desCard3Body',label:'Card 3 — description',type:'textarea'},
-      {k:'desCard4Title',label:'Card 4 — title',type:'input'},{k:'desCard4Body',label:'Card 4 — description',type:'textarea'},
-      {k:'desCard5Title',label:'Card 5 — title',type:'input'},{k:'desCard5Body',label:'Card 5 — description',type:'textarea'},
-      {k:'desCard6Title',label:'Card 6 — title',type:'input'},{k:'desCard6Body',label:'Card 6 — description',type:'textarea'}]}
+      {k:'desEngSub',label:'Subtitle / description',type:'textarea'}]}
   ]},
-  {screen:'text',id:'about',label:'About',ico:'◈',subs:[
+  {screen:'text',id:'aboutText',label:'About',ico:'◈',subs:[
     {grp:'Our Story — page header',items:[
       {k:'storyTag',label:'Tag',type:'input'},{k:'storyH2',label:'Heading',type:'input'},
       {k:'storySub',label:'Subtitle / description',type:'textarea'}]},
@@ -361,19 +336,12 @@ var SECTION_GROUPS=[
       {k:'storyP1',label:'Paragraph 1',type:'textarea'},
       {k:'storyP2',label:'Paragraph 2',type:'textarea'},
       {k:'storyP3',label:'Paragraph 3',type:'textarea'}]},
-    {grp:'Core Values',items:[
+    {grp:'Core Values — header',items:[
       {k:'valuesTag',label:'Tag',type:'input'},{k:'valuesH2',label:'Heading',type:'input'},
-      {k:'valuesSub',label:'Subtitle / description',type:'textarea'},
-      {k:'value1Title',label:'Value 1 — title',type:'input'},{k:'value1Desc',label:'Value 1 — description',type:'textarea'},
-      {k:'value2Title',label:'Value 2 — title',type:'input'},{k:'value2Desc',label:'Value 2 — description',type:'textarea'},
-      {k:'value3Title',label:'Value 3 — title',type:'input'},{k:'value3Desc',label:'Value 3 — description',type:'textarea'}]},
-    {grp:'Our Offices (About page summary)',items:[
+      {k:'valuesSub',label:'Subtitle / description',type:'textarea'}]},
+    {grp:'Our Offices — header',items:[
       {k:'officesTag',label:'Tag',type:'input'},{k:'officesH2',label:'Heading',type:'input'},
-      {k:'officesSub',label:'Subtitle / description',type:'textarea'},
-      {k:'office1City',label:'Office 1 — city',type:'input'},{k:'office1Country',label:'Office 1 — country / role',type:'input'},
-      {k:'office1Detail',label:'Office 1 — description',type:'textarea'},
-      {k:'office2City',label:'Office 2 — city',type:'input'},{k:'office2Country',label:'Office 2 — country / role',type:'input'},
-      {k:'office2Detail',label:'Office 2 — description',type:'textarea'}]},
+      {k:'officesSub',label:'Subtitle / description',type:'textarea'}]},
     {grp:'Our Team — page header',items:[
       {k:'teamTag',label:'Tag',type:'input'},{k:'teamH2',label:'Heading',type:'input'},
       {k:'teamSub',label:'Subtitle / description',type:'textarea'}]},
@@ -393,23 +361,64 @@ var SECTION_GROUPS=[
       {k:'heroSub',label:'Hero subtitle / description',type:'textarea'}]}
   ]},
 
-  /* ===== CONTACT & TEAM (details) ===== */
-  {screen:'contact',id:'office1',label:'Riyadh office (Saudi Arabia)',ico:'📍',subs:[
-    {grp:'Contact card details',items:[
+  /* ===== CARDS — every fixed card across the site ===== */
+  {screen:'cards',id:'svcCards',label:'Services — Service cards',ico:'⬡',subs:[
+    {grp:'BIM Services — 4 cards',items:[
+      {k:'bimCard1Title',label:'Card 1 — title',type:'input'},{k:'bimCard1Body',label:'Card 1 — description',type:'textarea'},
+      {k:'bimCard2Title',label:'Card 2 — title',type:'input'},{k:'bimCard2Body',label:'Card 2 — description',type:'textarea'},
+      {k:'bimCard3Title',label:'Card 3 — title',type:'input'},{k:'bimCard3Body',label:'Card 3 — description',type:'textarea'},
+      {k:'bimCard4Title',label:'Card 4 — title',type:'input'},{k:'bimCard4Body',label:'Card 4 — description',type:'textarea'}]},
+    {grp:'BIM & Engineering — Architectural card',items:[
+      {k:'engCard1Title',label:'Title',type:'input'},
+      {k:'engCard1L1',label:'Bullet 1',type:'input'},{k:'engCard1L2',label:'Bullet 2',type:'input'},
+      {k:'engCard1L3',label:'Bullet 3',type:'input'},{k:'engCard1L4',label:'Bullet 4',type:'input'}]},
+    {grp:'BIM & Engineering — Structural card',items:[
+      {k:'engCard2Title',label:'Title',type:'input'},
+      {k:'engCard2L1',label:'Bullet 1',type:'input'},{k:'engCard2L2',label:'Bullet 2',type:'input'},
+      {k:'engCard2L3',label:'Bullet 3',type:'input'},{k:'engCard2L4',label:'Bullet 4',type:'input'}]},
+    {grp:'BIM & Engineering — Mechanical card',items:[
+      {k:'engCard3Title',label:'Title',type:'input'},
+      {k:'engCard3L1',label:'Bullet 1',type:'input'},{k:'engCard3L2',label:'Bullet 2',type:'input'},
+      {k:'engCard3L3',label:'Bullet 3',type:'input'},{k:'engCard3L4',label:'Bullet 4',type:'input'}]},
+    {grp:'BIM & Engineering — Electrical card',items:[
+      {k:'engCard4Title',label:'Title',type:'input'},
+      {k:'engCard4L1',label:'Bullet 1',type:'input'},{k:'engCard4L2',label:'Bullet 2',type:'input'},
+      {k:'engCard4L3',label:'Bullet 3',type:'input'},{k:'engCard4L4',label:'Bullet 4',type:'input'}]},
+    {grp:'Design & Detail — 6 cards',items:[
+      {k:'desCard1Title',label:'Card 1 — title',type:'input'},{k:'desCard1Body',label:'Card 1 — description',type:'textarea'},
+      {k:'desCard2Title',label:'Card 2 — title',type:'input'},{k:'desCard2Body',label:'Card 2 — description',type:'textarea'},
+      {k:'desCard3Title',label:'Card 3 — title',type:'input'},{k:'desCard3Body',label:'Card 3 — description',type:'textarea'},
+      {k:'desCard4Title',label:'Card 4 — title',type:'input'},{k:'desCard4Body',label:'Card 4 — description',type:'textarea'},
+      {k:'desCard5Title',label:'Card 5 — title',type:'input'},{k:'desCard5Body',label:'Card 5 — description',type:'textarea'},
+      {k:'desCard6Title',label:'Card 6 — title',type:'input'},{k:'desCard6Body',label:'Card 6 — description',type:'textarea'}]}
+  ]},
+  {screen:'cards',id:'aboutCards',label:'About — cards',ico:'◈',subs:[
+    {grp:'Core Values — 3 cards',items:[
+      {k:'value1Title',label:'Value 1 — title',type:'input'},{k:'value1Desc',label:'Value 1 — description',type:'textarea'},
+      {k:'value2Title',label:'Value 2 — title',type:'input'},{k:'value2Desc',label:'Value 2 — description',type:'textarea'},
+      {k:'value3Title',label:'Value 3 — title',type:'input'},{k:'value3Desc',label:'Value 3 — description',type:'textarea'}]},
+    {grp:'About page — office cards',items:[
+      {k:'office1City',label:'Office 1 — city',type:'input'},{k:'office1Country',label:'Office 1 — country / role',type:'input'},
+      {k:'office1Detail',label:'Office 1 — description',type:'textarea'},
+      {k:'office2City',label:'Office 2 — city',type:'input'},{k:'office2Country',label:'Office 2 — country / role',type:'input'},
+      {k:'office2Detail',label:'Office 2 — description',type:'textarea'}]}
+  ]},
+  {screen:'cards',id:'contactCards',label:'Contact — office cards',ico:'📍',subs:[
+    {grp:'Riyadh office (Saudi Arabia)',items:[
       {k:'office1Label',label:'Heading (city / country)',type:'input'},
       {k:'office1Addr',label:'Address',type:'textarea'},
       {k:'office1Tel',label:'Telephone',type:'input'},
       {k:'office1Mobil',label:'Mobile',type:'input'},
-      {k:'office1Email',label:'Email',type:'input'}]}
-  ]},
-  {screen:'contact',id:'office2',label:'Cairo office (Egypt)',ico:'📍',subs:[
-    {grp:'Contact card details',items:[
+      {k:'office1Email',label:'Email',type:'input'}]},
+    {grp:'Cairo office (Egypt)',items:[
       {k:'office2Label',label:'Heading (city / country)',type:'input'},
       {k:'office2Addr',label:'Address',type:'textarea'},
       {k:'office2Tel',label:'Telephone',type:'input'},
       {k:'office2Mobil',label:'Mobile',type:'input'},
       {k:'office2Email',label:'Email',type:'input'}]}
   ]},
+
+  /* ===== CONTACT & TEAM (non-card details) ===== */
   {screen:'contact',id:'teamNums',label:'Team statistics (the big numbers)',ico:'📊',subs:[
     {grp:'Numbers shown on the Our Team page',hint:'Type the number with its suffix, e.g. “25+” or “90%”. The label for each is under Titles & Texts → About → Our Team.',items:[
       {k:'teamStat1Num',label:'Stat 1 number',type:'input'},{k:'teamStat2Num',label:'Stat 2 number',type:'input'},
@@ -529,6 +538,18 @@ var SECTION_DEFAULTS={
   footerTagline:'Delivering high-quality BIM-based digital modeling solutions for Architectural, Structural, and MEP disciplines.'
 };
 
+/* Home "Our Core Services" cards — the first three are shown on the home page.
+   Used to pre-fill the Cards screen editor when no custom cards are saved yet. */
+var SERVICE_DEFAULTS=[
+  {num:'01',title:'Design & Detail Engineering',icon:'✎',page:'DesignEngineering1',desc:'Complete design and engineering services across Architectural, Structural, and MEP disciplines. From concept through construction documentation, we deliver accurate, coordinated, and detail-driven packages.',features:['Architectural design and documentation','Structural analysis and design','MEP system engineering','Shop drawing preparation','Construction supervision support']},
+  {num:'02',title:'BIM Services',icon:'⬡',page:'BIMServices',desc:'Full-cycle BIM implementation from modeling to coordination. We deliver LOD 100 through LOD 500 models tailored to project phases, enabling clash-free construction and efficient project delivery.',features:['3D BIM modeling (all disciplines)','BIM execution planning','LOD 100–500 deliverables','Model management and coordination','As-built model documentation']},
+  {num:'03',title:'BIM & Engineering Service',icon:'✓',page:'DesignEngineering',desc:'Expert BIM consultancy, digital construction management, 3D modelling and visualization, and clash detection services to navigate the complexities of modern construction.',features:['BIM Consultancy','Digital Construction Management','3D Modelling & Visualization','Clash Detection & Resolution']},
+  {num:'04',title:'Estimation & Take-off',icon:'≡',page:'',desc:'Precise quantity surveying and cost estimation services for tendering, procurement, and construction phases. BOQ and BOM preparation aligned with international standards.',features:['Bill of Quantities (BOQ) preparation','Bill of Materials (BOM)','Cost estimation and budgeting','Tender documentation support','Quantity verification and reconciliation']},
+  {num:'05',title:'Multi-Discipline Coordination',icon:'⇄',page:'',desc:'Advanced clash detection and design optimization across Architectural, Structural, and MEP disciplines. We resolve conflicts before they reach the field, reducing rework and delays.',features:['3D clash detection and resolution','Cross-discipline coordination','Design optimization reports','Construction sequencing coordination','Field issue resolution support']},
+  {num:'06',title:'Technical Consultancy',icon:'☆',page:'',desc:'Value engineering, risk mitigation, and ongoing technical support throughout project lifecycle phases. Our consultants bring 15+ years of mega-project experience to your team.',features:['Value engineering analysis','Risk assessment and mitigation','Technical advisory services','Specification development (CSI format)','Sustainable and LEED design support']}
+];
+var SERVICE_PAGES=['','Home','Projects','BIMServices','DesignEngineering','DesignEngineering1','AboutStory','AboutTeam','Contact'];
+
 /* ── toasts ── */
 function toast(msg,kind){
   var t=el('<div class="toast '+(kind||'')+'">'+esc(msg)+'</div>');
@@ -578,12 +599,13 @@ var VIEW_META={
   dashboard:{t:'Dashboard',s:'Your website at a glance — live visitors and recent activity.'},
   analytics:{t:'Analytics',s:'Live visitor analysis for your website.'},
   projects:{t:'Project Cards',s:'Add, edit or delete the project cards in your portfolio.'},
+  cards:{t:'Cards',s:'Edit every card across the site — home services, service pages, About and Contact.'},
   text:{t:'Titles & Texts',s:'Edit every heading, subtitle and description across the site.'},
   contact:{t:'Contact & Team',s:'Edit office contact details, team numbers and the footer.'},
   seo:{t:'SEO & Visibility',s:'Search/social previews and show-or-hide controls.'},
   reorder:{t:'Reorder Projects',s:'Drag the cards into the order you want, then Save / Publish.'}
 };
-var VIEWS=['dashboard','analytics','projects','text','contact','seo','reorder'];
+var VIEWS=['dashboard','analytics','projects','cards','text','contact','seo','reorder'];
 function go(view){
   state.view=view;stopPolling();
   $$('.nav-item[data-view]').forEach(function(b){b.classList.toggle('active',b.dataset.view===view)});
@@ -593,6 +615,7 @@ function go(view){
   if(view==='dashboard')renderDashboard();
   if(view==='analytics')renderAnalytics();
   if(view==='projects')renderProjects();
+  if(view==='cards')renderCards();
   if(view==='text')renderSectionScreen('text','#view-text');
   if(view==='contact')renderSectionScreen('contact','#view-contact');
   if(view==='seo')renderSectionScreen('seo','#view-seo');
@@ -855,11 +878,95 @@ function openProjectEditor(idx){
   $('#modalMount').appendChild(box);$('#f-title',body).focus();
 }
 
-/* ═══════════ SECTION SCREENS (text / contact / seo) ═══════════ */
-function renderSectionScreen(screen,containerId){
+/* ═══════════ CARDS SCREEN ═══════════ */
+function renderCards(){
+  var C=$('#view-cards');
+  C.innerHTML='<p class="helper">Every card on your website in one place. The <b>Home — Core Service cards</b> below are a flexible list (add / edit / delete / reorder). The fixed cards on each page are grouped underneath.</p>'+
+    '<div id="cards-services"></div><div id="cards-sections"></div>';
+  renderServiceCards();
+  renderSectionScreen('cards','#cards-sections',true);
+}
+function renderServiceCards(){
+  var sv=state.content.services||[];
+  var head='<div class="panel"><div class="panel-head"><h3>Home — Core Service cards</h3>'+
+    '<div class="panel-actions"><span class="helper" style="margin:0">The first 3 show on the home page.</span>'+
+    '<button class="btn btn-primary btn-sm" id="addSvc">+ Add card</button></div></div>';
+  var grid='';
+  if(!sv.length){grid='<div class="empty">No service cards yet. Click <b>+ Add card</b>.</div>';}
+  else{
+    grid='<div class="cards">'+sv.map(function(s,i){
+      return '<div class="pcard"><div class="pcard-thumb" style="display:flex;align-items:center;justify-content:center;font-size:34px;color:#fff">'+esc(s.icon||'•')+
+        '<span class="pcard-tag">'+(i<3?'On home':'Hidden')+' · '+esc(s.num||('0'+(i+1)).slice(-2))+'</span></div>'+
+        '<div class="pcard-body"><div class="pcard-title">'+esc(s.title||'Untitled')+'</div>'+
+        '<div class="pcard-meta">'+esc((s.desc||'').slice(0,70))+((s.desc||'').length>70?'…':'')+'</div>'+
+        '<div class="pcard-actions">'+
+          '<button class="btn btn-ghost btn-sm" data-up="'+i+'" title="Move up"'+(i===0?' disabled':'')+'>↑</button>'+
+          '<button class="btn btn-ghost btn-sm" data-down="'+i+'" title="Move down"'+(i===sv.length-1?' disabled':'')+'>↓</button>'+
+          '<button class="btn btn-ghost btn-sm" data-edit="'+i+'">Edit</button>'+
+          '<button class="btn btn-danger btn-sm" data-del="'+i+'">Delete</button></div></div></div>';
+    }).join('')+'</div>';
+  }
+  $('#cards-services').innerHTML=head+grid+'</div>';
+  $('#addSvc').onclick=function(){openServiceEditor(null)};
+  $$('#cards-services [data-edit]').forEach(function(b){b.onclick=function(){openServiceEditor(+b.dataset.edit)}});
+  $$('#cards-services [data-del]').forEach(function(b){b.onclick=function(){
+    var i=+b.dataset.del;openDialog({title:'Delete service card?',body:'<p>Delete <b>'+esc(sv[i].title||'this card')+'</b>?</p>',confirmText:'Delete',confirmClass:'btn-danger',
+      onConfirm:function(){state.content.services.splice(i,1);renumberServices();setDirty(true);closeDialog();renderServiceCards();toast('Card removed. Remember to Save / Publish.','ok')}});
+  }});
+  $$('#cards-services [data-up]').forEach(function(b){b.onclick=function(){moveSvc(+b.dataset.up,-1)}});
+  $$('#cards-services [data-down]').forEach(function(b){b.onclick=function(){moveSvc(+b.dataset.down,1)}});
+}
+function moveSvc(i,dir){
+  var sv=state.content.services,j=i+dir;if(j<0||j>=sv.length)return;
+  var t=sv[i];sv[i]=sv[j];sv[j]=t;renumberServices();setDirty(true);renderServiceCards();
+}
+function renumberServices(){(state.content.services||[]).forEach(function(s,i){s.num=('0'+(i+1)).slice(-2)})}
+function openServiceEditor(idx){
+  var isNew=idx===null;
+  var s=isNew?{num:'',title:'',desc:'',icon:'•',page:'',features:['']}
+            :JSON.parse(JSON.stringify(state.content.services[idx]));
+  if(!s.features||!s.features.length)s.features=[''];
+  var box=el('<div class="overlay"><div class="modal-box"><div class="modal-head">'+
+    '<h2>'+(isNew?'Add service card':'Edit service card')+'</h2><button class="modal-x">&times;</button></div>'+
+    '<div class="modal-body"></div>'+
+    '<div class="modal-foot"><button class="btn btn-ghost" data-cancel>Cancel</button>'+
+    '<button class="btn btn-primary" data-save>'+(isNew?'Add card':'Save changes')+'</button></div></div></div>');
+  var body=$('.modal-body',box);
+  body.innerHTML=
+    '<div class="row2"><div class="field"><label>Title</label><input id="s-title" value="'+esc(s.title)+'"></div>'+
+      '<div class="field"><label>Icon <span class="tip" data-tip="A short symbol or emoji shown on the card, e.g. ⬡ ✎ ✓ ≡ ☆">i</span></label><input id="s-icon" maxlength="6" value="'+esc(s.icon)+'"></div></div>'+
+    '<div class="field"><label>Description</label><textarea id="s-desc" style="min-height:90px">'+esc(s.desc)+'</textarea></div>'+
+    '<div class="field"><label>“Learn More” links to page <span class="tip" data-tip="Where the Learn More button goes. Leave blank for no button.">i</span></label>'+
+      '<select id="s-page">'+SERVICE_PAGES.map(function(p){return'<option value="'+esc(p)+'"'+(p===(s.page||'')?' selected':'')+'>'+(p||'— none —')+'</option>'}).join('')+'</select></div>'+
+    '<div class="field"><label>Feature bullets</label><div class="chip-list" id="s-feat"></div>'+
+      '<button class="btn btn-ghost btn-sm" id="addFeat" style="margin-top:8px">+ Add bullet</button></div>';
+  function renderFeat(){var c=$('#s-feat',body);c.innerHTML='';s.features.forEach(function(f,i){
+    var r=el('<div class="chip"><input value="'+esc(f)+'"><button title="Remove">&times;</button></div>');
+    $('input',r).oninput=function(){s.features[i]=this.value};
+    $('button',r).onclick=function(){s.features.splice(i,1);if(!s.features.length)s.features=[''];renderFeat()};c.appendChild(r);});}
+  renderFeat();
+  $('#addFeat',body).onclick=function(){s.features.push('');renderFeat()};
+  function close(){box.remove()}
+  $('.modal-x',box).onclick=close;$('[data-cancel]',box).onclick=close;
+  box.addEventListener('click',function(e){if(e.target===box)close()});
+  $('[data-save]',box).onclick=function(){
+    s.title=$('#s-title',body).value.trim();
+    if(!s.title){toast('Please enter a card title.','err');$('#s-title',body).focus();return}
+    s.icon=$('#s-icon',body).value.trim()||'•';s.desc=$('#s-desc',body).value.trim();s.page=$('#s-page',body).value;
+    s.features=s.features.map(function(f){return f.trim()}).filter(Boolean);
+    if(!state.content.services)state.content.services=[];
+    if(isNew)state.content.services.push(s);else state.content.services[idx]=s;
+    renumberServices();setDirty(true);close();renderServiceCards();
+    toast(isNew?'Card added. Remember to Save / Publish.':'Card updated. Remember to Save / Publish.','ok');
+  };
+  $('#modalMount').appendChild(box);$('#s-title',body).focus();
+}
+
+/* ═══════════ SECTION SCREENS (cards / text / contact / seo) ═══════════ */
+function renderSectionScreen(screen,containerId,noIntro){
   var s=state.content.sections||{};
   var groups=SECTION_GROUPS.filter(function(g){return g.screen===screen});
-  var html='<p class="helper">Edit and click <b>Save / Publish</b> to make changes live. Use the search box to jump to any field.</p>';
+  var html=noIntro?'':'<p class="helper">Edit and click <b>Save / Publish</b> to make changes live. Use the search box to jump to any field.</p>';
   html+='<div class="sec-toolbar">'+
     '<div class="sec-search"><input class="secSearch" type="search" placeholder="Search fields…" autocomplete="off"></div>'+
     '<button class="btn btn-ghost btn-sm secExpand">Expand all</button>'+
@@ -980,13 +1087,14 @@ var TOUR=[
   {sel:'.nav-item[data-view="dashboard"]',title:'Dashboard',text:'Your home screen — live visitors right now, visitors today, and how many edits you published today.'},
   {sel:'.nav-item[data-view="analytics"]',title:'Analytics',text:'Full live website analysis: traffic charts, top pages, sources, devices, with a date range and CSV export.'},
   {sel:'.nav-item[data-view="projects"]',title:'Project Cards',text:'Add, edit, delete and reorder the project cards in your portfolio.'},
+  {sel:'.nav-item[data-view="cards"]',title:'Cards',text:'Every other card on the site in one place — home service cards, the service-page cards, About values & offices, and the contact office cards.'},
   {sel:'.nav-item[data-view="text"]',title:'Titles & Texts',text:'Edit every heading, subtitle and description across the whole site. Use the search box to find any field fast.'},
   {sel:'.nav-item[data-view="contact"]',title:'Contact & Team',text:'Edit office phone numbers, emails, addresses, the team statistics and the footer.'},
   {sel:'#saveBtn',title:'Save / Publish',text:'Always click Save / Publish to make your changes go live.'}
 ];
 var tourIdx=0,tourBox=null;
 function startTour(){tourIdx=0;showTourStep()}
-function endTour(){if(tourBox){tourBox.remove();tourBox=null}try{localStorage.setItem('ies_tour_done','2')}catch(e){}}
+function endTour(){if(tourBox){tourBox.remove();tourBox=null}try{localStorage.setItem('ies_tour_done','3')}catch(e){}}
 function showTourStep(){
   var step=TOUR[tourIdx];var target=document.querySelector(step.sel);
   var r=target?target.getBoundingClientRect():{top:80,left:260,width:200,height:40};
@@ -1012,6 +1120,8 @@ function loadContent(){
   return api.getContent().then(function(c){
     if(!c.projects)c.projects=[];if(!c.sections)c.sections={};
     c.projects.forEach(function(p){if(!p.images)p.images=[];if(!p.scope)p.scope=[]});
+    // Pre-fill the service-card editor with the live defaults when none are saved yet.
+    if(!Array.isArray(c.services)||!c.services.length)c.services=JSON.parse(JSON.stringify(SERVICE_DEFAULTS));
     state.content=c;
   });
 }
@@ -1020,7 +1130,7 @@ function boot(){
     showApp();resetIdle();
     loadContent().then(function(){
       go('dashboard');
-      try{if(localStorage.getItem('ies_tour_done')!=='2')setTimeout(startTour,600)}catch(e){}
+      try{if(localStorage.getItem('ies_tour_done')!=='3')setTimeout(startTour,600)}catch(e){}
     });
   }).catch(showLogin);
 }

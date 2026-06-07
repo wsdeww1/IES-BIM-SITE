@@ -31,7 +31,7 @@ function slugify(str) {
 
 /* Whitelist + clamp every field the admin can submit (defense in depth). */
 function sanitize(input) {
-  const out = { projects: [], sections: {} };
+  const out = { projects: [], services: [], sections: {} };
   const seen = {};
 
   (Array.isArray(input.projects) ? input.projects : []).forEach((p, i) => {
@@ -62,6 +62,22 @@ function sanitize(input) {
   // Normalise order to the submitted sequence (drag-and-drop result).
   out.projects.forEach((p, i) => { p.order = i; });
 
+  // Core service cards (shown on the home "Our Core Services" section).
+  (Array.isArray(input.services) ? input.services : []).slice(0, 24).forEach((sv, i) => {
+    if (!sv || typeof sv !== 'object') return;
+    const title = s(sv.title, 160);
+    if (!title) return;
+    out.services.push({
+      num: s(sv.num, 6) || ('0' + (i + 1)).slice(-2),
+      title,
+      desc: s(sv.desc, 1500),
+      icon: s(sv.icon, 12),
+      page: s(sv.page, 40),
+      features: (Array.isArray(sv.features) ? sv.features : [])
+        .map((f) => s(f, 300)).filter(Boolean).slice(0, 16),
+    });
+  });
+
   const sec = (input.sections && typeof input.sections === 'object') ? input.sections : {};
   let kept = 0;
   Object.keys(sec).forEach((k) => {
@@ -84,7 +100,7 @@ module.exports = async (req, res) => {
     if (!requireAuth(req, res)) return;
     const body = await readJson(req);
     const clean = sanitize(body);
-    if (!clean.projects.length && !Object.values(clean.sections).some(Boolean)) {
+    if (!clean.projects.length && !clean.services.length && !Object.values(clean.sections).some(Boolean)) {
       return send(res, 400, { error: 'Nothing to save.' });
     }
     const saved = await setContent(clean);

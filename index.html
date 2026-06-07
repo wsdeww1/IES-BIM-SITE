@@ -1864,6 +1864,13 @@ function initGlobe(canvasId){
       renderHomeProjGrid();
       if(currentPage==='Projects')renderProjects();
     }
+    if(Array.isArray(c.services)&&c.services.length){
+      SERVICES=c.services.map(function(s){return{
+        num:s.num||'',title:s.title||'',desc:s.desc||'',icon:s.icon||'•',
+        page:s.page||'',features:Array.isArray(s.features)?s.features:[]
+      }});
+      renderHomeServices();
+    }
     if(c.sections){applySections(c.sections);applyVisibility(c.sections);}
   }).catch(function(){/* keep built-in defaults */});
 })();
