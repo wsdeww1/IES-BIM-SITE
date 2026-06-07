@@ -161,19 +161,30 @@ textarea{resize:vertical;min-height:80px}
 .tour-btns{display:flex;gap:8px}
 .empty{text-align:center;color:var(--muted);padding:50px 20px}
 
-/* ── Section accordion ── */
-.sec-group{margin-bottom:12px;border:1px solid #e4e9e9;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
+/* ── Section accordion (two-level, sliding) ── */
+.sec-group{margin-bottom:12px;border:1px solid #e4e9e9;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);background:#fff}
 .sec-group-head{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:16px 20px;
   background:#fff;font-size:15px;font-weight:700;color:var(--teal-dark);cursor:pointer;transition:.15s;border:none;font-family:inherit}
 .sec-group-head:hover{background:#f8fafa}
-.sec-group-head .sec-arrow{margin-left:auto;font-size:11px;transition:transform .2s;color:var(--muted)}
-.sec-group-head.open .sec-arrow{transform:rotate(180deg)}
+.sec-group-head.open{background:#f4f8f8}
 .sec-group-head .sec-ico{font-size:16px;width:22px;text-align:center}
-.sec-group-body{display:none;padding:6px 18px 18px;background:#fff}
-.sec-group-head.open+.sec-group-body{display:block}
-.sec-sub{margin-top:16px;border:1px solid #eef1f1;border-left:3px solid var(--gold);border-radius:8px;padding:16px 18px 6px;background:#fbfcfc}
+
+/* sliding wrapper (animates open/closed) */
+.sec-acc{display:grid;grid-template-rows:0fr;transition:grid-template-rows .28s ease}
+.sec-acc.open{grid-template-rows:1fr}
+.sec-acc-inner{overflow:hidden;min-height:0}
+.sec-arrow{margin-left:auto;font-size:10px;transition:transform .25s;color:var(--muted)}
+.sec-group-head.open .sec-arrow,.sec-sub-head.open .sec-arrow{transform:rotate(180deg)}
+.sec-group>.sec-acc>.sec-acc-inner{padding:6px 18px 16px}
+
+/* sub-section: a section and its cards, itself collapsible */
+.sec-sub{margin-top:12px;border:1px solid #eef1f1;border-left:3px solid var(--gold);border-radius:8px;background:#fbfcfc;overflow:hidden}
 .sec-sub:first-child{margin-top:8px}
-.sec-sub>.lbl{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--teal-mid);margin-bottom:14px;display:block}
+.sec-sub-head{display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:none;background:none;font-family:inherit;cursor:pointer;
+  padding:13px 16px;font-size:12.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--teal-mid);transition:.15s}
+.sec-sub-head:hover{background:#f1f6f6}
+.sec-sub-head.open{background:#eef5f5}
+.sec-sub>.sec-acc>.sec-acc-inner{padding:6px 16px 4px}
 .sec-sub .field{margin-bottom:14px}
 @media(max-width:760px){.sidebar{width:64px;padding:18px 8px}.sidebar-logo span,.nav-item span:not(.ico),.sidebar-logo img{display:none}
   .main{margin-left:64px}.content,.topbar{padding-left:16px;padding-right:16px}}
@@ -648,27 +659,31 @@ function renderSections(){
   var html='<p class="helper">Edit the text shown on your public pages. Click a section to expand it. Changes go live after you click <b>Save / Publish</b>.</p>';
   SECTION_GROUPS.forEach(function(g){
     html+='<div class="sec-group">';
-    html+='<button class="sec-group-head" data-toggle="sec-'+g.id+'"><span class="sec-ico">'+g.ico+'</span>'+esc(g.label)+'<span class="sec-arrow">&#9660;</span></button>';
-    html+='<div class="sec-group-body" id="sec-'+g.id+'">';
+    html+='<button class="sec-group-head"><span class="sec-ico">'+g.ico+'</span>'+esc(g.label)+'<span class="sec-arrow">&#9660;</span></button>';
+    html+='<div class="sec-acc"><div class="sec-acc-inner">';
     g.subs.forEach(function(sub){
-      html+='<div class="sec-sub"><span class="lbl">'+esc(sub.grp)+'</span>';
+      html+='<div class="sec-sub">';
+      html+='<button class="sec-sub-head">'+esc(sub.grp)+'<span class="sec-arrow">&#9660;</span></button>';
+      html+='<div class="sec-acc"><div class="sec-acc-inner">';
       sub.items.forEach(function(it){
         var raw=(s[it.k]!=null&&s[it.k]!=='')?s[it.k]:(SECTION_DEFAULTS[it.k]||'');
         var val=esc(raw);
         html+='<div class="field"><label>'+esc(it.label)+'</label>'+
           (it.type==='textarea'?'<textarea data-sec="'+it.k+'">'+val+'</textarea>':'<input data-sec="'+it.k+'" value="'+val+'">')+'</div>';
       });
-      html+='</div>';
+      html+='</div></div></div>';
     });
-    html+='</div></div>';
+    html+='</div></div></div>';
   });
   $('#view-sections').innerHTML=html;
   $$('#view-sections [data-sec]').forEach(function(f){
     f.oninput=function(){state.content.sections[f.dataset.sec]=f.value;setDirty(true)};
   });
-  $$('#view-sections .sec-group-head').forEach(function(btn){
+  $$('#view-sections .sec-group-head, #view-sections .sec-sub-head').forEach(function(btn){
     btn.addEventListener('click',function(){
       btn.classList.toggle('open');
+      var acc=btn.nextElementSibling;
+      if(acc&&acc.classList.contains('sec-acc'))acc.classList.toggle('open');
     });
   });
 }
