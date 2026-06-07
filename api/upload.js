@@ -9,7 +9,7 @@ const { send, requireAuth } = require('./_lib/util');
 
 // Use Vercel Blob in production; fall back to a local folder when its token
 // is absent (local test mode). Lazily required so local mode needs no package.
-function blobEnabled() { return !!process.env.BLOB_READ_WRITE_TOKEN; }
+function blobEnabled() { return !!(process.env.BLOB_READ_WRITE_TOKEN || process.env.BLOB_STORE_ID); }
 function getPut() { try { return require('@vercel/blob').put; } catch (e) { return null; } }
 
 // Vercel parses JSON bodies automatically; for binary uploads we read the
