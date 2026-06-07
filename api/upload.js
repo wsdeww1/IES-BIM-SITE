@@ -64,14 +64,19 @@ module.exports = async (req, res) => {
     const put = getPut();
     if (!put) return send(res, 500, { error: 'Image storage package is missing. Run "npm install".' });
     try {
-      const blob = await put('projects/' + filename, buf, {
+      const opts = {
         access: 'public',
         contentType: type,
-        addRandomSuffix: true, // avoids collisions, keeps names safe
-      });
+        addRandomSuffix: true,
+      };
+      if (!process.env.BLOB_READ_WRITE_TOKEN && process.env.BLOB_STORE_ID) {
+        opts.token = process.env.VERCEL_OIDC_TOKEN;
+        opts.storeId = process.env.BLOB_STORE_ID;
+      }
+      const blob = await put('projects/' + filename, buf, opts);
       return send(res, 200, { ok: true, url: blob.url });
     } catch (e) {
-      return send(res, 500, { error: 'Could not store the image. Is Vercel Blob configured?' });
+      return send(res, 500, { error: 'Could not store the image: ' + (e.message || 'Unknown error') });
     }
   }
 
