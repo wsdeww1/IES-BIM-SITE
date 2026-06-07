@@ -160,6 +160,19 @@ textarea{resize:vertical;min-height:80px}
 .tour-step{font-size:12px;color:var(--muted)}
 .tour-btns{display:flex;gap:8px}
 .empty{text-align:center;color:var(--muted);padding:50px 20px}
+
+/* ── Section accordion ── */
+.sec-group{margin-bottom:12px;border:1px solid #e4e9e9;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
+.sec-group-head{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:16px 20px;
+  background:#fff;font-size:15px;font-weight:700;color:var(--teal-dark);cursor:pointer;transition:.15s;border:none;font-family:inherit}
+.sec-group-head:hover{background:#f8fafa}
+.sec-group-head .sec-arrow{margin-left:auto;font-size:11px;transition:transform .2s;color:var(--muted)}
+.sec-group-head.open .sec-arrow{transform:rotate(180deg)}
+.sec-group-head .sec-ico{font-size:16px;width:22px;text-align:center}
+.sec-group-body{display:none;padding:0 20px 20px;background:#fff}
+.sec-group-head.open+.sec-group-body{display:block}
+.sec-sub{margin-top:16px;border-left:3px solid var(--gold);padding-left:16px}
+.sec-sub>.lbl{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--teal-mid);margin-bottom:10px;display:block}
 @media(max-width:760px){.sidebar{width:64px;padding:18px 8px}.sidebar-logo span,.nav-item span:not(.ico),.sidebar-logo img{display:none}
   .main{margin-left:64px}.content,.topbar{padding-left:16px;padding-right:16px}}
 </style>
@@ -245,19 +258,45 @@ function el(html){var d=document.createElement('div');d.innerHTML=html.trim();re
 var state={content:null,view:'dashboard',dirty:false};
 var DISCIPLINES=['Architecture','Structural','MEP','BIM'];
 var STATUSES=['Completed','In Progress','On Hold','Planned'];
-var SECTION_FIELDS=[
-  {grp:'Hero (home top)',items:[
-    {k:'heroBadge',label:'Hero badge',type:'input'},
-    {k:'heroSub',label:'Hero subtitle / description',type:'textarea'}]},
-  {grp:'Our Core Services',items:[
-    {k:'coreTag',label:'Tag',type:'input'},{k:'coreH2',label:'Heading',type:'input'},
-    {k:'coreSub',label:'Subtitle / description',type:'textarea'}]},
-  {grp:'Featured Projects (home)',items:[
-    {k:'featTag',label:'Tag',type:'input'},{k:'featH2',label:'Heading',type:'input'},
-    {k:'featSub',label:'Subtitle / description',type:'textarea'}]},
-  {grp:'Our Projects (projects page)',items:[
-    {k:'projTag',label:'Tag',type:'input'},{k:'projH2',label:'Heading',type:'input'},
-    {k:'projSub',label:'Subtitle / description',type:'textarea'}]}
+var SECTION_GROUPS=[
+  {id:'projects',label:'Our Projects',ico:'▤',subs:[
+    {grp:'Featured Projects (home)',items:[
+      {k:'featTag',label:'Tag',type:'input'},{k:'featH2',label:'Heading',type:'input'},
+      {k:'featSub',label:'Subtitle / description',type:'textarea'}]},
+    {grp:'Projects Page',items:[
+      {k:'projTag',label:'Tag',type:'input'},{k:'projH2',label:'Heading',type:'input'},
+      {k:'projSub',label:'Subtitle / description',type:'textarea'}]}
+  ]},
+  {id:'services',label:'Services',ico:'✎',subs:[
+    {grp:'Our Core Services (home)',items:[
+      {k:'coreTag',label:'Tag',type:'input'},{k:'coreH2',label:'Heading',type:'input'},
+      {k:'coreSub',label:'Subtitle / description',type:'textarea'}]},
+    {grp:'BIM Services',items:[
+      {k:'bimSvcTag',label:'Tag',type:'input'},{k:'bimSvcH2',label:'Heading',type:'input'},
+      {k:'bimSvcSub',label:'Subtitle / description',type:'textarea'}]},
+    {grp:'BIM & Engineering Service',items:[
+      {k:'bimEngTag',label:'Tag',type:'input'},{k:'bimEngH2',label:'Heading',type:'input'},
+      {k:'bimEngSub',label:'Subtitle / description',type:'textarea'}]},
+    {grp:'Design & Detail Engineering',items:[
+      {k:'desEngTag',label:'Tag',type:'input'},{k:'desEngH2',label:'Heading',type:'input'},
+      {k:'desEngSub',label:'Subtitle / description',type:'textarea'}]}
+  ]},
+  {id:'about',label:'About',ico:'◈',subs:[
+    {grp:'Our Story',items:[
+      {k:'storyTag',label:'Tag',type:'input'},{k:'storyH2',label:'Heading',type:'input'},
+      {k:'storySub',label:'Subtitle / description',type:'textarea'}]},
+    {grp:'Our Team',items:[
+      {k:'teamTag',label:'Tag',type:'input'},{k:'teamH2',label:'Heading',type:'input'},
+      {k:'teamSub',label:'Subtitle / description',type:'textarea'}]}
+  ]},
+  {id:'contact',label:'Contact',ico:'✉',subs:[
+    {grp:'Contact Page',items:[
+      {k:'contactTag',label:'Tag',type:'input'},{k:'contactH2',label:'Heading',type:'input'},
+      {k:'contactSub',label:'Subtitle / description',type:'textarea'}]},
+    {grp:'Hero (home top)',items:[
+      {k:'heroBadge',label:'Hero badge',type:'input'},
+      {k:'heroSub',label:'Hero subtitle / description',type:'textarea'}]}
+  ]}
 ];
 
 /* ── toasts ── */
@@ -488,19 +527,30 @@ function openProjectEditor(idx){
 /* ═══════════ SECTIONS / CONCEPTS ═══════════ */
 function renderSections(){
   var s=state.content.sections||{};
-  var html='<p class="helper">Edit the text shown on your public pages. Changes go live after you click <b>Save / Publish</b>.</p>';
-  SECTION_FIELDS.forEach(function(g){
-    html+='<div class="panel"><span class="lbl" style="color:var(--teal-mid);font-weight:700;font-size:12px;letter-spacing:.06em;text-transform:uppercase">'+esc(g.grp)+'</span>';
-    g.items.forEach(function(it){
-      var val=esc(s[it.k]||'');
-      html+='<div class="field"><label>'+esc(it.label)+'</label>'+
-        (it.type==='textarea'?'<textarea data-sec="'+it.k+'">'+val+'</textarea>':'<input data-sec="'+it.k+'" value="'+val+'">')+'</div>';
+  var html='<p class="helper">Edit the text shown on your public pages. Click a section to expand it. Changes go live after you click <b>Save / Publish</b>.</p>';
+  SECTION_GROUPS.forEach(function(g){
+    html+='<div class="sec-group">';
+    html+='<button class="sec-group-head" data-toggle="sec-'+g.id+'"><span class="sec-ico">'+g.ico+'</span>'+esc(g.label)+'<span class="sec-arrow">&#9660;</span></button>';
+    html+='<div class="sec-group-body" id="sec-'+g.id+'">';
+    g.subs.forEach(function(sub){
+      html+='<div class="sec-sub"><span class="lbl">'+esc(sub.grp)+'</span>';
+      sub.items.forEach(function(it){
+        var val=esc(s[it.k]||'');
+        html+='<div class="field"><label>'+esc(it.label)+'</label>'+
+          (it.type==='textarea'?'<textarea data-sec="'+it.k+'">'+val+'</textarea>':'<input data-sec="'+it.k+'" value="'+val+'">')+'</div>';
+      });
+      html+='</div>';
     });
-    html+='</div>';
+    html+='</div></div>';
   });
   $('#view-sections').innerHTML=html;
   $$('#view-sections [data-sec]').forEach(function(f){
     f.oninput=function(){state.content.sections[f.dataset.sec]=f.value;setDirty(true)};
+  });
+  $$('#view-sections .sec-group-head').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      btn.classList.toggle('open');
+    });
   });
 }
 
